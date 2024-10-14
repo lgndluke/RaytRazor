@@ -1,0 +1,85 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__35 (8) to come 
+#
+newmtl colbrown
+Ka  0.3 0.2 0.1
+Kd  0.3 0.2 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd COLIWOOT.png
+#
+newmtl colifloo
+Ka  0.8 0.9 0.9
+Kd  0.8 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd COLISTFT.png
+bump COLISTFT.png
+#
+newmtl coliesta
+Ka  0.6 0.6 0.5
+Kd  0.6 0.6 0.5
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd COLIESTT.png
+map_d COLIESTO.png
+bump COLIESTT.png
+#
+newmtl colifron
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl colistg2
+Ka  0.8 0.9 0.9
+Kd  0.8 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd COLILOWT.png
+bump COLISTFT.png
+#
+newmtl colistgr
+Ka  0.8 0.9 0.9
+Kd  0.8 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd COLISTFT.png
+bump COLISTFT.png
+#
+newmtl colisand
+Ka  0.8 0.8 0.6
+Kd  0.8 0.8 0.6
+Ks  1.0 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump COLIFLOT.png
+#
+newmtl coliston
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd COLIWALT.png
+map_d COLIWALO.png
+bump COLIWALT.png
+#
+# Multi/Sub Material__35 done 
+#
+# EOF

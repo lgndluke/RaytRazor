@@ -1,0 +1,1 @@
+Konzeptionelle Beschreibung des verfolgten Ansatzes (Designziele, Besonderheiten, wichtige Entscheidungen)

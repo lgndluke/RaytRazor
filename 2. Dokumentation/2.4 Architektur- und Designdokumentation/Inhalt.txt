@@ -1,0 +1,1 @@
+Architektur- und Designdokumentation zur Software (auch mit UML-Diagrammen!)
