@@ -1,6 +1,6 @@
 <div align="center">
-    
-![RaytRazor_Logo](https://github.com/user-attachments/assets/4427f4a8-709e-45d8-b62f-d8adae4f3657)
+
+<img src="https://github.com/user-attachments/assets/4427f4a8-709e-45d8-b62f-d8adae4f3657" alt="RaytRazor_Logo" width="256"/>
 
 # RaytRazor
 
