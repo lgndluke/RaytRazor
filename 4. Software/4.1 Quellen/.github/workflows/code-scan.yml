@@ -21,9 +21,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Analyzes C++ code.
-          - language: c-cpp
-            build-mode: autobuild
           # Analyzes Java code.
           - language: java-kotlin
             build-mode: none
