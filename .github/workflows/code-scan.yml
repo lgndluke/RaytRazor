@@ -35,7 +35,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake ../..
+          cmake ../4. Software/4.1 Quellen
           make
 
       - name: Initialize CodeQL
