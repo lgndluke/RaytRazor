@@ -1,0 +1,3 @@
+C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/cmake-build-debug/CMakeFiles/RaytRazor.dir
+C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
