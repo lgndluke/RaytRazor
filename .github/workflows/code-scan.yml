@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake "./4. Software/4.1 Quellen/RaytRazor/"
+          cmake "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor"
           make
 
       - name: Initialize CodeQL
