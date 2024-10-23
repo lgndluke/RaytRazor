@@ -4,3 +4,10 @@ on:
   push:
     branches:
       - placeholder
+
+jobs:
+  no-op:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy
+        run: echo "This is solely a placeholder workflow as of now!"
