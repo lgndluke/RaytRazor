@@ -1,0 +1,4 @@
+name: build-latest
+
+on:
+  invalid_event: []
