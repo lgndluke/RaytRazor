@@ -25,11 +25,18 @@ jobs:
         include:
           # Analyzes C++ code.
           - language: c-cpp
-            build-mode: autobuild
+            build-mode: manual
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.1
+
+      - name: Build Project
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
