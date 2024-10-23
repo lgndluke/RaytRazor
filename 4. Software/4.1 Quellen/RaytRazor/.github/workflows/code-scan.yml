@@ -21,10 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Analyzes Java code.
-          - language: java-kotlin
-            build-mode: none
-
+          # Analyzes C++ code.
+          - language: c-cpp
+            build-mode: autobuild
 
     steps:
       - name: Checkout repository
