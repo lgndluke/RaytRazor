@@ -1,4 +1,6 @@
 name: build-development
 
 on:
-  invalid_event: []
+  push:
+    branches:
+      - placeholder
