@@ -31,6 +31,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.1
 
+      - name: Print current Position
+        run: |
+          pwd
+
       - name: List Checkout Directory/Files
         run: |
           ls -a
@@ -39,7 +43,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake "../4. Software/4.1 Quellen"
+          cmake "/4. Software/4.1 Quellen/"
           make
 
       - name: Initialize CodeQL
