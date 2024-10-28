@@ -59,5 +59,7 @@ Rayt_vec calc_normVec(Rayt_vec pd1, Rayt_vec pd2){};
 
 //create a reflection vector from an incomming ray
 RayT_ray calc_reflecRay(Rayt_vec normVec, RayT_ray OrigRay){};
+
 #endif 
 //RayT_Math_h
+//commit test <- später löschen
