@@ -4,11 +4,13 @@
 #include <string>
 #include <fstream>
 
+using namespace std;
+
 /**
- * //TODO
+ * @brief This method does xyz
  * @author Lukas Jeckle
  */
-enum class LoggerType
+enum class MessageType
 {
     DEBUG,      //Used for logging 'DEBUG' messages.
     INFO,       //Used for logging 'INFORMATION' messages.
@@ -25,16 +27,28 @@ class Logger
     public:
 
         Logger() = delete;
-        static void log(LoggerType logType, const std::string& logMessage);
+        ~Logger() { logFileStream.close(); }
+        static void initialize();
+        static bool isInitialized();
+        static void log(MessageType logType, const string& logMessage);
         static void rotateLogs();
 
     private:
 
-        static std::string logDirectory;
-        static std::string logFileName;
-        static std::string logFile;
-        static std::ofstream logFileStream;
-        static void writeLog(const std::string& logEntry);
+        static string configFileDirectory;
+        static string configFileName;
+        static string configFile;
+        static bool initialized;
+        static int logFileSize;
+        static int logFilesToSave;
+        static string logDirectory;
+        static string logFileName;
+        static string logFile;
+        static ofstream logFileStream;
+        static string getDateTimeString(const string& format);
+        static string getThreadID();
+        static void loadConfigValues();
+        static void writeLog(const string& logEntry);
 
 };
 
