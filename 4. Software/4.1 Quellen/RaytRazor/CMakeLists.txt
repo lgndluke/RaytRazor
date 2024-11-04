@@ -6,13 +6,15 @@ find_package(OpenGL REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 
 # Including GLFW
-add_subdirectory(Libraries/glfw)
-include_directories(Libraries/glfw/include)
+add_subdirectory(Utility/External_Libraries/glfw)
+include_directories(Utility/External_Libraries/glfw/include)
 
 # Including GLAD
-include_directories(Libraries/glad/include)
+include_directories(Utility/External_Libraries/glad/include)
 
-set(SOURCE_FILES main.cpp Libraries/glad/src/glad.c)
+set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
+        Utility/Logger/Logger.cpp
+        Utility/Logger/Logger.h)
 
 add_executable(RaytRazor ${SOURCE_FILES})
 

@@ -31,23 +31,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.1
 
-      - name: Print current Position
-        run: |
-          pwd
-
-      - name: List Checkout Directory/Files
-        run: |
-          ls -a
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: security-extended,security-and-quality
+
       - if: ${{ matrix.build-mode == 'manual' }}
         name: Build C++ Code
         run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgl1-mesa-dev \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libx11-dev \
+            libxi-dev \
+            libxext-dev
           mkdir build
           cd build
           cmake "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor"
