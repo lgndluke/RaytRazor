@@ -25,9 +25,6 @@ ofstream Logger::logFileStream;
 
 // Private Methods:
 
-/**
- * //TODO Write method comment.
- */
 string Logger::getDateTimeString(const string& format)
 {
 
@@ -49,9 +46,6 @@ string Logger::getDateTimeString(const string& format)
 
 }
 
-/**
- * //TODO Write method comment.
- */
 string Logger::getThreadID()
 {
 
@@ -61,9 +55,6 @@ string Logger::getThreadID()
 
 }
 
-/**
- * //TODO Write method comment.
- */
 void Logger::loadConfigValues()
 {
 
@@ -71,9 +62,6 @@ void Logger::loadConfigValues()
 
 }
 
-/**
- * //TODO Write method comment.
- */
 void Logger::writeLog(const string& logEntry)
 {
 
@@ -90,16 +78,13 @@ void Logger::writeLog(const string& logEntry)
   }
   else
   {
-    cerr << "Logger::writeLog: Unable to open log file: " << logFile << endl;
+    cerr << "Logger::writeLog: Unable to open log file: " << logFile << endl; //TODO Throw error? || Write in program console?
   }
 
 }
 
 // Public Methods:
 
-/**
- * //TODO Write method comment.
- */
 void Logger::initialize()
 {
   //TODO implement reading values from config.json file.
@@ -111,24 +96,18 @@ void Logger::initialize()
 
 }
 
-/**
- * //TODO Write method comment.
- */
 bool Logger::isInitialized()
 {
   return initialized;
 }
 
-/**
- * //TODO Write method comment.
- */
-void Logger::log(const MessageType logType, const string& logMessage)
+void Logger::log(const MessageType msgType, const string& logMessage)
 {
 
   string logEntry;
   logEntry.append("[" + getDateTimeString("%H:%M:%S") + "]\t");
 
-  switch (logType)
+  switch (msgType)
   {
     case MessageType::DEBUG:    logEntry.append("[Thread: " + getThreadID() + "/DEBUG]:\t");  break;
     case MessageType::INFO:     logEntry.append("[Thread: " + getThreadID() + "/INFO]:\t");   break;
@@ -141,9 +120,6 @@ void Logger::log(const MessageType logType, const string& logMessage)
 
 }
 
-/**
- * //TODO Write method comment.
- */
 void Logger::rotateLogs()
 {
 
