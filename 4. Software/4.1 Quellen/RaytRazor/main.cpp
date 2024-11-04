@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Utility/Logger/Logger.h"
 
 #include <iostream>
 
@@ -12,6 +13,20 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
+
+    /*
+    // Code for testing Logger - Luke.
+
+    Logger::log(LoggerType::DEBUG, "Hello World!");
+    Logger::log(LoggerType::INFO, "Hello 1. World!");
+    Logger::log(LoggerType::WARN, "Hello 2. World!");
+    Logger::log(LoggerType::SEVERE, "Hello 3. World!");
+
+    Logger::rotateLogs();
+
+    return 0;
+    */
+
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
