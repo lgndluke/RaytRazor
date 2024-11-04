@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "cube": {
+      "uuid": 1,
+      "Translation": {
+        "position": {
+          "x": -5,
+          "y": 0,
+          "z": 20
+        },
+        "rotation": {
+          "x": 0,
+          "y": 90,
+          "z": 25
+        },
+        "scale": {
+          "x": 2.5,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": 4,
+          "matUUID": 5
+        }
+      }
+    },
+    "sphere": {
+      "uuid": 2,
+      "Translation": {
+        "position": {
+          "x": 5,
+          "y": 0,
+          "z": 10
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": 4,
+          "matUUID": 5
+        }
+      }
+    },
+    "sun": {
+      "uuid": 3,
+      "Translation": {
+        "position": {
+          "x": 0,
+          "y": 50,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "LightComponent": {
+          "intensity": 0.15,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      }
+    }
+  },
+  "resources": {
+    "objects": {
+      "4": {
+        "type": "obj",
+        "path": "some/relative/path/to/obj/file/cube"
+      }
+    },
+    "materials": {
+      "5": {
+        "type": "mat",
+        "path": "some/relative/path/to/mat/file/wood"
+      }
+    }
+  }
+}

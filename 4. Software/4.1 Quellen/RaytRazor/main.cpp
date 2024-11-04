@@ -15,6 +15,23 @@ int main()
 {
 
     /*
+    // Code for testing Parser - Chriss
+    // Beispiel-JSON-Datei laden
+    std::string jsonFilePath = "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/JSON_Parser/scene.json"; // Der Pfad zur Test-JSON-Datei
+    std::string jsonData = loadJsonFile(jsonFilePath);
+
+    if (jsonData.empty()) {
+        std::cerr << "Keine JSON-Daten gefunden." << std::endl;
+        return 1;
+    }
+
+    // Szene parsen
+    Scene scene = parseScene(jsonData);
+     */
+
+
+
+    /*
     // Code for testing Logger - Luke.
 
     Logger::log(LoggerType::DEBUG, "Hello World!");
