@@ -15,7 +15,7 @@ int main()
 {
 
     /*
-    // Code for testing Logger - Luke
+    // Code for testing Logger - Luke.
 
     Logger::log(LoggerType::DEBUG, "Hello World!");
     Logger::log(LoggerType::INFO, "Hello 1. World!");
