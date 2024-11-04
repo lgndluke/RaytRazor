@@ -1,33 +1,81 @@
 #include "Logger.h"
-#include <iostream>
 #include <ctime>
+#include <iostream>
 #include <filesystem>
 #include <thread>
 
-// TODO
-// - Fix: Logger not writing to logfile.
+//TODO
 // - Add: Implement thread safety measures.
 // - Add: Make logger fetch static variables 'logDirectory' and 'logFileName' from program 'config.json' file.
 
-// Static Attributes.
+using namespace std;
 
-std::string Logger::logDirectory = "./logs/";
-std::string Logger::logFileName = "log.log";
-std::string Logger::logFile = logDirectory + logFileName;
-std::ofstream Logger::logFileStream;
+// Attributes.
 
-// Static Methods
+string Logger::configFileDirectory = "./config/"; //For now.
+string Logger::configFileName = "config.json"; //For now.
+string Logger::configFile = configFileDirectory + configFileName; //For now.
+bool Logger::initialized = false; //For now.
+int Logger::logFileSize = 10 * 1024 * 1024; //For now.
+int Logger::logFilesToSave = 3; //For now.
+string Logger::logDirectory = "./logs/"; //For now.
+string Logger::logFileName = "log0.log"; //For now.
+string Logger::logFile = logDirectory + logFileName; //For now.
+ofstream Logger::logFileStream;
+
+// Private Methods:
 
 /**
  * //TODO Write method comment.
  */
-void Logger::writeLog(const std::string& logEntry)
+string Logger::getDateTimeString(const string& format)
+{
+
+  const time_t now = time(nullptr);
+  tm buffer = {};
+  char timeBuffer[20];
+  string result = {};
+
+  localtime_s(&buffer, &now);
+  strftime(timeBuffer, sizeof(timeBuffer), format.c_str(), &buffer);
+
+  result.append(string(timeBuffer));
+  return result;
+
+}
+
+/**
+ * //TODO Write method comment.
+ */
+string Logger::getThreadID()
+{
+
+  stringstream result = {};
+  result << this_thread::get_id();
+  return result.str();
+
+}
+
+/**
+ * //TODO Write method comment.
+ */
+void Logger::loadConfigValues()
+{
+
+    //TODO
+
+}
+
+/**
+ * //TODO Write method comment.
+ */
+void Logger::writeLog(const string& logEntry)
 {
 
   if (!logFileStream.is_open())
   {
-    std::filesystem::create_directories(logDirectory);
-    logFileStream.open(logFile, std::ios_base::app);
+    filesystem::create_directories(logDirectory);
+    logFileStream.open(logFile, ios_base::out | ios_base::app);
   }
 
   if (logFileStream.is_open())
@@ -37,7 +85,23 @@ void Logger::writeLog(const std::string& logEntry)
   }
   else
   {
-    std::cerr << "Logger::writeLog: Unable to open log file: " << logFile << std::endl;
+    cerr << "Logger::writeLog: Unable to open log file: " << logFile << endl;
+  }
+
+}
+
+// Public Methods:
+
+/**
+ * //TODO Write method comment.
+ */
+void Logger::initialize()
+{
+  //TODO implement reading values from config.json file.
+  if (!initialized)
+  {
+    loadConfigValues();
+    initialized = true;
   }
 
 }
@@ -45,31 +109,31 @@ void Logger::writeLog(const std::string& logEntry)
 /**
  * //TODO Write method comment.
  */
-void Logger::log(LoggerType logType, const std::string& logMessage)
+bool Logger::isInitialized()
+{
+  return initialized;
+}
+
+/**
+ * //TODO Write method comment.
+ */
+void Logger::log(const MessageType logType, const string& logMessage)
 {
 
-  std::string logEntryPrefix;
+  string logEntry;
+  logEntry.append("[" + getDateTimeString("%H:%M:%S") + "]\t");
 
   switch (logType)
   {
-    case LoggerType::DEBUG:       logEntryPrefix = "[DEBUG] ";      break;
-    case LoggerType::INFO:        logEntryPrefix = "[INFO] ";       break;
-    case LoggerType::WARN:     logEntryPrefix = "[WARNING] ";       break;
-    case LoggerType::SEVERE:       logEntryPrefix = "[ERROR] ";     break;
+    case MessageType::DEBUG:    logEntry.append("[Thread: " + getThreadID() + "/DEBUG]:\t");  break;
+    case MessageType::INFO:     logEntry.append("[Thread: " + getThreadID() + "/INFO]:\t");   break;
+    case MessageType::WARN:     logEntry.append("[Thread: " + getThreadID() + "/WARN]:\t");   break;
+    case MessageType::SEVERE:   logEntry.append("[Thread: " + getThreadID() + "/ERROR]:\t");  break;
   }
 
-  // TODO implement a local thread storage for allocating thread names to threads?
-  std::stringstream logExecutingThread;
-  logExecutingThread << "[Thread " << std::this_thread::get_id() << "] ";
-  logEntryPrefix += logExecutingThread.str();
-
-  std::time_t logEntryTime = std::time(nullptr);
-  char logEntryTimeBuffer[20];
-  std::strftime(logEntryTimeBuffer, sizeof(logEntryTimeBuffer), "%F %T", std::localtime(&logEntryTime));
-  logEntryPrefix += std::string(logEntryTimeBuffer);
-
-  std::string logEntry = logEntryPrefix + logMessage + "\n";
+  logEntry.append(logMessage + "\n");
   writeLog(logEntry);
+
 }
 
 /**
@@ -78,24 +142,22 @@ void Logger::log(LoggerType logType, const std::string& logMessage)
 void Logger::rotateLogs()
 {
 
+  //TODO Rework completely?
+
   if (logFileStream.is_open())
   {
     logFileStream.close();
   }
 
-  std::time_t logFileTimeStamp = std::time(nullptr);
-  char backupFileName[50];
-  std::strftime(backupFileName, sizeof(backupFileName), "log_%Y%m%d_%H%m%s.log", std::localtime(&logFileTimeStamp));
+  string rotatedLogFileName = {};
+  rotatedLogFileName.append(logDirectory);
+  rotatedLogFileName.append("log_" + getDateTimeString("%Y_%m_%d") + ".log");
 
-  if (std::rename(logFile.c_str(), backupFileName) != 0)
-  {
-    std::cerr << "Logger::rotateLogs: Unable to rotate log file: " << logFile << std::endl;
-  }
+  cout << rotatedLogFileName << endl;
 
-  logFileStream.open(logFile, std::ios_base::out | std::ios_base::trunc);
-  if (!logFileStream.is_open())
+  if (rename(logFile.c_str(), rotatedLogFileName.data()) != 0)
   {
-    std::cerr << "Logger::rotateLogs: Unable to open new log file: " << logFile << std::endl;
+    cerr << "Logger::rotateLogs: Unable to rotate log file: " << logFile << endl;
   }
 
 }
