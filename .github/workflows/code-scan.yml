@@ -42,7 +42,14 @@ jobs:
         name: Build C++ Code
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libx11-dev
+          sudo apt-get install -y \
+            libgl1-mesa-dev \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libx11-dev \
+            libxi-dev \
+            libxext-dev
           mkdir build
           cd build
           cmake "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor"
