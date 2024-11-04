@@ -36,7 +36,12 @@ string Logger::getDateTimeString(const string& format)
   char timeBuffer[20];
   string result = {};
 
-  localtime_s(&buffer, &now);
+  #ifdef _WIN32
+    localtime_s(&buffer, &now);
+  #else
+    localtime_r(&buffer, &now);
+  #endif
+
   strftime(timeBuffer, sizeof(timeBuffer), format.c_str(), &buffer);
 
   result.append(string(timeBuffer));
