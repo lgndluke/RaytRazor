@@ -39,7 +39,7 @@ string Logger::getDateTimeString(const string& format)
   #ifdef _WIN32
     localtime_s(&buffer, &now);
   #else
-    localtime_r(&buffer, &now);
+    localtime_r(&now, &buffer);
   #endif
 
   strftime(timeBuffer, sizeof(timeBuffer), format.c_str(), &buffer);
