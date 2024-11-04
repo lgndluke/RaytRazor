@@ -12,6 +12,9 @@ include_directories(Utility/External_Libraries/glfw/include)
 # Including GLAD
 include_directories(Utility/External_Libraries/glad/include)
 
+# Including GLM
+include_directories(Utility/External_Libraries/glm)
+
 set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
         Utility/Logger/Logger.cpp
         Utility/Logger/Logger.h)
