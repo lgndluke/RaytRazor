@@ -1,14 +1,17 @@
 #include "Logger.h"
 #include <ctime>
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include <thread>
+#include <unordered_map>
 
 //TODO
 // - Add: Implement thread safety measures.
 // - Add: Make logger fetch static variables 'logDirectory' and 'logFileName' from program 'config.json' file.
+// - Improve: Error Handling.
 
 using namespace std;
+using namespace std::filesystem;
 
 // Attributes.
 
@@ -16,14 +19,41 @@ string Logger::configFileDirectory = "./config/"; //For now.
 string Logger::configFileName = "config.json"; //For now.
 string Logger::configFile = configFileDirectory + configFileName; //For now.
 bool Logger::initialized = false; //For now.
-int Logger::logFileSize = 10 * 1024 * 1024; //For now.
+int Logger::logFileSize = 25 * 1024; //25 KB for now.
 int Logger::logFilesToSave = 3; //For now.
 string Logger::logDirectory = "./logs/"; //For now.
-string Logger::logFileName = "log0.log"; //For now.
+string Logger::logFileName = "log_0.log"; //For now.
 string Logger::logFile = logDirectory + logFileName; //For now.
 ofstream Logger::logFileStream;
 
 // Private Methods:
+
+void Logger::deleteOldestLogFile(const unordered_map<string, file_time_type>& oldLogFiles)
+{
+
+  string oldestFile = {};
+  file_time_type oldestTime = file_time_type::max();
+
+  for (const auto& [fileName, modificationTime] : oldLogFiles)
+  {
+    if (modificationTime < oldestTime)
+    {
+      oldestTime = modificationTime;
+      oldestFile = fileName;
+    }
+  }
+
+  try
+  {
+    const path removeLogFile = logDirectory + oldestFile;
+    remove(removeLogFile);
+  }
+  catch (const filesystem_error& e)
+  {
+    std::cerr << "Logger::rotateLogs: Löschen fehlgeschlagen! \n" << "Grund:" << e.what() << std::endl;
+  }
+
+}
 
 string Logger::getDateTimeString(const string& format)
 {
@@ -62,12 +92,80 @@ void Logger::loadConfigValues()
 
 }
 
+void Logger::rotateLogFile(const path& fileToRename = logFile, int counter = 0)
+{
+
+  string rotatedLogFileName = "log_" + getDateTimeString("%Y_%m_%d");
+
+  if (counter > 0)
+  {
+    rotatedLogFileName.append("_" + to_string(counter));
+  }
+
+  rotatedLogFileName.append(".log");
+
+  const path rotatedLogFile = logDirectory + rotatedLogFileName;
+
+  if (exists(rotatedLogFile))
+  {
+    rotateLogFile(rotatedLogFile, ++counter);
+  }
+
+  try
+  {
+    rename(fileToRename, rotatedLogFile);
+  }
+  catch (const filesystem_error& e)
+  {
+    std::cerr << "Logger::rotateLogs: Umbenennen fehlgeschlagen! \n" << "Grund:" << e.what() << std::endl;
+  }
+
+}
+
+void Logger::rotateLogs()
+{
+
+  const string logFile_NamePrefix = "log";
+  unordered_map<string, file_time_type> oldLogFiles = {};
+
+  if (logFileStream.is_open())
+  {
+    logFileStream.close();
+  }
+
+  try
+  {
+    for (const auto& entry : directory_iterator(logDirectory))
+    {
+      if (entry.is_regular_file() && entry.path().filename().string().substr(0, logFile_NamePrefix.length()) == logFile_NamePrefix)
+      {
+        oldLogFiles[entry.path().filename().string()] = last_write_time(entry.path());
+      }
+    }
+  }
+  catch (const filesystem_error& e)
+  {
+    std::cerr << "FileSystem Error: " << e.what() << std::endl;
+  }
+
+  if (oldLogFiles.size() <= logFilesToSave)
+  {
+    rotateLogFile();
+  }
+  else
+  {
+    deleteOldestLogFile(oldLogFiles);
+    rotateLogFile();
+  }
+
+}
+
 void Logger::writeLog(const string& logEntry)
 {
 
   if (!logFileStream.is_open())
   {
-    filesystem::create_directories(logDirectory);
+    create_directories(logDirectory);
     logFileStream.open(logFile, ios_base::out | ios_base::app);
   }
 
@@ -78,7 +176,12 @@ void Logger::writeLog(const string& logEntry)
   }
   else
   {
-    cerr << "Logger::writeLog: Unable to open log file: " << logFile << endl; //TODO Throw error? || Write in program console?
+    cerr << "Logger::writeLog: Unable to open log file: " << logFile << endl;
+  }
+
+  if (file_size(logFile) > logFileSize)
+  {
+    rotateLogs();
   }
 
 }
@@ -117,28 +220,5 @@ void Logger::log(const MessageType msgType, const string& logMessage)
 
   logEntry.append(logMessage + "\n");
   writeLog(logEntry);
-
-}
-
-void Logger::rotateLogs()
-{
-
-  //TODO Rework completely?
-
-  if (logFileStream.is_open())
-  {
-    logFileStream.close();
-  }
-
-  string rotatedLogFileName = {};
-  rotatedLogFileName.append(logDirectory);
-  rotatedLogFileName.append("log_" + getDateTimeString("%Y_%m_%d") + ".log");
-
-  cout << rotatedLogFileName << endl;
-
-  if (rename(logFile.c_str(), rotatedLogFileName.data()) != 0)
-  {
-    cerr << "Logger::rotateLogs: Unable to rotate log file: " << logFile << endl;
-  }
 
 }

@@ -1,10 +1,13 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include <string>
+#include <filesystem>
 #include <fstream>
+#include <string>
+#include <unordered_map>
 
 using namespace std;
+using namespace std::filesystem;
 
 /**
  * @brief Enum das die unterschiedlichen Nachrichten Typen definiert.
@@ -53,11 +56,6 @@ class Logger
          */
         static void log(MessageType msgType, const string& logMessage);
 
-        /**
-         * //TODO Write method comment.
-         */
-        static void rotateLogs();
-
     private:
 
         static string configFileDirectory;
@@ -70,6 +68,21 @@ class Logger
         static string logFileName;
         static string logFile;
         static ofstream logFileStream;
+
+        /**
+         * //TODO Write method comment.
+         */
+        static void deleteOldestLogFile(const unordered_map<string, file_time_type>& oldLogFiles);
+
+        /**
+         * //TODO Write method comment.
+         */
+        static void rotateLogFile(const path& fileToRename, int counter);
+
+        /**
+         * //TODO Write method comment.
+         */
+        static void rotateLogs();
 
         /**
          * @brief Methode um aktuellen DateTime-Wert als formatierten String-Wert zu holen.
