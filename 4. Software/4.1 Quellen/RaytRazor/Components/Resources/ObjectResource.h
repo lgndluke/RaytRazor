@@ -9,17 +9,13 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class ObjectResource
-{
 
-    public:
-
-        //TODO add public Method definitions.
-
-    private:
-
-        //TODO add private Method definitions and attributes.
-
+/**
+ * @brief Struktur für Objektdaten in OpenGL.
+ */
+struct ObjectResource {
+    std::string type;
+    std::string path;
 };
 
 #endif

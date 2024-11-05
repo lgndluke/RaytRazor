@@ -9,17 +9,13 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class LightComponent
-{
 
-    public:
-
-        //TODO add public Method definitions.
-
-    private:
-
-        //TODO add private Method definitions and attributes.
-
+/**
+ * @brief Repräsentiert eine Lichtquelle im 3D-Raum.
+ */
+struct LightComponent {
+    float intensity;
+    glm::vec3 color{0.0f, 0.0f, 0.0f}; // RGB-Farbe des Lichts
 };
 
 #endif

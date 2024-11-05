@@ -11,74 +11,10 @@
 #include <map>
 #include <iostream>
 
-// Position-Klasse
-struct Position {
-    float x = 0;
-    float y = 0;
-    float z = 0;
-};
+#include "Components/Entity.h"
+#include "Components/Resources/MaterialResource.h"
+#include "Components/Resources/ObjectResource.h"
 
-// Rotation-Klasse
-struct Rotation {
-    float x = 0;
-    float y = 0;
-    float z = 0;
-};
-
-// Scale-Klasse
-struct Scale {
-    float x = 1;
-    float y = 1;
-    float z = 1;
-};
-
-// Translation-Klasse
-struct Translation {
-    Position position;
-    Rotation rotation;
-    Scale scale;
-};
-
-// RenderComponent-Klasse
-struct RenderComponent {
-    int objUUID;
-    int matUUID;
-};
-
-// LightComponent-Klasse
-struct LightComponent {
-    float intensity;
-    struct Color {
-        int r;
-        int g;
-        int b;
-    } color;
-};
-
-// Components-Klasse (enthält optionale Render- und Light-Komponenten)
-struct Components {
-    std::optional<RenderComponent> renderComponent;
-    std::optional<LightComponent> lightComponent;
-};
-
-// Entity-Klasse
-struct Entity {
-    int uuid;
-    Translation translation;
-    Components components;
-};
-
-// ObjectResource-Klasse
-struct ObjectResource {
-    std::string type;
-    std::string path;
-};
-
-// MaterialResource-Klasse
-struct MaterialResource {
-    std::string type;
-    std::string path;
-};
 
 // Resources-Klasse
 struct Resources {

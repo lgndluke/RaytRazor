@@ -11,6 +11,21 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+/*
+ *#include "JsonParser/SceneParser.h"
+// Hilfsfunktion, um JSON-Datei in einen String zu laden
+std::string loadJsonFile(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        std::cerr << "Fehler beim Öffnen der Datei: " << filePath << std::endl;
+        return "";
+    }
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+*/
+
 int main()
 {
 

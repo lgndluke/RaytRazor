@@ -9,17 +9,14 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class RenderComponent
-{
 
-    public:
-
-        //TODO add public Method definitions.
-
-    private:
-
-        //TODO add private Method definitions and attributes.
-
+/**
+ * @brief Repräsentiert eine Render-Komponente mit Verweisen auf OpenGL-Ressourcen.
+ */
+struct RenderComponent {
+ int objUUID;   // OpenGL-Objekt-ID
+ int matUUID;   // OpenGL-Material-ID
 };
+
 
 #endif
