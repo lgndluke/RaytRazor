@@ -1,4 +1,4 @@
-#include "LightComponent.h"
+#include "Object_Resource.h"
 //TODO Add imports.
 
 //TODO
