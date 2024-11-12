@@ -17,7 +17,35 @@ include_directories(Utility/External_Libraries/glm)
 
 set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
         Utility/Logger/Logger.cpp
-        Utility/Logger/Logger.h)
+        Utility/Logger/Logger.h
+        Import/Importers/Object/Object_Importer.cpp
+        Import/Importers/Object/Object_Importer.h
+        Parsing/Json_Parser.cpp
+        Parsing/Json_Parser.h
+        UI/Scenes/Base_Scene.cpp
+        UI/Scenes/Base_Scene.h
+        UI/Scenes/Main/Main_Scene.cpp
+        UI/Scenes/Main/Main_Scene.h
+        UI/Scenes/Settings/Settings_Scene.cpp
+        UI/Scenes/Settings/Settings_Scene.h
+        Import/Importers/Material/Material_Importer.cpp
+        Import/Importers/Material/Material_Importer.h
+        Components/Base_Component.cpp
+        Components/Base_Component.h
+        Components/Entities/Render_Component.cpp
+        Components/Entities/Render_Component.h
+        Components/Camera/Camera_Component.cpp
+        Components/Camera/Camera_Component.h
+        Components/Lighting/Light_Component.cpp
+        Components/Lighting/Light_Component.h
+        Import/Resources/Base_Resource.cpp
+        Import/Resources/Base_Resource.h
+        Import/Resources/Material/Material_Resource.cpp
+        Import/Resources/Material/Material_Resource.h
+        Import/Resources/Object/Object_Resource.cpp
+        Import/Resources/Object/Object_Resource.h
+        UI/SceneManager/Scene_Manager.cpp
+        UI/SceneManager/Scene_Manager.h)
 
 add_executable(RaytRazor ${SOURCE_FILES})
 
