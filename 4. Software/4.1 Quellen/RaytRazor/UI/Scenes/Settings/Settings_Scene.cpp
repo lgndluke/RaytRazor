@@ -1,4 +1,4 @@
-#include "RenderComponent.h"
+#include "Settings_Scene.h"
 //TODO Add imports.
 
 //TODO
