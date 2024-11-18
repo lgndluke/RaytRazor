@@ -46,18 +46,16 @@ int main()
 
 
 
-    /*
+
     // Code for testing Logger - Luke.
 
-    Logger::log(LoggerType::DEBUG, "Hello World!");
-    Logger::log(LoggerType::INFO, "Hello 1. World!");
-    Logger::log(LoggerType::WARN, "Hello 2. World!");
-    Logger::log(LoggerType::SEVERE, "Hello 3. World!");
-
-    Logger::rotateLogs();
+    Logger::log(MessageType::DEBUG, "Hello World!");
+    Logger::log(MessageType::INFO, "Hello 1. World!");
+    Logger::log(MessageType::WARN, "Hello 2. World!");
+    Logger::log(MessageType::SEVERE, "Hello 3. World!");
 
     return 0;
-    */
+
 
     // glfw: initialize and configure
     // ------------------------------
