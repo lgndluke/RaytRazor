@@ -3,7 +3,7 @@
 
 //TODO Add imports here.
 #include "../Base_Resource.h"
-#include "../../../Utility/External_Libraries/glfw/deps/glad/glad.h"
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <string>
 

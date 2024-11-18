@@ -3,7 +3,7 @@
 
 #include "../Base_Resource.h"
 #include <glm/glm.hpp>
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <string>
 
 using namespace std;
