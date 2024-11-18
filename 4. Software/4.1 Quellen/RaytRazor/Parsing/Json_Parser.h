@@ -2,6 +2,7 @@
 #define JSON_PARSER_H
 
 //TODO Add imports here.
+#include <../../../Utility/External_Libraries/nlohmann/json.hpp>
 #include "../Import/Resources/Material/Material_Resource.h"
 #include "../Import/Resources/Object/Object_Resource.h"
 #include "../Components/Camera/Camera_Component.h"
@@ -9,7 +10,6 @@
 #include "../Components/Lighting/Light_Component.h"
 #include <string>
 #include <map>
-#include <iostream>
 
 using namespace std;
 

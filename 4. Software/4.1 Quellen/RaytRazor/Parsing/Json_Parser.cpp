@@ -1,8 +1,4 @@
 #include "Json_Parser.h"
-#include <../../../Utility/External_Libraries/nlohmann/json.hpp>
-#include <iostream>
-#include <fstream>
-
 
 //TODO
 // - Define further tasks here.
@@ -14,8 +10,7 @@ using json = nlohmann::json;
 
 // Attributes (Init of global/static Attributes)
 
-// Constructor
-Json_Parser::Json_Parser() = default;
+// Constructor -> deleted in header.
 
 // Destructor
 
