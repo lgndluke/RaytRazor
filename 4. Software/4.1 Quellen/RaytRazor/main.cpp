@@ -49,7 +49,7 @@ int main()
 
     // Code for testing Logger - Luke.
 
-    Logger::log(MessageType::DEBUG, "Hello World!");
+    Logger::log(MessageType::DEBUG, "Hello World! Leon was here!");
     Logger::log(MessageType::INFO, "Hello 1. World!");
     Logger::log(MessageType::WARN, "Hello 2. World!");
     Logger::log(MessageType::SEVERE, "Hello 3. World!");
