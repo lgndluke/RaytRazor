@@ -142,7 +142,7 @@ vector<Vertex> Object_Importer::loadObject(const string& filePath)
             groups.push_back(ss.str().substr(pos + 1));
         }
         else {
-            std::cout << "Unbekannter Pr\x84 \bfix: " << prefix << std::endl;
+            Logger::log(MessageType::SEVERE, "Object_Importer::loadObject(): Unbekannter Präfix: !" + prefix + "\n");
         }
     }
     // Endprodukt zusammensetzen (Mesh)
