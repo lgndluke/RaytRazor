@@ -1,6 +1,9 @@
 {
-  "entities": {
-    "cube": {
+
+  "renderentity": [
+    {
+
+      "name": "cube",
       "uuid": 1,
       "Translation": {
         "position": {
@@ -21,54 +24,34 @@
       },
       "components": {
         "RenderComponent": {
-          "objUUID": 4,
-          "matUUID": 5
+          "objUUID": 101,
+          "matUUID": 201
         }
       }
     },
-    "sphere": {
+    {
+      "name": "sphere",
       "uuid": 2,
       "Translation": {
         "position": {
-          "x": 5,
-          "y": 0,
-          "z": 10
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "scale": {
-          "x": 1,
-          "y": 1,
-          "z": 1
+          "x": 5
         }
       },
       "components": {
         "RenderComponent": {
-          "objUUID": 4,
-          "matUUID": 5
+          "objUUID": 102,
+          "matUUID": 201
         }
       }
-    },
-    "sun": {
+    }
+  ],
+  "lightentity": [
+    {
+      "name": "sun",
       "uuid": 3,
       "Translation": {
         "position": {
-          "x": 0,
-          "y": 50,
-          "z": 0
-        },
-        "rotation": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "scale": {
-          "x": 1,
-          "y": 1,
-          "z": 1
+          "y": 50
         }
       },
       "components": {
@@ -82,19 +65,55 @@
         }
       }
     }
-  },
-  "resources": {
-    "objects": {
-      "4": {
-        "type": "obj",
-        "path": "some/relative/path/to/obj/file/cube"
-      }
-    },
-    "materials": {
-      "5": {
-        "type": "mat",
-        "path": "some/relative/path/to/mat/file/wood"
+  ],
+  "cameraentity": [
+    {
+      "name": "main_camera",
+      "uuid": 6,
+      "Translation": {
+        "position": {
+          "x": 0,
+          "y": 10,
+          "z": 50
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "components": {
+        "CameraComponent": {
+          "fov": 60,
+          "aspectRatio": 1.77,
+          "nearClip": 0.1,
+          "farClip": 1000
+        }
       }
     }
+  ],
+  "resources": [
+    {
+      "uuid": 101,
+      "type": "obj",
+      "path": "~/assets/cube.obj"
+    },
+    {
+      "uuid": 102,
+      "type": "obj",
+      "path": "~/assets/sphere.obj"
+    },
+    {
+      "uuid": 201,
+      "type": "mat",
+      "path": "~/assets/wood.obj"
+    }
+  ],
+  "metadata": {
+    "backgroundColor": [0.1, 0.1, 0.1],
+    "globalIllumination": true,
+    "renderMode": "pathtracing",
+    "maxDepth": 5,
+    "samplesPerPixel": 100
   }
 }
