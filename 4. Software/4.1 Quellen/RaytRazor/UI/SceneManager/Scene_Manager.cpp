@@ -1,4 +1,4 @@
-#include "LightComponent.h"
+#include "Scene_Manager.h"
 //TODO Add imports.
 
 //TODO

@@ -1,4 +1,4 @@
-#include "RenderComponent.h"
+#include "Camera_Component.h"
 //TODO Add imports.
 
 //TODO

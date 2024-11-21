@@ -1,4 +1,5 @@
-#include "MaterialResource.h"
+#include "Base_Component.h"
+
 //TODO Add imports.
 
 //TODO

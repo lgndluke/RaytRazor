@@ -1,7 +1,8 @@
-#ifndef OBJECTRESOURCE_H
-#define OBJECTRESOURCE_H
+#ifndef CAMERA_COMPONENT_H
+#define CAMERA_COMPONENT_H
 
 //TODO Add imports here.
+#include "../Base_Component.h"
 
 using namespace std;
 
@@ -9,7 +10,7 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class ObjectResource
+class Camera_Component : Base_Component
 {
 
     public:
@@ -18,7 +19,7 @@ class ObjectResource
 
     private:
 
-        //TODO add private Method definitions and attributes.
+        //TODO add private Method definitions.
 
 };
 

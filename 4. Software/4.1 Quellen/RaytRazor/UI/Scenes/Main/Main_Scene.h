@@ -1,5 +1,5 @@
-#ifndef MATERIALRESOURCE_H
-#define MATERIALRESOURCE_H
+#ifndef MAIN_SCENE_H
+#define MAIN_SCENE_H
 
 //TODO Add imports here.
 
@@ -9,7 +9,7 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class MaterialResource
+class Main_Scene
 {
 
     public:
@@ -18,7 +18,7 @@ class MaterialResource
 
     private:
 
-        //TODO add private Method definitions and attributes.
+        //TODO add private Method definitions.
 
 };
 

@@ -1,0 +1,119 @@
+{
+
+  "renderentity": [
+    {
+
+      "name": "cube",
+      "uuid": 1,
+      "Translation": {
+        "position": {
+          "x": -5,
+          "y": 0,
+          "z": 20
+        },
+        "rotation": {
+          "x": 0,
+          "y": 90,
+          "z": 25
+        },
+        "scale": {
+          "x": 2.5,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": 101,
+          "matUUID": 201
+        }
+      }
+    },
+    {
+      "name": "sphere",
+      "uuid": 2,
+      "Translation": {
+        "position": {
+          "x": 5
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": 102,
+          "matUUID": 201
+        }
+      }
+    }
+  ],
+  "lightentity": [
+    {
+      "name": "sun",
+      "uuid": 3,
+      "Translation": {
+        "position": {
+          "y": 50
+        }
+      },
+      "components": {
+        "LightComponent": {
+          "intensity": 0.15,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      }
+    }
+  ],
+  "cameraentity": [
+    {
+      "name": "main_camera",
+      "uuid": 6,
+      "Translation": {
+        "position": {
+          "x": 0,
+          "y": 10,
+          "z": 50
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "components": {
+        "CameraComponent": {
+          "fov": 60,
+          "aspectRatio": 1.77,
+          "nearClip": 0.1,
+          "farClip": 1000
+        }
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uuid": 101,
+      "type": "obj",
+      "path": "~/assets/cube.obj"
+    },
+    {
+      "uuid": 102,
+      "type": "obj",
+      "path": "~/assets/sphere.obj"
+    },
+    {
+      "uuid": 201,
+      "type": "mat",
+      "path": "~/assets/wood.obj"
+    }
+  ],
+  "metadata": {
+    "backgroundColor": [0.1, 0.1, 0.1],
+    "globalIllumination": true,
+    "renderMode": "pathtracing",
+    "maxDepth": 5,
+    "samplesPerPixel": 100
+  }
+}

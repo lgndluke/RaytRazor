@@ -11,21 +11,51 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+/*
+ *#include "JsonParser/SceneParser.h"
+// Hilfsfunktion, um JSON-Datei in einen String zu laden
+std::string loadJsonFile(const std::string& filePath) {
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        std::cerr << "Fehler beim Öffnen der Datei: " << filePath << std::endl;
+        return "";
+    }
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+*/
+
 int main()
 {
 
     /*
+    // Code for testing Parser - Chriss
+    // Beispiel-JSON-Datei laden
+    std::string jsonFilePath = "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/JSON_Parser/scene.json"; // Der Pfad zur Test-JSON-Datei
+    std::string jsonData = loadJsonFile(jsonFilePath);
+
+    if (jsonData.empty()) {
+        std::cerr << "Keine JSON-Daten gefunden." << std::endl;
+        return 1;
+    }
+
+    // Szene parsen
+    Scene scene = parseScene(jsonData);
+     */
+
+
+
+
     // Code for testing Logger - Luke.
 
-    Logger::log(LoggerType::DEBUG, "Hello World!");
-    Logger::log(LoggerType::INFO, "Hello 1. World!");
-    Logger::log(LoggerType::WARN, "Hello 2. World!");
-    Logger::log(LoggerType::SEVERE, "Hello 3. World!");
-
-    Logger::rotateLogs();
+    Logger::log(MessageType::DEBUG, "Hello World! Leon was here!");
+    Logger::log(MessageType::INFO, "Hello 1. World!");
+    Logger::log(MessageType::WARN, "Hello 2. World!");
+    Logger::log(MessageType::SEVERE, "Hello 3. World!");
 
     return 0;
-    */
+
 
     // glfw: initialize and configure
     // ------------------------------

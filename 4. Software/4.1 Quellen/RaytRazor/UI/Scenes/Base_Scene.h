@@ -1,5 +1,5 @@
-#ifndef LIGHTCOMPONENT_H
-#define LIGHTCOMPONENT_H
+#ifndef BASE_SCENE_H
+#define BASE_SCENE_H
 
 //TODO Add imports here.
 
@@ -9,7 +9,7 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class LightComponent
+class Base_Scene
 {
 
     public:
@@ -18,7 +18,7 @@ class LightComponent
 
     private:
 
-        //TODO add private Method definitions and attributes.
+        //TODO add private Method definitions.
 
 };
 

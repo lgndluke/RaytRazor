@@ -1,5 +1,5 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef SCENE_MANAGER_H
+#define SCENE_MANAGER_H
 
 //TODO Add imports here.
 
@@ -9,7 +9,7 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class Entity
+class Scene_Manager
 {
 
     public:
@@ -18,7 +18,7 @@ class Entity
 
     private:
 
-        //TODO add private Method definitions and attributes.
+        //TODO add private Method definitions.
 
 };
 

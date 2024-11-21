@@ -1,5 +1,5 @@
-#ifndef RENDERCOMPONENT_H
-#define RENDERCOMPONENT_H
+#ifndef SETTINGS_SCENE_H
+#define SETTINGS_SCENE_H
 
 //TODO Add imports here.
 
@@ -9,7 +9,7 @@ using namespace std;
  * @brief //TODO
  * @author //TODO
  */
-class RenderComponent
+class Settings_Scene
 {
 
     public:
@@ -18,7 +18,7 @@ class RenderComponent
 
     private:
 
-        //TODO add private Method definitions and attributes.
+        //TODO add private Method definitions.
 
 };
 
