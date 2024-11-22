@@ -50,7 +50,7 @@ jobs:
             libx11-dev \
             libxi-dev \
             libxext-dev \
-            libXxf86vm
+            libxxf86vm-dev
           mkdir build
           cd build
           cmake "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor"
