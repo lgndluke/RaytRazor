@@ -30,7 +30,6 @@ public:
     void render() const;
 
 private:
-    // UUIDs für OpenGL-Objekte und Materialien
     string objUUID;  // OpenGL-Objekt-ID als UUID
     string matUUID;  // OpenGL-Material-ID als UUID
 };

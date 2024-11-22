@@ -19,7 +19,10 @@ class Base_Component
 
    public:
 
-        Base_Component();
+        Base_Component() {
+            uuid = boost::uuids::random_generator()();
+        }
+
         virtual ~Base_Component();
 
         boost::uuids::uuid get_uuid() const;
