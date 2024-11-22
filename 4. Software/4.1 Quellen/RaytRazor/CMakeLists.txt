@@ -5,33 +5,32 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(OpenGL REQUIRED)
 
-# Include GLFW
-add_subdirectory(Utility/External_Libraries/glfw)
-include_directories(Utility/External_Libraries/glfw/include)
-
-# Include GLAD
-include_directories(Utility/External_Libraries/glad/include)
-
 # Include GLM
 include_directories(Utility/External_Libraries/glm)
 
 # Include STB_Image
 include_directories(Utility/External_Libraries/stb_image)
 
-# Include Eigen
-include_directories(Utility/External_Libraries/eigen-3.4.0)
-
-# Include NanoVG
-include_directories(Utility/External_Libraries/nanovg/src)
-
 # Include NanoGUI
-include_directories(Utility/External_Libraries/nanogui)
+set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_SHARED OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
+set(NANOGUI_INSTALL       OFF CACHE BOOL " " FORCE)
+
+add_subdirectory(Utility/External_Libraries/nanogui)
+set_property(TARGET glfw glfw_objects nanogui PROPERTY FOLDER "dependencies")
+
+add_definitions(${NANOGUI_EXTRA_DEFS})
+include_directories(${NANOGUI_EXTRA_INCS})
+
+include_directories(Utility/External_Libraries/nanogui/include)
 
 # Include Boost
 include_directories(Utility/External_Libraries/boost)
 include_directories(Utility/External_Libraries/boost/boost/uuid)
 
-set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
+set(SOURCE_FILES
+        main.cpp
         Utility/Logger/Logger.cpp
         Utility/Logger/Logger.h
         Import/Importers/Object/Object_Importer.cpp
@@ -61,9 +60,10 @@ set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
         Import/Resources/Object/Object_Resource.cpp
         Import/Resources/Object/Object_Resource.h
         UI/SceneManager/Scene_Manager.cpp
-        UI/SceneManager/Scene_Manager.h)
+        UI/SceneManager/Scene_Manager.h
+)
 
 add_executable(RaytRazor ${SOURCE_FILES})
 
-# Linking GLFW and OpenGL
-target_link_libraries(${CMAKE_PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARY})
+# Linking libraries
+target_link_libraries(RaytRazor nanogui nanogui-obj ${NANOGUI_EXTRA_LIBS} ${OPENGL_LIBRARIES})
