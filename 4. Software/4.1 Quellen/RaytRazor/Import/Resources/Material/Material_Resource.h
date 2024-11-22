@@ -3,7 +3,7 @@
 
 #include "../Base_Resource.h"
 #include <glm/glm.hpp>
-#include <glad/glad.h>
+#include <nanogui/glutil.h>
 #include <sstream>
 #include <string>
 
