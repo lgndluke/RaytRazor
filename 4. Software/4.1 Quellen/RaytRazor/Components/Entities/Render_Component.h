@@ -1,28 +1,38 @@
 #ifndef RENDER_COMPONENT_H
 #define RENDER_COMPONENT_H
 
-//TODO Add imports here.
-#include "../Base_Component.h"
+#include <string>
+#include "../Base_Component.h"  // Annahme: Header für Base_Component
 
 using namespace std;
 
 /**
  * @brief Repräsentiert eine Render-Komponente mit Verweisen auf OpenGL-Ressourcen.
- * @author //TODO
+ * Diese Klasse enthält Referenzen auf OpenGL-Objekte wie Geometrie und Materialien,
+ * die für das Rendering eines Objekts notwendig sind.
+ *
+ * @author Dein Name
  */
-class Render_Component : Base_Component
+class Render_Component : public Base_Component
 {
+public:
 
-    public:
+    Render_Component(const string& objUUID = "", const string& matUUID = "");
 
-        //TODO add public Method definitions.
 
-    private:
+    string getObjUUID() const;
+    void setObjUUID(const string& newObjUUID);
 
-        int objUUID;   // OpenGL-Objekt-ID /*TODO: Make this UUID and not INT!*/
-        int matUUID;   // OpenGL-Material-ID /*TODO: Make this UUID and not INT!*/
+    string getMatUUID() const;
+    void setMatUUID(const string& newMatUUID);
 
+
+    void render() const;
+
+private:
+    // UUIDs für OpenGL-Objekte und Materialien
+    string objUUID;  // OpenGL-Objekt-ID als UUID
+    string matUUID;  // OpenGL-Material-ID als UUID
 };
 
-
-#endif
+#endif // RENDER_COMPONENT_H

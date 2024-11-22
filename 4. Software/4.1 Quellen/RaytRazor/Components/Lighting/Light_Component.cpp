@@ -1,19 +1,64 @@
 #include "Light_Component.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+/**
+ * @brief Konstruktor, der die Lichtquelle mit einer Anfangsintensität und -farbe initialisiert.
+ *
+ * @param intensity Anfangsintensität des Lichts (Standard: 1.0f)
+ * @param color Anfangsfarbe des Lichts (Standard: Weiß - glm::vec3(1.0f, 1.0f, 1.0f))
+ */
+Light_Component::Light_Component(float intensity, glm::vec3 color)
+    : intensity(intensity), color(color)
+{
+}
 
-using namespace std;
+/**
+ * @brief Gibt die Intensität des Lichts zurück.
+ *
+ * @return float Intensität des Lichts
+ */
+float Light_Component::getIntensity() const
+{
+    return intensity;
+}
 
-// Attributes (Init of global/static Attributes)
+/**
+ * @brief Setzt die Intensität des Lichts.
+ *
+ * @param newIntensity Neue Intensität des Lichts
+ */
+void Light_Component::setIntensity(float newIntensity)
+{
+    intensity = newIntensity;
+}
 
-// Constructor
+/**
+ * @brief Gibt die Farbe des Lichts zurück.
+ *
+ * @return glm::vec3 Farbe des Lichts (RGB)
+ */
+glm::vec3 Light_Component::getColor() const
+{
+    return color;
+}
 
-// Destructor
+/**
+ * @brief Setzt die Farbe des Lichts.
+ *
+ * @param newColor Neue Farbe des Lichts (RGB)
+ */
+void Light_Component::setColor(const glm::vec3& newColor)
+{
+    color = newColor;
+}
 
-// Private Methods
-
-// Public Methods
+/**
+ * @brief Aktualisiert die Eigenschaften des Lichts basierend auf einer Zeitdifferenz.
+ * Dies könnte für dynamische Lichteffekte oder Animationen nützlich sein.
+ *
+ * @param deltaTime Zeitdifferenz, die seit dem letzten Update vergangen ist
+ */
+void Light_Component::update(float deltaTime)
+{
+    // Beispiel: Intensität könnte basierend auf deltaTime verändert werden (z.B. für pulsierende Lichter)
+    // intensity = ... Berechnungen mit deltaTime
+}

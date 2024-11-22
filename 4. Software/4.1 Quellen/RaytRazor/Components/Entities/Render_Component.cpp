@@ -1,19 +1,70 @@
 #include "Render_Component.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+#include <iostream>
 
-using namespace std;
+/**
+ * @brief Konstruktor, der die UUIDs für das Objekt und das Material initialisiert.
+ * Falls keine UUID übergeben wird, wird die UUID des Basiskomponenten-Getters verwendet.
+ *
+ * @param objUUID UUID für das OpenGL-Objekt (Standard: UUID von der Base_Component)
+ * @param matUUID UUID für das OpenGL-Material (Standard: UUID von der Base_Component)
+ */
+Render_Component::Render_Component(const string& objUUID, const string& matUUID)
+{
+    // Wenn keine UUID übergeben wird, dann verwenden wir die UUID von Base_Component
+    this->objUUID = objUUID.empty() ? get_uuid() : objUUID;  // Falls leer, von Base_Component nehmen
+    this->matUUID = matUUID.empty() ? get_uuid() : matUUID;  // Falls leer, von Base_Component nehmen
+}
 
-// Attributes (Init of global/static Attributes)
+/**
+ * @brief Gibt die UUID des OpenGL-Objekts zurück.
+ *
+ * @return string UUID des Objekts
+ */
+string Render_Component::getObjUUID() const
+{
+    return objUUID;
+}
 
-// Constructor
+/**
+ * @brief Setzt die UUID für das OpenGL-Objekt.
+ *
+ * @param newObjUUID Neue UUID für das Objekt
+ */
+void Render_Component::setObjUUID(const string& newObjUUID)
+{
+    objUUID = newObjUUID;
+}
 
-// Destructor
+/**
+ * @brief Gibt die UUID des OpenGL-Materials zurück.
+ *
+ * @return string UUID des Materials
+ */
+string Render_Component::getMatUUID() const
+{
+    return matUUID;
+}
 
-// Private Methods
+/**
+ * @brief Setzt die UUID für das OpenGL-Material.
+ *
+ * @param newMatUUID Neue UUID für das Material
+ */
+void Render_Component::setMatUUID(const string& newMatUUID)
+{
+    matUUID = newMatUUID;
+}
 
-// Public Methods
+/**
+ * @brief Führt das Rendering für das Objekt durch.
+ * Diese Methode kann angepasst werden, um die entsprechenden OpenGL-Aufrufe zu tätigen.
+ */
+void Render_Component::render() const
+{
+    // Hier könnte Code stehen, der OpenGL-Objekte rendert, basierend auf objUUID und matUUID.
+    // Beispiel: OpenGL-Aufrufe, die das Rendern des Objekts und Materials ermöglichen.
+
+    // Beispiel einer Darstellung (dies ist nur ein Platzhalter, OpenGL-Aufrufe müssen hier implementiert werden)
+    cout << "Rendering object with UUID: " << objUUID << " and material UUID: " << matUUID << endl;
+}
