@@ -2,6 +2,7 @@
 #define BASE_SCENE_H
 
 //TODO Add imports here.
+#include <nanogui/opengl.h>
 
 using namespace std;
 
