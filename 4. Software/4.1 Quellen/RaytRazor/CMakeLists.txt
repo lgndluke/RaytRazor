@@ -15,6 +15,8 @@ include_directories(Utility/External_Libraries/glad/include)
 # Including GLM
 include_directories(Utility/External_Libraries/glm)
 
+include_directories(Utility/External_Libraries/stb_image)
+
 set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
         Utility/Logger/Logger.cpp
         Utility/Logger/Logger.h
