@@ -236,6 +236,7 @@ int main(int /* argc */, char ** /* argv */) {
         }
 
         nanogui::shutdown();
+        Logger::log(MessageType::INFO, "Terminated NanoGUI");
     } catch (const std::runtime_error &e) {
         std::string error_msg = std::string("Caught a fatal error: ") + std::string(e.what());
         #if defined(_WIN32)
