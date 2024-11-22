@@ -3,7 +3,7 @@
 
 //TODO Add imports here.
 #include "../Base_Resource.h"
-#include <glad/glad.h>
+#include <nanogui/glutil.h>
 #include <glm/glm.hpp>
 #include <sstream>
 #include <string>
