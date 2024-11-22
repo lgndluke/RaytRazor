@@ -4,6 +4,7 @@
 #include "../Base_Resource.h"
 #include <glm/glm.hpp>
 #include <glad/glad.h>
+#include <sstream>
 #include <string>
 
 using namespace std;
