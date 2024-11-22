@@ -42,6 +42,8 @@
 #include <memory>
 #include <utility>
 
+#include "Utility/Logger/Logger.h"
+
 #if defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
@@ -223,6 +225,7 @@ private:
 
 int main(int /* argc */, char ** /* argv */) {
     try {
+        Logger::log(MessageType::INFO, "Initializing NanoGUI");
         nanogui::init();
 
         /* scoped variables */ {
