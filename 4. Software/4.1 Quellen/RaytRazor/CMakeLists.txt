@@ -1,21 +1,35 @@
 cmake_minimum_required(VERSION 3.3)
 project(RaytRazor)
 
-find_package(OpenGL REQUIRED)
-
 set(CMAKE_CXX_STANDARD 17)
 
-# Including GLFW
+find_package(OpenGL REQUIRED)
+
+# Include GLFW
 add_subdirectory(Utility/External_Libraries/glfw)
 include_directories(Utility/External_Libraries/glfw/include)
 
-# Including GLAD
+# Include GLAD
 include_directories(Utility/External_Libraries/glad/include)
 
-# Including GLM
+# Include GLM
 include_directories(Utility/External_Libraries/glm)
 
+# Include STB_Image
 include_directories(Utility/External_Libraries/stb_image)
+
+# Include Eigen
+include_directories(Utility/External_Libraries/eigen-3.4.0)
+
+# Include NanoVG
+include_directories(Utility/External_Libraries/nanovg/src)
+
+# Include NanoGUI
+include_directories(Utility/External_Libraries/nanogui)
+
+# Include Boost
+include_directories(Utility/External_Libraries/boost)
+include_directories(Utility/External_Libraries/boost/boost/uuid)
 
 set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
         Utility/Logger/Logger.cpp
