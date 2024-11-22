@@ -11,9 +11,6 @@ include_directories(Utility/External_Libraries/glm)
 # Include STB_Image
 include_directories(Utility/External_Libraries/stb_image)
 
-# Include NanoVG
-include_directories(Utility/External_Libraries/nanovg/src)
-
 # Include NanoGUI
 set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
 set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
