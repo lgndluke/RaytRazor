@@ -207,7 +207,7 @@ public:
         b1->setCallback([this]()
         {
             mCanvas->setRotation(nanogui::Vector3f((rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f));
-            Logger::log(MessageType::INFO, "Randomized Rotation!");
+            Logger::log(MessageType::INFO, "Randomized Rotation");
         });
 
         performLayout();
