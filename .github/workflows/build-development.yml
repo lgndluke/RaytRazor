@@ -88,7 +88,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "Changing back to the RaytRazor directory"
-          Set-Location $GITHUB_WORKSPACE
+          Set-Location ..
           
           Write-Host "Creating release directory"
           New-Item -ItemType Directory -Path release
