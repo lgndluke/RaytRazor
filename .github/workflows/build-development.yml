@@ -110,29 +110,13 @@ jobs:
           Write-Host "Listing contents of release directory"
           Get-ChildItem -Path release/
 
-      - name: Upload Release
-        uses: actions/upload-artifact@v4
-        with:
-          name: RaytRazor-PreRelease-${{ env.version }}
-          path: D:\a\RaytRazor\release
-
-      - name: Create Pre-Release
-        id: create_prerelease
-        uses: actions/create-release@v1
+      - name: Deploy Pre-Release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           tag_name: RaytRazor-PreRelease-${{ env.version }}
-          release_name: RaytRazor-PreRelease-${{ env.version }}
-          draft: false
+          name: RaytRazor-PreRelease-${{ env.version }}
           prerelease: true
-
-      - name: Deploy Pre-Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_prerelease.outputs.upload_url }}
-          asset_path: D:\a\RaytRazor\release
-          asset_name: RaytRazor-${{ env.version }}.exe
-          asset_content_type: application/octet-stream
+          files: |
+            release/**
