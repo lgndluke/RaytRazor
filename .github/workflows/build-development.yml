@@ -68,7 +68,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "Version env:GITHUB_OUTPUT: ${{ steps.generate_version.outputs.version }}"
-          Write-Host "Version env:GITHUB_ENV: ${{ env.version }} "
+          Write-Host "Version env:GITHUB_ENV: ${{ env.version }}"
 
       - name: Build RaytRazor Project
         shell: pwsh
@@ -126,7 +126,7 @@ jobs:
       - name: Debug version in Deploy
         shell: pwsh
         run: |
-          Write-Host: "Version of env.version: ${{ env.version }}
+          Write-Host: "Version of env.version: ${{ env.version }}"
 
       - name: Create Pre-Release
         id: create_prerelease
