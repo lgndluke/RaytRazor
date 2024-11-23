@@ -118,5 +118,4 @@ jobs:
           tag_name: RaytRazor-PreRelease-${{ env.version }}
           name: RaytRazor-PreRelease-${{ env.version }}
           prerelease: true
-          files: |
-            release/**
+          files: D:/a/RaytRazor/release/*
