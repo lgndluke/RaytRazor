@@ -92,7 +92,7 @@ jobs:
           Copy-Item "build/RaytRazor.exe" "../release/"
           
           Write-Host "Copying version file to release directory"
-          Copy-Item "../4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
+          Copy-Item "../RaytRazor/4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
 
       - name: Upload Release
         uses: actions/upload-artifact@v4
