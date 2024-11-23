@@ -62,11 +62,13 @@ jobs:
           $FULL_VERSION = "$MAJOR.$MINOR.$PATCH.$BUILD"
           Write-Host "Build version: $FULL_VERSION"
           "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - name: Debug Build Outputs
         shell: pwsh
         run: |
-          Write-Host "Generated version in build job: ${{ steps.generate_version.outputs.version }}"
+          Write-Host "Version env:GITHUB_OUTPUT: ${{ steps.generate_version.outputs.version }}
+          Write-Host "Version env:GITHUB_ENV: ${{ env.version }} "
 
       - name: Build RaytRazor Project
         shell: pwsh
@@ -111,22 +113,29 @@ jobs:
       - name: Upload Release
         uses: actions/upload-artifact@v4
         with:
-          name: RaytRazor-PreRelease-${{ needs.build.outputs.version }}
-          path: release/
+          name: RaytRazor-PreRelease-${{ env.version }}
+          path: D:\a\RaytRazor\release
 
   deploy:
     name: Deploy Pre-Release
     runs-on: windows-latest
     needs: build
+    env:
+      version: ${{ needs.build.outputs.version }}
     steps:
+      - name: Debug version in Deploy
+        shell: pwsh
+        run: |
+          Write-Host: "Version of env.version: ${{ env.version }}
+
       - name: Create Pre-Release
         id: create_prerelease
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: RaytRazor-PreRelease-${{ needs.build.outputs.version }}
-          release_name: RaytRazor-PreRelease-${{ needs.build.outputs.version }}
+          tag_name: RaytRazor-PreRelease-${{ env.version }}
+          release_name: RaytRazor-PreRelease-${{ env.version }}
           draft: false
           prerelease: true
 
