@@ -126,7 +126,7 @@ jobs:
       - name: Debug version in Deploy
         shell: pwsh
         run: |
-          Write-Host: "Version of env.version: ${{ env.version }}"
+          Write-Host "Version of env.version: ${{ env.version }}"
 
       - name: Create Pre-Release
         id: create_prerelease
