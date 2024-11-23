@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build Pre-Release
+    name: Build & Deploy Pre-Release
     runs-on: windows-latest
     timeout-minutes: 60
     permissions:
@@ -115,20 +115,6 @@ jobs:
         with:
           name: RaytRazor-PreRelease-${{ env.version }}
           path: D:\a\RaytRazor\release
-
-  deploy:
-    name: Deploy Pre-Release
-    runs-on: windows-latest
-    needs: build
-    env:
-      version: ${{ needs.build.outputs.version }}
-    steps:
-      - name: Debug version in Deploy
-        shell: pwsh
-        run: |
-          Write-Host "Version of env.version: ${{ env.version }}"
-          Write-Host "Version of steps.generate_version.outputs.version: ${{ steps.generate_version.outputs.version }}"
-          Write-Host "Version of needs.build.outputs.version: ${{ needs.build.outputs.version }}"
 
       - name: Create Pre-Release
         id: create_prerelease
