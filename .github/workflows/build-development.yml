@@ -44,6 +44,7 @@ jobs:
           choco install -y cmake make mingw
 
       - name: Generate Version Syntax
+        id: generate_version
         shell: pwsh
         run: |
           $VERSION_FILE = "4. Software/4.1 Quellen/RaytRazor/VERSION.DAT"
@@ -62,6 +63,7 @@ jobs:
           Write-Host "Build version: $FULL_VERSION"
           "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "$FULL_VERSION" | Out-File -FilePath $VERSION_FILE -Encoding utf8
+          echo "version=$FULL_VERSION" >> $env:GITHUB_OUTPUT
 
       - name: Build RaytRazor Project
         shell: pwsh
@@ -85,19 +87,22 @@ jobs:
       - name: Create release directory
         shell: pwsh
         run: |
+          Write-Host "Changing back to the RaytRazor directory"
+          Set-Location $GITHUB_WORKSPACE
+          
           Write-Host "Creating release directory"
-          New-Item -ItemType Directory -Path ../release
+          New-Item -ItemType Directory -Path release
           
           Write-Host "Copying RaytRazor executable to release directory"
-          Copy-Item "build/RaytRazor.exe" "../release/"
+          Copy-Item "build/RaytRazor.exe" "release/"
           
           Write-Host "Copying version file to release directory"
-          Copy-Item "../RaytRazor/4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
+          Copy-Item "4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "release/VERSION.DAT"
 
       - name: Upload Release
         uses: actions/upload-artifact@v4
         with:
-          name: RaytRazor-PreRelease-${{ env.version }}
+          name: RaytRazor-PreRelease-${{ steps.generate_version.outputs.version }}
           path: release/
 
   deploy:
@@ -111,8 +116,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: RaytRazor-PreRelease-${{ env.version }}
-          release_name: RaytRazor-PreRelease-${{ env.version }}
+          tag_name: RaytRazor-PreRelease-${{ steps.generate_version.outputs.version }}
+          release_name: RaytRazor-PreRelease-${{ steps.generate_version.outputs.version }}
           draft: false
           prerelease: true
 
@@ -121,7 +126,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          upload_url: ${{ steps.create_prerelease.output.upload_url }}
+          upload_url: ${{ steps.create_prerelease.outputs.upload_url }}
           asset_path: release/RaytRazor
           asset_name: RaytRazor-${{ env.version }}.exe
           asset_content_type: application/octet-stream
