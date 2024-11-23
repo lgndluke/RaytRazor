@@ -42,6 +42,8 @@
 #include <memory>
 #include <utility>
 
+#include "Utility/Logger/Logger.h"
+
 #if defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
@@ -223,6 +225,7 @@ private:
 
 int main(int /* argc */, char ** /* argv */) {
     try {
+        Logger::log(MessageType::INFO, "Initializing NanoGUI");
         nanogui::init();
 
         /* scoped variables */ {
@@ -233,6 +236,7 @@ int main(int /* argc */, char ** /* argv */) {
         }
 
         nanogui::shutdown();
+        Logger::log(MessageType::INFO, "Terminated NanoGUI");
     } catch (const std::runtime_error &e) {
         std::string error_msg = std::string("Caught a fatal error: ") + std::string(e.what());
         #if defined(_WIN32)
