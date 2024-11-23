@@ -127,6 +127,8 @@ jobs:
         shell: pwsh
         run: |
           Write-Host "Version of env.version: ${{ env.version }}"
+          Write-Host "Version of steps.generate_version.outputs.version: ${{ steps.generate_version.outputs.version }}"
+          Write-Host "Version of needs.build.outputs.version: ${{ needs.build.outputs.version }}"
 
       - name: Create Pre-Release
         id: create_prerelease
