@@ -200,7 +200,7 @@ public:
         b0->setCallback([this]()
         {
             mCanvas->setBackgroundColor(Vector4i(rand() % 256, rand() % 256, rand() % 256, 255));
-            Logger::log(MessageType::INFO, "Randomized Color!");
+            Logger::log(MessageType::INFO, "Randomized Color");
         });
 
         Button *b1 = new Button(tools, "Random Rotation");
