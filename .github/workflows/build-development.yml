@@ -61,14 +61,7 @@ jobs:
           $BUILD = "$BUILD_NUMBER"
           $FULL_VERSION = "$MAJOR.$MINOR.$PATCH.$BUILD"
           Write-Host "Build version: $FULL_VERSION"
-          "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-
-      - name: Debug Build Outputs
-        shell: pwsh
-        run: |
-          Write-Host "Version env:GITHUB_OUTPUT: ${{ steps.generate_version.outputs.version }}"
-          Write-Host "Version env:GITHUB_ENV: ${{ env.version }}"
 
       - name: Build RaytRazor Project
         shell: pwsh
@@ -78,9 +71,6 @@ jobs:
           
           Write-Host "Moving to build directory"
           Set-Location build
-          
-          Write-Host "Path of build directory"
-          pwd
           
           Write-Host "Building Project"
           cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
@@ -95,20 +85,11 @@ jobs:
           Write-Host "Changing back to the RaytRazor directory"
           Set-Location ..
           
-          Write-Host "Listing contents of RaytRazor directory"
-          Get-ChildItem -Path .
-          
           Write-Host "Creating release directory"
           New-Item -ItemType Directory -Path release
           
           Write-Host "Copying RaytRazor executable to release directory"
           Copy-Item "RaytRazor/build/RaytRazor.exe" "release/"
-          
-          Write-Host "Copying version file to release directory"
-          Copy-Item "RaytRazor/4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "release/VERSION.DAT"
-
-          Write-Host "Listing contents of release directory"
-          Get-ChildItem -Path release/
 
       - name: Deploy Pre-Release
         uses: softprops/action-gh-release@v2
@@ -117,5 +98,8 @@ jobs:
         with:
           tag_name: RaytRazor-PreRelease-${{ env.version }}
           name: RaytRazor-PreRelease-${{ env.version }}
+          target_commitish: development
+          generate_release_notes: true
+          append_body: true
           prerelease: true
           files: D:/a/RaytRazor/release/*
