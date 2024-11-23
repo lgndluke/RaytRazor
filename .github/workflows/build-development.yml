@@ -67,7 +67,7 @@ jobs:
       - name: Debug Build Outputs
         shell: pwsh
         run: |
-          Write-Host "Version env:GITHUB_OUTPUT: ${{ steps.generate_version.outputs.version }}
+          Write-Host "Version env:GITHUB_OUTPUT: ${{ steps.generate_version.outputs.version }}"
           Write-Host "Version env:GITHUB_ENV: ${{ env.version }} "
 
       - name: Build RaytRazor Project
