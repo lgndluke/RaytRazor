@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build-Development
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 60
     permissions:
       security-events: none
@@ -30,48 +30,64 @@ jobs:
         uses: actions/checkout@v4.2.1
 
       - name: Install RaytRazor Project dependencies.
+        shell: pwsh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgl1-mesa-dev \
-            libxrandr-dev \
-            libxinerama-dev \
-            libxcursor-dev \
-            libx11-dev \
-            libxi-dev \
-            libxext-dev \
-            libxxf86vm-dev
+          Write-Host "Installing Chocolatey"
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServiceManager]::SecurityProtocol = [System.Net.ServicePointManger]::SecurityProtocol -bor 3072;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          
+          Write-Host "Refreshing environmental variables"
+          refreshenv
+          
+          Write-Host "Installing dependencies using Chocolatey"
+          choco install -y cmake make mingw
 
       - name: Generate Version Syntax
+        shell: pwsh
         run: |
-          VERSION_FILE="4. Software/4.1 Quellen/RaytRazor/VERSION.DAT"
-          BUILD_NUMBER=$((GITHUB_RUN_NUMBER))
-          if [ -f "$VERSION_FILE" ]; then
-            VERSION=$(cat "$VERSION_FILE")
-          else
-            VERSION=1.0.0
-          fi
-          MAJOR=$(echo $VERSION | cut -d. -f1)
-          MINOR=$(echo $VERSION | cut -d. -f2)
-          PATCH=$(echo $VERSION | cut -d. -f3)
-          BUILD="${BUILD_NUMBER}"
-          FULL_VERSION="${MAJOR}.${MINOR}.${PATCH}.${BUILD}"
-          echo "Build version: $FULL_VERSION"
-          echo "version=$FULL_VERSION" >> $GITHUB_ENV
-          echo $FULL_VERSION > "$VERSION_FILE"
+          $VERSION_FILE = "4. Software/4.1 Quellen/RaytRazor/VERSION.DAT"
+          $BUILD_NUMBER = $env:GITHUB_RUN_NUMBER
+          if (Test-Path $VERSION_FILE) {
+            $VERSION = Get-Content $VERSION_FILE
+          } else {
+            $VERSION="0.0.0"
+          }
+          $VERSION_PARTS = $VERSION -split '\.'
+          $MAJOR = $VERSION_PARTS[0]
+          $MINOR = $VERSION_PARTS[1]
+          $PATCH = $VERSION_PARTS[2]
+          $BUILD = $VERSION_PARTS[3]
+          $FULL_VERSION = "$MAJOR.$MINOR.$PATCH.$BUILD"
+          Write-Host "Build version: $FULL_VERSION"
+          "$FULL_VERSION" | Out-File -FilePath $env.GITHUB_ENV -Append -Encoding utf8
+          "$FULL_VERSION" | Out-File -FilePath $VERSION_FILE -Encoding utf8
 
       - name: Build RaytRazor Project
+        shell: pwsh
         run: |
-          mkdir -p build
-          cd build
-          cmake "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor"
-          make
+          Write-Host "Creating build directory"
+          New-Item -ItemType Directory -Path build
+          
+          Write-Host "Moving to build directory"
+          Set-Location build
+          
+          Write-Host "Building Project"
+          cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
+          mingw32-make
 
       - name: Create release directory
+        shell: pwsh
         run: |
-          mkdir -p release
-          cp build/RaytRazor release/
-          cp "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/VERSION" release/version.txt
+          Write-Host "Creating release directory"
+          New-Item -ItemType Directory -Path ../release
+          
+          Write-Host "Copying RaytRazor executable to release directory"
+          Copy-Item "RaytRazor.exe" "../release/"
+          
+          Write-Host "Copying version file to release directory"
+          Copy-Item "../4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
+          
 
       - name: Upload Release
         uses: actions/upload-artifact@v4
@@ -81,7 +97,7 @@ jobs:
 
   deploy:
     name: Deploy Pre-Release
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     steps:
       - name: Create Pre-Release
