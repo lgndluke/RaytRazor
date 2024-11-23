@@ -61,9 +61,12 @@ jobs:
           $BUILD = "$BUILD_NUMBER"
           $FULL_VERSION = "$MAJOR.$MINOR.$PATCH.$BUILD"
           Write-Host "Build version: $FULL_VERSION"
-          "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-          "$FULL_VERSION" | Out-File -FilePath $VERSION_FILE -Encoding utf8
-          echo "version=$FULL_VERSION" >> $env:GITHUB_OUTPUT
+          "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Debug Build Outputs
+        shell: pwsh
+        run: |
+          Write-Host "Generated version in build job: ${{ steps.generate_version.outputs.version }}"
 
       - name: Build RaytRazor Project
         shell: pwsh
@@ -90,6 +93,9 @@ jobs:
           Write-Host "Changing back to the RaytRazor directory"
           Set-Location ..
           
+          Write-Host "Listing contents of RaytRazor directory"
+          Get-ChildItem -Path .
+          
           Write-Host "Creating release directory"
           New-Item -ItemType Directory -Path release
           
@@ -99,10 +105,13 @@ jobs:
           Write-Host "Copying version file to release directory"
           Copy-Item "RaytRazor/4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "release/VERSION.DAT"
 
+          Write-Host "Listing contents of release directory"
+          Get-ChildItem -Path release/
+
       - name: Upload Release
         uses: actions/upload-artifact@v4
         with:
-          name: RaytRazor-PreRelease-${{ steps.generate_version.outputs.version }}
+          name: RaytRazor-PreRelease-${{ needs.build.outputs.version }}
           path: release/
 
   deploy:
@@ -116,8 +125,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: RaytRazor-PreRelease-${{ steps.generate_version.outputs.version }}
-          release_name: RaytRazor-PreRelease-${{ steps.generate_version.outputs.version }}
+          tag_name: RaytRazor-PreRelease-${{ needs.build.outputs.version }}
+          release_name: RaytRazor-PreRelease-${{ needs.build.outputs.version }}
           draft: false
           prerelease: true
 
