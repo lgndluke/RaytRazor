@@ -57,7 +57,7 @@ jobs:
           $MAJOR = $VERSION_PARTS[0]
           $MINOR = $VERSION_PARTS[1]
           $PATCH = $VERSION_PARTS[2]
-          $BUILD = $VERSION_PARTS[3]
+          $BUILD = "$BUILD_NUMBER"
           $FULL_VERSION = "$MAJOR.$MINOR.$PATCH.$BUILD"
           Write-Host "Build version: $FULL_VERSION"
           "version=$FULL_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
@@ -72,6 +72,9 @@ jobs:
           Write-Host "Moving to build directory"
           Set-Location build
           
+          Write-Host "Path of build directory"
+          pwd
+          
           Write-Host "Building Project"
           cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
           mingw32-make
@@ -83,7 +86,7 @@ jobs:
           New-Item -ItemType Directory -Path ../release
           
           Write-Host "Copying RaytRazor executable to release directory"
-          Copy-Item "RaytRazor.exe" "../release/"
+          Copy-Item "RaytRazor/RaytRazor.exe" "../release/"
           
           Write-Host "Copying version file to release directory"
           Copy-Item "../4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
