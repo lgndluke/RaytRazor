@@ -3,7 +3,7 @@ name: build-development
 on:
   push:
     branches:
-      - development_ui
+      - development_UI
     paths:
       - '4. Software/4.1 Quellen/**'
 
