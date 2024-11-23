@@ -60,7 +60,7 @@ jobs:
           $BUILD = $VERSION_PARTS[3]
           $FULL_VERSION = "$MAJOR.$MINOR.$PATCH.$BUILD"
           Write-Host "Build version: $FULL_VERSION"
-          "$FULL_VERSION" | Out-File -FilePath $env.GITHUB_ENV -Append -Encoding utf8
+          "$FULL_VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "$FULL_VERSION" | Out-File -FilePath $VERSION_FILE -Encoding utf8
 
       - name: Build RaytRazor Project
