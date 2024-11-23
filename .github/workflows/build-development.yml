@@ -94,7 +94,7 @@ jobs:
           New-Item -ItemType Directory -Path release
           
           Write-Host "Copying RaytRazor executable to release directory"
-          Copy-Item "build/RaytRazor.exe" "release/"
+          Copy-Item "RaytRazor/build/RaytRazor.exe" "release/"
           
           Write-Host "Copying version file to release directory"
           Copy-Item "4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "release/VERSION.DAT"
