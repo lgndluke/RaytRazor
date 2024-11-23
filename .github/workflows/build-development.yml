@@ -78,6 +78,9 @@ jobs:
           Write-Host "Building Project"
           cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
           mingw32-make
+          
+          Write-Host "Listing built folders/files"
+          dir
 
       - name: Create release directory
         shell: pwsh
@@ -86,11 +89,10 @@ jobs:
           New-Item -ItemType Directory -Path ../release
           
           Write-Host "Copying RaytRazor executable to release directory"
-          Copy-Item "RaytRazor/RaytRazor.exe" "../release/"
+          Copy-Item "RaytRazor/RaytRazor/build/RaytRazor.exe" "../release/"
           
           Write-Host "Copying version file to release directory"
           Copy-Item "../4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
-          
 
       - name: Upload Release
         uses: actions/upload-artifact@v4
