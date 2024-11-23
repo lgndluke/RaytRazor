@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build-Development
+    name: Build Pre-Release
     runs-on: windows-latest
     timeout-minutes: 60
     permissions:
@@ -89,7 +89,7 @@ jobs:
           New-Item -ItemType Directory -Path ../release
           
           Write-Host "Copying RaytRazor executable to release directory"
-          Copy-Item "RaytRazor/RaytRazor/build/RaytRazor.exe" "../release/"
+          Copy-Item "build/RaytRazor.exe" "../release/"
           
           Write-Host "Copying version file to release directory"
           Copy-Item "../4. Software/4.1 Quellen/RaytRazor/VERSION.DAT" "../release/VERSION.DAT"
