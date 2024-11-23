@@ -197,10 +197,18 @@ public:
                                        Alignment::Middle, 0, 5));
 
         Button *b0 = new Button(tools, "Random Color");
-        b0->setCallback([this]() { mCanvas->setBackgroundColor(Vector4i(rand() % 256, rand() % 256, rand() % 256, 255)); });
+        b0->setCallback([this]()
+        {
+            mCanvas->setBackgroundColor(Vector4i(rand() % 256, rand() % 256, rand() % 256, 255));
+            Logger::log(MessageType::INFO, "Randomized Color");
+        });
 
         Button *b1 = new Button(tools, "Random Rotation");
-        b1->setCallback([this]() { mCanvas->setRotation(nanogui::Vector3f((rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f)); });
+        b1->setCallback([this]()
+        {
+            mCanvas->setRotation(nanogui::Vector3f((rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f));
+            Logger::log(MessageType::INFO, "Randomized Rotation");
+        });
 
         performLayout();
     }
