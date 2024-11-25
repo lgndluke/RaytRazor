@@ -1,19 +1,26 @@
 #include "Light_Component.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+Light_Component::Light_Component(float intensity, glm::vec3 color)
+    : intensity(intensity), color(color)
+{
+}
 
-using namespace std;
+float Light_Component::getIntensity() const
+{
+    return intensity;
+}
 
-// Attributes (Init of global/static Attributes)
+void Light_Component::setIntensity(float newIntensity)
+{
+    intensity = newIntensity;
+}
 
-// Constructor
+glm::vec3 Light_Component::getColor() const
+{
+    return color;
+}
 
-// Destructor
-
-// Private Methods
-
-// Public Methods
+void Light_Component::setColor(const glm::vec3& newColor)
+{
+    color = newColor;
+}
