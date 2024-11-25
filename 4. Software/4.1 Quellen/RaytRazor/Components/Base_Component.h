@@ -21,7 +21,7 @@ class Base_Component
        /**
         * @brief Konstruktor, der ein Base_Component Objekt mit zufällig generierter UUID erstellt.
         */
-       Base_Component()
+       Base_Component();
 
        //virtual ~Base_Component();
 
