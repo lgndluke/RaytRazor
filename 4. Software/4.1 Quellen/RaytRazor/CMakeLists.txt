@@ -1,21 +1,44 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.30.5)
 project(RaytRazor)
-
-find_package(OpenGL REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Including GLFW
-add_subdirectory(Utility/External_Libraries/glfw)
-include_directories(Utility/External_Libraries/glfw/include)
+if (WIN32)
+    # Windows specific compiler flags.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static")
+else ()
+    # Linux/MacOS specific compiler flags. -> Functionality has not yet been tested.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+endif ()
 
-# Including GLAD
-include_directories(Utility/External_Libraries/glad/include)
+find_package(OpenGL REQUIRED)
 
-# Including GLM
+# Include GLM
 include_directories(Utility/External_Libraries/glm)
 
-set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
+# Include STB_Image
+include_directories(Utility/External_Libraries/stb_image)
+
+# Include NanoGUI
+set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_SHARED OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
+set(NANOGUI_INSTALL       OFF CACHE BOOL " " FORCE)
+
+add_subdirectory(Utility/External_Libraries/nanogui)
+set_property(TARGET glfw glfw_objects nanogui PROPERTY FOLDER "dependencies")
+
+add_definitions(${NANOGUI_EXTRA_DEFS})
+include_directories(${NANOGUI_EXTRA_INCS})
+
+include_directories(Utility/External_Libraries/nanogui/include)
+
+# Include Boost
+include_directories(Utility/External_Libraries/boost)
+include_directories(Utility/External_Libraries/boost/boost/uuid)
+
+set(SOURCE_FILES
+        main.cpp
         Utility/Logger/Logger.cpp
         Utility/Logger/Logger.h
         Import/Importers/Object/Object_Importer.cpp
@@ -45,9 +68,10 @@ set(SOURCE_FILES main.cpp Utility/External_Libraries/glad/src/glad.c
         Import/Resources/Object/Object_Resource.cpp
         Import/Resources/Object/Object_Resource.h
         UI/SceneManager/Scene_Manager.cpp
-        UI/SceneManager/Scene_Manager.h)
+        UI/SceneManager/Scene_Manager.h
+)
 
 add_executable(RaytRazor ${SOURCE_FILES})
 
-# Linking GLFW and OpenGL
-target_link_libraries(${CMAKE_PROJECT_NAME} glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARY})
+# Linking libraries
+target_link_libraries(RaytRazor nanogui nanogui-obj ${NANOGUI_EXTRA_LIBS} ${OPENGL_LIBRARIES})
