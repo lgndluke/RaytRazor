@@ -56,12 +56,6 @@ class Render_Component : public Base_Component
          */
         void setMatUUID(const string& newMatUUID);
 
-        /**
-         * @brief Führt das Rendering für das Objekt durch.
-         * Diese Methode kann angepasst werden, um die entsprechenden OpenGL-Aufrufe zu tätigen.
-         */
-        void render() const;
-
 private:
 
     string objUUID;      // OpenGL-Objekt-ID als UUID

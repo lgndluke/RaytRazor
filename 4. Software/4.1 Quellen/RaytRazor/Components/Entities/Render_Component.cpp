@@ -1,9 +1,5 @@
 #include "Render_Component.h"
 
-//TODO:
-// - Implementieren der Render_Component::render() Methode.
-// - cout aufruf in Render_Component::render() durch Logger::log() ersetzten - Logger.h in Header Datei importieren.
-
 Render_Component::Render_Component(const string& objUUID, const string& matUUID)
 {
     this->objUUID = objUUID;
@@ -28,10 +24,4 @@ string Render_Component::getMatUUID() const
 void Render_Component::setMatUUID(const string& newMatUUID)
 {
     matUUID = newMatUUID;
-}
-
-void Render_Component::render() const
-{
-    // Methode implementieren.
-    cout << "Rendering object with UUID: " << objUUID << " and material UUID: " << matUUID << endl;
 }
