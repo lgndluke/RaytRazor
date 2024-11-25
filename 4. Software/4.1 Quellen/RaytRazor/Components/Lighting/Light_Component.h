@@ -1,28 +1,60 @@
 #ifndef LIGHT_COMPONENT_H
 #define LIGHT_COMPONENT_H
 
-//TODO Add imports here.
-#include "../Base_Component.h"
-
-//TODO Add imports here.
-
-using namespace std;
+#include <glm/glm.hpp>                      // Für glm::vec3
+#include "../Base_Component.h"              // Annahme: Header für Base_Component
 
 /**
- * @brief //TODO
- * @author //TODO
+ * @brief Repräsentiert eine Lichtquelle in der Szene mit Eigenschaften wie Intensität und Farbe.
+ * Diese Klasse kann für Lichteffekte verwendet werden, die auf ein Objekt in einer 3D-Szene angewendet werden.
+ *
+ * @author Christian Kasper
  */
-class Light_Component : Base_Component
+class Light_Component : public Base_Component
 {
 
-   public:
+    public:
 
-        //TODO add public Method definitions.
+        /**
+         * @brief Konstruktor, der die Lichtquelle mit einer Anfangsintensität und -farbe initialisiert.
+         *
+         * @param intensity        Anfangsintensität des Lichts (Standard: 1.0f)
+         * @param color            Anfangsfarbe des Lichts (Standard: Weiß - glm::vec3(1.0f, 1.0f, 1.0f))
+         */
+        Light_Component(float intensity = 1.0f, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f));
 
-   private:
+        /**
+         * @brief Gibt die Intensität des Lichts zurück.
+         *
+         * @return float           Intensität des Lichts
+         */
+        float getIntensity() const;
+
+        /**
+         * @brief Setzt die Intensität des Lichts.
+         *
+         * @param newIntensity     Neue Intensität des Lichts
+         */
+        void setIntensity(float newIntensity);
+
+        /**
+         * @brief Gibt die Farbe des Lichts zurück.
+         *
+         * @return glm::vec3       Farbe des Lichts (RGB)
+         */
+        glm::vec3 getColor() const;
+
+        /**
+         * @brief Setzt die Farbe des Lichts.
+         *
+         * @param newColor         Neue Farbe des Lichts (RGB)
+         */
+        void setColor(const glm::vec3& newColor);
+
+    private:
 
         float intensity;
-        glm::vec3 color{0.0f, 0.0f, 0.0f};
+        glm::vec3 color;
 
 };
 
