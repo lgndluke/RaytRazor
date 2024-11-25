@@ -5,11 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(OpenGL REQUIRED)
 
+# Include Boost
+include_directories(Utility/External_Libraries/boost)
+include_directories(Utility/External_Libraries/boost/boost/uuid)
+
 # Include GLM
 include_directories(Utility/External_Libraries/glm)
-
-# Include STB_Image
-include_directories(Utility/External_Libraries/stb_image)
 
 # Include NanoGUI
 set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
@@ -25,9 +26,11 @@ include_directories(${NANOGUI_EXTRA_INCS})
 
 include_directories(Utility/External_Libraries/nanogui/include)
 
-# Include Boost
-include_directories(Utility/External_Libraries/boost)
-include_directories(Utility/External_Libraries/boost/boost/uuid)
+# Include nlohmann
+include_directories(Utility/External_Libraries/nlohmann)
+
+# Include STB_Image
+include_directories(Utility/External_Libraries/stb_image)
 
 set(SOURCE_FILES
         main.cpp
