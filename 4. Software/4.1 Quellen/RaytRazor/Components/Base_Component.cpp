@@ -1,20 +1,31 @@
 #include "Base_Component.h"
 
-//TODO Add imports.
-
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+//TODO:
+// -
 
 using namespace std;
 
-// Attributes (Init of global/static Attributes)
+Base_Component::Base_Component()
+{
+    uuid = boost::uuids::random_generator()();
+}
 
-// Constructor
+boost::uuids::uuid Base_Component::get_uuid() const
+{
+    return uuid;
+}
 
-// Destructor
+glm::vec3 Base_Component::get_position() const
+{
+    return position;
+}
 
-// Private Methods
+glm::vec3 Base_Component::get_rotation() const
+{
+    return rotation;
+}
 
-// Public Methods
+glm::vec3 Base_Component::get_scale() const
+{
+    return scale;
+}
