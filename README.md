@@ -5,10 +5,8 @@
 # RaytRazor
 
 ![Release_Version_Badge](https://img.shields.io/github/v/release/lgndluke/RaytRazor?include_prereleases&sort=date&display_name=release&style=for-the-badge&label=Release%3A)
-![Release_Status_Badge](https://img.shields.io/github/actions/workflow/status/lgndluke/RaytRazor/build-latest.yml?branch=main&style=for-the-badge&label=Build%20status%3A)
-![Top_Language_Badge](https://img.shields.io/github/languages/top/lgndluke/RaytRazor?style=for-the-badge&label=Language%3A)
-
-## Cutting edge Raytracing Technology
+![Release_Status_Badge](https://img.shields.io/github/actions/workflow/status/lgndluke/RaytRazor/build.yml?style=for-the-badge&label=Build%20Status%3A)
+![Top_Language_Badge](https://img.shields.io/github/languages/top/lgndluke/RaytRazor?style=for-the-badge)
 
 </div>
 
