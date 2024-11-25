@@ -41,8 +41,8 @@
 #include <cstdint>
 #include <memory>
 #include <utility>
-
 #include "Utility/Logger/Logger.h"
+#include "Import/Importers/Object/Object_Importer.h"
 
 #if defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -100,7 +100,8 @@ public:
             "}"
         );
 
-        MatrixXu indices(3, 12); /* Draw a cube */
+        /*
+        MatrixXu indices(3,12);
         indices.col( 0) << 0, 1, 3;
         indices.col( 1) << 3, 2, 1;
         indices.col( 2) << 3, 2, 6;
@@ -114,6 +115,7 @@ public:
         indices.col(10) << 5, 6, 2;
         indices.col(11) << 2, 1, 5;
 
+        /*
         MatrixXf positions(3, 8);
         positions.col(0) << -1,  1,  1;
         positions.col(1) << -1,  1, -1;
@@ -137,12 +139,68 @@ public:
         colors.col( 9) << 1, 0.5, 0;
         colors.col(10) << 0.5, 1, 0;
         colors.col(11) << 0.5, 1, 0.5;
+        */
+
+        vector<Vertex> vectorPos = Object_Importer::loadObject(
+    "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/airplanes/airplanes/dc3/plane2.obj");
+
+
+        vector<Vertex> vectorMAt = Object_Importer::loadObject(
+    "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/airplanes/airplanes/dc3/plane2.mtl");
 
         mShader.bind();
-        mShader.uploadIndices(indices);
+        mShader.uploadIndices(convertToMatrixxXU(vectorPos));
 
-        mShader.uploadAttrib("position", positions);
-        mShader.uploadAttrib("color", colors);
+        mShader.uploadAttrib("position", convertToMatrixXf(vectorPos));
+        mShader.uploadAttrib("color", createColorMatrix(vectorPos));
+    }
+
+    Eigen::MatrixXf createColorMatrix(const std::vector<Vertex>& vertices) {
+        // Erstelle eine 3 x N Matrix (3 Zeilen für RGB, N Spalten für Vertices)
+        Eigen::MatrixXf colors(3, vertices.size());
+
+        // Standardfarbe (z. B. Weiß: RGB = 1.0f, 1.0f, 1.0f)
+        for (size_t i = 0; i < vertices.size(); i++) {
+            //colors(0, i) = 1.0f; // Rot
+            //colors(1, i) = 1.0f; // Grün
+            //colors(2, i) = 1.0f; // Blau
+            colors.col(i) << 1.0f,1.0f,1.0f;
+        }
+
+        return colors;
+    }
+
+
+    Eigen::MatrixXf convertToMatrixXf(const std::vector<Vertex>& vertices) {
+        // Anzahl der Vertices
+        size_t numVertices = vertices.size();
+
+        // Initialisiere eine n x 3 Matrix
+        Eigen::MatrixXf matrix(3, numVertices);
+
+        // Positionen in die Matrix einfügen
+        for (size_t i = 0; i < numVertices; i++) {
+            matrix.col(i) << vertices[i].position.x, vertices[i].position.y, vertices[i].position.z;
+        }
+
+        //Logger::log(MessageType::INFO, matrixToString(matrix));
+        return matrix;
+    }
+
+    nanogui::MatrixXu convertToMatrixxXU(const std::vector<Vertex>& vertices)
+    {
+        // Die Anzahl der Dreiecke basierend auf der Annahme, dass jede Dreiecksgruppe 3 Vertices nutzt
+        size_t numTriangles = vertices.size() / 3;
+
+        // Erstelle eine 3 x n Matrix für die Indizes
+        nanogui::MatrixXu indices(3, numTriangles);
+
+        for (size_t i = 0; i < numTriangles; i++) {
+            indices.col(i) << (i * 3),     // Index 0 des Dreiecks
+                      (i * 3 + 1), // Index 1 des Dreiecks
+                      (i * 3 + 2); // Index 2 des Dreiecks
+        }
+        return indices;
     }
 
     ~MyGLCanvas() {
