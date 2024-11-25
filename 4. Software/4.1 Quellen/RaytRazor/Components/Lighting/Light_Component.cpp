@@ -59,6 +59,5 @@ void Light_Component::setColor(const glm::vec3& newColor)
  */
 void Light_Component::update(float deltaTime)
 {
-    // Beispiel: Intensität könnte basierend auf deltaTime verändert werden (z.B. für pulsierende Lichter)
-    // intensity = ... Berechnungen mit deltaTime
+
 }

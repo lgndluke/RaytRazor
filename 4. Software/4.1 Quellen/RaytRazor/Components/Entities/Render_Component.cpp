@@ -12,8 +12,8 @@
 Render_Component::Render_Component(const string& objUUID, const string& matUUID)
 {
     // Wenn keine UUID übergeben wird, dann verwenden wir die UUID von Base_Component
-    this->objUUID = objUUID.empty() ? get_uuid() : objUUID;  // Falls leer, von Base_Component nehmen
-    this->matUUID = matUUID.empty() ? get_uuid() : matUUID;  // Falls leer, von Base_Component nehmen
+    this->objUUID = objUUID;
+    this->matUUID = matUUID;
 }
 
 /**
@@ -63,8 +63,6 @@ void Render_Component::setMatUUID(const string& newMatUUID)
 void Render_Component::render() const
 {
     // Hier könnte Code stehen, der OpenGL-Objekte rendert, basierend auf objUUID und matUUID.
-    // Beispiel: OpenGL-Aufrufe, die das Rendern des Objekts und Materials ermöglichen.
 
-    // Beispiel einer Darstellung (dies ist nur ein Platzhalter, OpenGL-Aufrufe müssen hier implementiert werden)
     cout << "Rendering object with UUID: " << objUUID << " and material UUID: " << matUUID << endl;
 }
