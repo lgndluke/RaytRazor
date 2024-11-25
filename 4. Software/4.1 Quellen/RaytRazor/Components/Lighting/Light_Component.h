@@ -51,14 +51,6 @@ class Light_Component : public Base_Component
          */
         void setColor(const glm::vec3& newColor);
 
-        /**
-         * @brief Aktualisiert die Eigenschaften des Lichts basierend auf einer Zeitdifferenz.
-         * Könnte für dynamische Lichteffekte oder Animationen nützlich sein.
-         *
-         * @param deltaTime        Zeitdifferenz, die seit dem letzten Update vergangen ist
-         */
-        void update(float deltaTime);
-
     private:
 
         float intensity;

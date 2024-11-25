@@ -1,8 +1,5 @@
 #include "Light_Component.h"
 
-//TODO:
-// - Implementieren der Light_Component::update(float deltaTime) Methode.
-
 Light_Component::Light_Component(float intensity, glm::vec3 color)
     : intensity(intensity), color(color)
 {
@@ -26,9 +23,4 @@ glm::vec3 Light_Component::getColor() const
 void Light_Component::setColor(const glm::vec3& newColor)
 {
     color = newColor;
-}
-
-void Light_Component::update(float deltaTime)
-{
-    // Methode implementieren.
 }
