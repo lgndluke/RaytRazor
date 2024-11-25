@@ -1,13 +1,14 @@
 #ifndef JSON_PARSER_H
 #define JSON_PARSER_H
 
-#include <../../../Utility/External_Libraries/nlohmann/json.hpp>
 #include "../Import/Resources/Material/Material_Resource.h"
 #include "../Import/Resources/Object/Object_Resource.h"
 #include "../Components/Base_Component.h"
+#include "../Components/Entities/Render_Component.h"
 #include <boost/uuid/uuid.hpp>
-#include <string>
 #include <map>
+#include <nlohmann/json.hpp>
+#include <string>
 
 using namespace std;
 
