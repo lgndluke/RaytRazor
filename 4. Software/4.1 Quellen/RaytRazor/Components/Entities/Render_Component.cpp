@@ -1,19 +1,27 @@
 #include "Render_Component.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+Render_Component::Render_Component(const string& objUUID, const string& matUUID)
+{
+    this->objUUID = objUUID;
+    this->matUUID = matUUID;
+}
 
-using namespace std;
+string Render_Component::getObjUUID() const
+{
+    return objUUID;
+}
 
-// Attributes (Init of global/static Attributes)
+void Render_Component::setObjUUID(const string& newObjUUID)
+{
+    objUUID = newObjUUID;
+}
 
-// Constructor
+string Render_Component::getMatUUID() const
+{
+    return matUUID;
+}
 
-// Destructor
-
-// Private Methods
-
-// Public Methods
+void Render_Component::setMatUUID(const string& newMatUUID)
+{
+    matUUID = newMatUUID;
+}

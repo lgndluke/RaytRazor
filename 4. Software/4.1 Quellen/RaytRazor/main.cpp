@@ -11,29 +11,7 @@
     BSD-style license that can be found in the LICENSE.txt file.
 */
 
-#include <nanogui/opengl.h>
-#include <nanogui/glutil.h>
-#include <nanogui/screen.h>
-#include <nanogui/window.h>
-#include <nanogui/layout.h>
-#include <nanogui/label.h>
-#include <nanogui/checkbox.h>
-#include <nanogui/button.h>
-#include <nanogui/toolbutton.h>
-#include <nanogui/popupbutton.h>
-#include <nanogui/combobox.h>
-#include <nanogui/progressbar.h>
-#include <nanogui/entypo.h>
-#include <nanogui/messagedialog.h>
-#include <nanogui/textbox.h>
-#include <nanogui/slider.h>
-#include <nanogui/imagepanel.h>
-#include <nanogui/imageview.h>
-#include <nanogui/vscrollpanel.h>
-#include <nanogui/colorwheel.h>
-#include <nanogui/graph.h>
-#include <nanogui/tabwidget.h>
-#include <nanogui/glcanvas.h>
+#include <nanogui/nanogui.h>
 #include <iostream>
 #include <string>
 
@@ -200,14 +178,14 @@ public:
         b0->setCallback([this]()
         {
             mCanvas->setBackgroundColor(Vector4i(rand() % 256, rand() % 256, rand() % 256, 255));
-            Logger::log(MessageType::INFO, "Randomized Color!");
+            Logger::log(MessageType::INFO, "Randomized Color");
         });
 
         Button *b1 = new Button(tools, "Random Rotation");
         b1->setCallback([this]()
         {
             mCanvas->setRotation(nanogui::Vector3f((rand() % 100) / 100.0f, (rand() % 100) / 100.0f, (rand() % 100) / 100.0f));
-            Logger::log(MessageType::INFO, "Randomized Rotation!");
+            Logger::log(MessageType::INFO, "Randomized Rotation");
         });
 
         performLayout();
