@@ -1,8 +1,5 @@
 #include "Base_Component.h"
 
-//TODO:
-// -
-
 using namespace std;
 
 Base_Component::Base_Component()
