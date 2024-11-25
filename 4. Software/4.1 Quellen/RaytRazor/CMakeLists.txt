@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30.5)
+cmake_minimum_required(VERSION 3.29.6)
 project(RaytRazor)
 
 set(CMAKE_CXX_STANDARD 17)
