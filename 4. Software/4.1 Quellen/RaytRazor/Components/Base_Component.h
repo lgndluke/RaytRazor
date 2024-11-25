@@ -23,7 +23,7 @@ class Base_Component
             uuid = boost::uuids::random_generator()();
         }
 
-        virtual ~Base_Component();
+        //virtual ~Base_Component();
 
         boost::uuids::uuid get_uuid() const;
         glm::vec3 get_position();
