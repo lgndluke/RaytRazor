@@ -1,7 +1,15 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.30.5)
 project(RaytRazor)
 
 set(CMAKE_CXX_STANDARD 17)
+
+if (WIN32)
+    # Windows specific compiler flags.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static")
+else ()
+    # Linux/MacOS specific compiler flags. -> Functionality has not yet been tested.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+endif ()
 
 find_package(OpenGL REQUIRED)
 
