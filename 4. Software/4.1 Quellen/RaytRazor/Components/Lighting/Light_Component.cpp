@@ -1,26 +1,34 @@
 #include "Light_Component.h"
 
-Light_Component::Light_Component(float intensity, glm::vec3 color)
-    : intensity(intensity), color(color)
+Light_Component::Light_Component(const boost::uuids::uuid uuid,
+                                 const string& name,
+                                 const optional<glm::vec3> position,
+                                 const optional<glm::vec3> rotation,
+                                 const optional<glm::vec3> scale,
+                                 const float intensity,
+                                 const glm::vec3 color)
+                                 : Base_Component(uuid, name, position, rotation, scale)
 {
+    this->intensity = intensity;
+    this->color = color;
 }
 
-float Light_Component::getIntensity() const
+float Light_Component::get_intensity() const
 {
-    return intensity;
+    return this->intensity;
 }
 
-void Light_Component::setIntensity(float newIntensity)
+void Light_Component::set_intensity(const float new_intensity)
 {
-    intensity = newIntensity;
+    this->intensity = new_intensity;
 }
 
-glm::vec3 Light_Component::getColor() const
+glm::vec3 Light_Component::get_color() const
 {
-    return color;
+    return this->color;
 }
 
-void Light_Component::setColor(const glm::vec3& newColor)
+void Light_Component::set_color(const glm::vec3 new_color)
 {
-    color = newColor;
+    this->color = new_color;
 }

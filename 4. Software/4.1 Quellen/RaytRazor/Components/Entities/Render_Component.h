@@ -1,18 +1,13 @@
 #ifndef RENDER_COMPONENT_H
 #define RENDER_COMPONENT_H
 
-#include <string>
-#include <iostream>
-#include "../Base_Component.h"              // Annahme: Header für Base_Component
+#include "../Base_Component.h"
 
 using namespace std;
 
 /**
- * @brief Repräsentiert eine Render-Komponente mit Verweisen auf OpenGL-Ressourcen.
- * Diese Klasse enthält Referenzen auf OpenGL-Objekte wie Geometrie und Materialien,
- * die für das Rendering eines Objekts notwendig sind.
- *
- * @author Christian Kasper
+ * @brief Abgeleitete Klasse Render_Component repräsentiert eine Render Komponente.
+ * @author Christian Kasper, Lukas Jeckle
  */
 class Render_Component : public Base_Component
 {
@@ -20,46 +15,50 @@ class Render_Component : public Base_Component
     public:
 
         /**
-         * @brief Konstruktor, der die UUIDs für das Objekt und das Material initialisiert.
-         * Falls keine UUID übergeben wird, wird die UUID des Basiskomponenten-Getters verwendet.
+         * @brief Konstruktor zum Erstellen eines Render_Component Objekts.
          *
-         * @param objUUID          UUID für das OpenGL-Objekt (Standard: UUID von der Base_Component)
-         * @param matUUID          UUID für das OpenGL-Material (Standard: UUID von der Base_Component)
+         * @param uuid                      UUID des Components.
+         * @param name                      Name des Components.
+         * @param position                  3D-Position des Components.
+         * @param rotation                  3D-Rotation des Components.
+         * @param scale                     3D-Skalierung des Components.
+         *
+         * @param object_UUID               UUID der verwendeten Object_Resource.
+         * @param material_UUID             UUID der verwendeten Material_Resource.
          */
-        Render_Component(const string& objUUID = "", const string& matUUID = "");
+        Render_Component(const boost::uuids::uuid uuid, const string& name,
+                         const optional<glm::vec3> position, const optional<glm::vec3> rotation,
+                         const optional<glm::vec3> scale, const boost::uuids::uuid object_UUID,
+                         const boost::uuids::uuid material_UUID);
 
         /**
-         * @brief Gibt die UUID des OpenGL-Objekts zurück.
-         *
-         * @return string          UUID des Objekts
+         * @brief Methode, um die UUID der verwendeten Object_Resource zu erhalten.
+         * @return boost::uuids::uuid       UUID der verwendeten Object_Resource.
          */
-        string getObjUUID() const;
+        boost::uuids::uuid get_object_UUID() const;
 
         /**
-         * @brief Setzt die UUID für das OpenGL-Objekt.
-         *
-         * @param newObjUUID       Neue UUID für das Objekt
+         * @brief Methode, um die UUID der verwendeten Object_Resource zu ändern.
+         * @param new_UUID                  Neue UUID der verwendeten Object_Resource.
          */
-        void setObjUUID(const string& newObjUUID);
+        void set_object_UUID(const boost::uuids::uuid new_UUID);
 
         /**
-         * @brief Gibt die UUID des OpenGL-Materials zurück.
-         *
-         * @return string          UUID des Materials
+         * @brief Methode, um die UUID der verwendeten Material_Resource zu erhalten.
+         * @return boost::uuids::uuid       UUID der verwendeten Material_Resource.
          */
-        string getMatUUID() const;
+        boost::uuids::uuid get_material_UUID() const;
 
         /**
-         * @brief Setzt die UUID für das OpenGL-Material.
-         *
-         * @param newMatUUID       Neue UUID für das Material
+         * @brief Methode, um die UUID der verwendeten Material_Resource zu ändern.
+         * @param new_UUID                  Neue UUID der verwendeten Material_Resource.
          */
-        void setMatUUID(const string& newMatUUID);
+        void set_material_UUID(const boost::uuids::uuid new_UUID);
 
 private:
 
-    string objUUID;      // OpenGL-Objekt-ID als UUID
-    string matUUID;      // OpenGL-Material-ID als UUID
+    boost::uuids::uuid object_UUID;
+    boost::uuids::uuid material_UUID;
 
 };
 
