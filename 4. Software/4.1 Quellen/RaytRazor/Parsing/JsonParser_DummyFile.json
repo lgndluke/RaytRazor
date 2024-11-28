@@ -1,10 +1,9 @@
 {
-
   "renderentity": [
     {
 
       "name": "cube",
-      "uuid": 1,
+      "uuid": "64601c4f-bfd7-49a2-aaab-0cd4c118aec1",
       "Translation": {
         "position": {
           "x": -5,
@@ -24,14 +23,14 @@
       },
       "components": {
         "RenderComponent": {
-          "objUUID": 101,
-          "matUUID": 201
+          "objUUID": "25838b95-efac-4a60-a2bc-095ea8876af6",
+          "matUUID": "cbcf3341-d2a2-4ff3-8a7c-40cf0b135bdb"
         }
       }
     },
     {
       "name": "sphere",
-      "uuid": 2,
+      "uuid": "1c39c95f-e795-4274-9e63-1b5a950ae264",
       "Translation": {
         "position": {
           "x": 5
@@ -39,8 +38,8 @@
       },
       "components": {
         "RenderComponent": {
-          "objUUID": 102,
-          "matUUID": 201
+          "objUUID": "4d5a3dd5-5b97-40d5-9589-f5f9db068cb0",
+          "matUUID": "cbcf3341-d2a2-4ff3-8a7c-40cf0b135bdb"
         }
       }
     }
@@ -48,7 +47,7 @@
   "lightentity": [
     {
       "name": "sun",
-      "uuid": 3,
+      "uuid": "d4ef836c-325d-4ba9-9c68-56eba49c6aa3",
       "Translation": {
         "position": {
           "y": 50
@@ -69,7 +68,7 @@
   "cameraentity": [
     {
       "name": "main_camera",
-      "uuid": 6,
+      "uuid": "936e5ede-7c3e-4424-b523-585dcfe695fa",
       "Translation": {
         "position": {
           "x": 0,
@@ -94,17 +93,17 @@
   ],
   "resources": [
     {
-      "uuid": 101,
+      "uuid": "25838b95-efac-4a60-a2bc-095ea8876af6",
       "type": "obj",
       "path": "~/assets/cube.obj"
     },
     {
-      "uuid": 102,
+      "uuid": "4d5a3dd5-5b97-40d5-9589-f5f9db068cb0",
       "type": "obj",
       "path": "~/assets/sphere.obj"
     },
     {
-      "uuid": 201,
+      "uuid": "cbcf3341-d2a2-4ff3-8a7c-40cf0b135bdb",
       "type": "mat",
       "path": "~/assets/wood.obj"
     }
