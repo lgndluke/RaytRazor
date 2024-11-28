@@ -1,14 +1,11 @@
 #ifndef LIGHT_COMPONENT_H
 #define LIGHT_COMPONENT_H
 
-#include <glm/glm.hpp>                      // Für glm::vec3
-#include "../Base_Component.h"              // Annahme: Header für Base_Component
+#include "../Base_Component.h"
 
 /**
- * @brief Repräsentiert eine Lichtquelle in der Szene mit Eigenschaften wie Intensität und Farbe.
- * Diese Klasse kann für Lichteffekte verwendet werden, die auf ein Objekt in einer 3D-Szene angewendet werden.
- *
- * @author Christian Kasper
+ * @brief Abgeleitete Klasse Light_Component repräsentiert eine Licht Komponente.
+ * @author Christian Kasper, Lukas Jeckle
  */
 class Light_Component : public Base_Component
 {
@@ -16,40 +13,44 @@ class Light_Component : public Base_Component
     public:
 
         /**
-         * @brief Konstruktor, der die Lichtquelle mit einer Anfangsintensität und -farbe initialisiert.
+         * @brief Konstruktor zum Erstellen eines Light_Component Objekts.
          *
-         * @param intensity        Anfangsintensität des Lichts (Standard: 1.0f)
-         * @param color            Anfangsfarbe des Lichts (Standard: Weiß - glm::vec3(1.0f, 1.0f, 1.0f))
+         * @param uuid                   UUID des Components.
+         * @param name                   Name des Components.
+         * @param position               3D-Position des Components.
+         * @param rotation               3D-Rotation des Components.
+         * @param scale                  3D-Skalierung des Components.
+         *
+         * @param intensity              Intensität der Lichtstärke.
+         * @param color                  Farbeinstellungen der Lichtquelle.
          */
-        Light_Component(float intensity = 1.0f, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f));
+        Light_Component(const boost::uuids::uuid uuid, const string& name,
+                        const optional<glm::vec3> position, const optional<glm::vec3> rotation,
+                        const optional<glm::vec3> scale, const float intensity, const glm::vec3 color);
 
         /**
-         * @brief Gibt die Intensität des Lichts zurück.
-         *
-         * @return float           Intensität des Lichts
+         * @brief Methode, um die Intensität des Light_Components zu erhalten.
+         * @return float                 Intensität des Light_Components.
          */
-        float getIntensity() const;
+        float get_intensity() const;
 
         /**
-         * @brief Setzt die Intensität des Lichts.
-         *
-         * @param newIntensity     Neue Intensität des Lichts
+         * @brief Methode, um die Intensität des Light_Components zu ändern.
+         * @param new_intensity          Neue Intensität des Light_Components.
          */
-        void setIntensity(float newIntensity);
+        void set_intensity(const float new_intensity);
 
         /**
-         * @brief Gibt die Farbe des Lichts zurück.
-         *
-         * @return glm::vec3       Farbe des Lichts (RGB)
+         * @brief Methode, um die Farbe des Light_Components zu erhalten.
+         * @return glm::vec3             Farbe des Light_Components.
          */
-        glm::vec3 getColor() const;
+        glm::vec3 get_color() const;
 
         /**
-         * @brief Setzt die Farbe des Lichts.
-         *
-         * @param newColor         Neue Farbe des Lichts (RGB)
+         * @brief Methode, um die Farbe des Light_Components zu ändern.
+         * @param new_color             Neue Farbe des Light_Components.
          */
-        void setColor(const glm::vec3& newColor);
+        void set_color(const glm::vec3 new_color);
 
     private:
 
