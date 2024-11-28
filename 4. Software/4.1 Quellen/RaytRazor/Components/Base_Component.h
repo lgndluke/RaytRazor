@@ -1,17 +1,16 @@
 #ifndef BASE_COMPONENT_H
 #define BASE_COMPONENT_H
 
+#include <optional>
 #include <string>
 #include <glm/glm.hpp>
-#include <boost/uuid/uuid.hpp>              // UUID Klasse
-#include <boost/uuid/uuid_generators.hpp>   // UUID Generatoren
-#include <boost/uuid/uuid_io.hpp>           // Streaming-Operatoren, etc...
+#include <boost/uuid/uuid.hpp>
 
 using namespace std;
 
 /**
- * @brief Abstrakte Basis Klasse eines Component Objekts.
- * @author Christian Kasper
+ * @brief Abstrakte Basis Klasse für Component Objekte.
+ * @author Christian Kasper, Lukas Jeckle
  */
 class Base_Component
 {
@@ -19,42 +18,80 @@ class Base_Component
    public:
 
        /**
-        * @brief Konstruktor, der ein Base_Component Objekt mit zufällig generierter UUID erstellt.
+        * @brief Konstruktor zum Erstellen eines Base_Component Objekts.
+        *
+        * @param uuid                   UUID des Components.
+        * @param name                   Name des Components.
+        * @param position               3D-Position des Components.
+        * @param rotation               3D-Rotation des Components.
+        * @param scale                  3D-Skalierung des Components.
         */
-       Base_Component();
-
-       //virtual ~Base_Component();
+       Base_Component(const boost::uuids::uuid uuid, const string& name,
+                      const optional<glm::vec3> position, const optional<glm::vec3> rotation,
+                      const optional<glm::vec3> scale);
 
        /**
-        * @brief Methode um die UUID des Components zu erhalten.
+        * @brief Methode, um die UUID des Components zu erhalten.
         * @return boost::uuids::uuid       UUID des Components.
         */
        boost::uuids::uuid get_uuid() const;
 
+        /**
+         * @brief Methode, um den Namen des Components zu erhalten.
+         * @return string                   Name des Components.
+         */
+       string get_name() const;
+
+        /**
+         * @brief Methode, um den Namen des Components zu ändern.
+         * @param new_Name                  Neuer Name des Components.
+         */
+       void set_name(const string& new_Name);
+
        /**
-        * @brief Methode um die Position des Components zu erhalten.
-        * @return glm::vec3                Position des Components.
+        * @brief Methode, um die Position des Components zu erhalten.
+        * @return glm::vec3                Position des Components, falls diese gesetzt ist. Andernfalls glm::vec3(0, 0, 0).
         */
        glm::vec3 get_position() const;
 
+
+       /**
+        * @brief Methode, um die Position des Components zu ändern.
+        * @param new_Position              Neue Position des Components.
+        */
+       void set_position(glm::vec3 new_Position);
+
        /**
         * @brief Methode um die Rotation des Components zu erhalten.
-        * @return glm::vec3                Rotation des Components.
+        * @return glm::vec3                Rotation des Components, falls diese gesetzt ist. Andernfalls glm::vec3(0.0f, 0.0f, 0.0f).
         */
        glm::vec3 get_rotation() const;
 
        /**
+        * @brief Methode, um die Rotation des Components zu ändern.
+        * @param new_Rotation               Neue Rotation des Components.
+        */
+       void set_rotation(glm::vec3 new_Rotation);
+
+       /**
         * @brief Methode um die Skalierung des Components zu erhalten.
-        * @return glm::vec3                Skalierung des Components.
+        * @return glm::vec3                Skalierung des Components, falls diese gesetzt ist. Andernfalls glm::vec3(0.0f, 0.0f, 0.0f).
         */
        glm::vec3 get_scale() const;
+
+        /**
+         * @brief Methode, um die Skalierung des Components zu ändern.
+         * @param new_Scale                Neue Skalierung des Components.
+         */
+         void set_scale(glm::vec3 new_Scale);
 
    private:
 
        boost::uuids::uuid uuid;
-       glm::vec3 position {0.0f, 0.0f, 0.0f};
-       glm::vec3 rotation {0.0f, 0.0f, 0.0f};
-       glm::vec3 scale {1.0f, 1.0f, 1.0f};
+       string name;
+       optional<glm::vec3> position;
+       optional<glm::vec3> rotation;
+       optional<glm::vec3> scale;
 
 };
 
