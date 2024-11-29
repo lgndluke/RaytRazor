@@ -11,7 +11,11 @@ else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Ofast")
 endif ()
 
+set(SDL2_PATH "Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32")
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32/lib/cmake/SDL2)
+
 find_package(OpenGL REQUIRED)
+find_package(SDL2 REQUIRED)
 
 # Include Boost
 include_directories(Utility/External_Libraries/boost)
@@ -41,9 +45,6 @@ include_directories(Utility/External_Libraries/nlohmann)
 include_directories(Utility/External_Libraries/stb_image)
 
 # Include SDL2
-set(SDL2_PATH "Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32")
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32/lib/cmake/SDL2)
-find_package(SDL2 REQUIRED)
 include_directories( ${SDL2_INCLUDE_DIR} )
 
 set(SOURCE_FILES
