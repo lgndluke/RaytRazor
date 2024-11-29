@@ -1,14 +1,14 @@
-cmake_minimum_required(VERSION 3.30.5)
+cmake_minimum_required(VERSION 3.25.0)
 project(RaytRazor)
 
 set(CMAKE_CXX_STANDARD 17)
 
 if (WIN32)
     # Windows specific compiler flags.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static -Ofast")
 else ()
     # Linux/MacOS specific compiler flags. -> Functionality has not yet been tested.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Ofast")
 endif ()
 
 find_package(OpenGL REQUIRED)
@@ -39,6 +39,11 @@ include_directories(Utility/External_Libraries/nlohmann)
 
 # Include STB_Image
 include_directories(Utility/External_Libraries/stb_image)
+
+# Include SDL2
+set(SDL2_PATH "Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32/lib/cmake")
+find_package(SDL2 REQUIRED)
+include_directories( ${SDL2_INCLUDE_DIR} )
 
 set(SOURCE_FILES
         main.cpp
@@ -77,4 +82,4 @@ set(SOURCE_FILES
 add_executable(RaytRazor ${SOURCE_FILES})
 
 # Linking libraries
-target_link_libraries(RaytRazor nanogui nanogui-obj ${NANOGUI_EXTRA_LIBS} ${OPENGL_LIBRARIES})
+target_link_libraries(RaytRazor nanogui nanogui-obj ${NANOGUI_EXTRA_LIBS} ${OPENGL_LIBRARIES} ${SDL2_LIBRARY})
