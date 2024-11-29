@@ -1,8 +1,18 @@
 #include "Material_Resource.h"
 
-Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string& path)
+//TODO:
+// - Material_Resource::Material_Resource:
+// -> Prüfen, ob indices und materials die gleiche größe besitzen.
+// -> Überlegen und implementieren, was passiert wenn dem nicht so sein sollte.
+// - Material_Resource::update_indices_and_vertices()? Implementieren?
+
+Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string& path
+                                     const std::vector<int>& indices, const std::vector<Material>& materials)
                                      : Base_Resource(uuid, MATERIAL, path)
-{}
+{
+    this->indices = indices;
+    this->materials = materials;
+}
 
 std::vector<int> Material_Resource::get_indices() const
 {

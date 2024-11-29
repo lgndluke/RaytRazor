@@ -43,8 +43,11 @@ class Material_Resource : Base_Resource
          * @param uuid                   UUID der Ressource.
          * @param path                   Pfad der Ressource.
          *
+         * @param indices                Indices der Material_Resource.
+         * @param materials              Materials der Material_Resource.
          */
-        Material_Resource(const boost::uuids::uuid uuid, const string& path);
+        Material_Resource(const boost::uuids::uuid uuid, const string& path
+                          const std::vector<int>& indices, const std::vector<Material>& materials);
 
         /**
          * @brief Methode, um die Indices der Material_Resource zu erhalten.
