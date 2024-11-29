@@ -1,8 +1,18 @@
 #include "Object_Resource.h"
 
-Object_Resource::Object_Resource(const boost::uuids::uuid uuid, const string& path)
+//TODO:
+// - Object_Resource::Object_Resource:
+// -> Prüfen, ob indices und vertices die gleiche größe besitzen.
+// -> Überlegen und implementieren, was passiert wenn dem nicht so sein sollte.
+// - Object_Resource::update_indices_and_vertices()? Implementieren?
+
+Object_Resource::Object_Resource(const boost::uuids::uuid uuid, const string& path,
+                                 const std::vector<int>& indices, const std::vector<Vertex>& vertices)
                                  : Base_Resource(uuid, OBJECT, path)
-{}
+{
+    this->indices = indices;
+    this->vertices = vertices;
+}
 
 std::vector<int> Object_Resource::get_indices() const
 {

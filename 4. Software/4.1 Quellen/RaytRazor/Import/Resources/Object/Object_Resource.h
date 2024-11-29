@@ -40,8 +40,11 @@ class Object_Resource : Base_Resource
          * @param uuid                   UUID der Ressource.
          * @param path                   Pfad der Ressource.
          *
+         * @param indices                Indices der Object_Resource.
+         * @param vertices               Vertices der Object_Resource.
          */
-        Object_Resource(const boost::uuids::uuid uuid, const string& path);
+        Object_Resource(const boost::uuids::uuid uuid, const string& path,
+                        const std::vector<int>& indices, const std::vector<Vertex>& vertices);
 
         /**
          * @brief Methode, um die Indices der Object_Resource zu erhalten.
