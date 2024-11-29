@@ -29,7 +29,7 @@ struct Vertex
  * @brief Abgeleitete Klasse Object_Resource repräsentiert eine Objekt Ressource.
  * @author Lukas Jeckle
  */
-class Object_Resource : Base_Resource
+class Object_Resource : public Base_Resource
 {
 
     public:
