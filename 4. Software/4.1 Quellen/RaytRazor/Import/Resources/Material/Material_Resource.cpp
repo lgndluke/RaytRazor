@@ -4,7 +4,7 @@
 // - Material_Resource::Material_Resource:
 // -> Prüfen, ob indices und materials die gleiche größe besitzen.
 // -> Überlegen und implementieren, was passiert wenn dem nicht so sein sollte.
-// - Material_Resource::update_indices_and_vertices()? Implementieren?
+// - Material_Resource::update_indices_and_materials()? Implementieren?
 
 Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string& path,
                                      const std::vector<int>& indices, const std::vector<Material>& materials)
