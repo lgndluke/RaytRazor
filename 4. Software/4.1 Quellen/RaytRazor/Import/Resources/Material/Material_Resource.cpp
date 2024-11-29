@@ -1,19 +1,43 @@
 #include "Material_Resource.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string& path)
+                                     : Base_Resource(uuid, MATERIAL, path)
+{}
 
-using namespace std;
+std::vector<int> Material_Resource::get_indices() const
+{
+    if (indices.size() != 0)
+        return this->indices;
 
-// Attributes (Init of global/static Attributes)
+    return std::vector<int>();
+}
 
-// Constructor
+void Material_Resource::set_indices(const std::vector<int>& new_Indices)
+{
+    if (new_Indices.size() != this->materials.size())
+    {
+        Logger::log(MessageType::SEVERE, "Material_Resource::set_indices(): Size of new_Indices does not match size of this->materials!");
+        return;
+    }
 
-// Destructor
+    this->indices = new_Indices;
+}
 
-// Private Methods
+std::vector<Material> Material_Resource::get_materials() const
+{
+    if (materials.size() != 0)
+        return this->materials;
 
-// Public Methods
+    return std::vector<Material>();
+}
+
+void Material_Resource::set_materials(const std::vector<Material>& new_Materials)
+{
+    if (new_Materials.size() != this->indices.size())
+    {
+        Logger::log(MessageType::SEVERE, "Material_Resource::set_materials(): Size of new_Materials does not match size of this->indices!");
+        return;
+    }
+
+    this->materials = new_Materials;
+}
