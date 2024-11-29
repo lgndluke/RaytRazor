@@ -32,7 +32,7 @@ struct Material
  * @brief Abgeleitete Klasse Material_Resource repräsentiert eine Material Ressource.
  * @author Lukas Jeckle
  */
-class Material_Resource : Base_Resource
+class Material_Resource : public Base_Resource
 {
 
     public:
@@ -46,7 +46,7 @@ class Material_Resource : Base_Resource
          * @param indices                Indices der Material_Resource.
          * @param materials              Materials der Material_Resource.
          */
-        Material_Resource(const boost::uuids::uuid uuid, const string& path
+        Material_Resource(const boost::uuids::uuid uuid, const string& path,
                           const std::vector<int>& indices, const std::vector<Material>& materials);
 
         /**
