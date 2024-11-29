@@ -2,7 +2,7 @@
 
 //TODO:
 // - Methode: Json_Parser::parseJSON()
-// -> Implementieren des Ressourcen-Abschnitts.
+// -> Ressourcen-Abschnitts -> Importer Aufrufe hinzufügen.
 // -> Was passiert mit der Metadata?
 // - Implementierung der Methode: Json_Parser::exportToJSON()
 
@@ -180,13 +180,19 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 
         if (type == "obj")
         {
-            /*Object_Resource object_resource(type, path);
-            resources[uuid] = object_resource;*/
+            std::vector<int> indices;           //TODO Call to Object-Import?
+            std::vector<Vertex> vertices;       //TODO Call to Object-Import?
+
+            Object_Resource object_resource(uuid, path, indices, vertices);
+            resources.insert({uuid, object_resource});
         }
         else if (type == "mat")
         {
-            /*Material_Resource material_resource(type, path);
-            resources[uuid] = material_resource;*/
+            std::vector<int> indices;           //TODO Call to Material-Import?
+            std::vector<Material> materials;    //TODO Call to Material-Import?
+
+            Material_Resource material_resource(uuid, path, indices, materials);
+            resources.insert({uuid, material_resource});
         }
         else
         {
@@ -205,4 +211,5 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 bool Json_Parser::exportToJSON(const string& exportPath)
 {
     // Methode implementieren.
+    return false;
 }

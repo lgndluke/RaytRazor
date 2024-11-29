@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <memory>
 #include <utility>
+#include <SDL.h>
 
 #include "Utility/Logger/Logger.h"
 
@@ -233,5 +234,7 @@ int main(int /* argc */, char ** /* argv */) {
         return -1;
     }
 
+    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Quit();
     return 0;
 }
