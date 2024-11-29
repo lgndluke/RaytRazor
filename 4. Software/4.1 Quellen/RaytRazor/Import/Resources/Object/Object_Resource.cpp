@@ -1,19 +1,43 @@
 #include "Object_Resource.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+Object_Resource::Object_Resource(const boost::uuids::uuid uuid, const string& path)
+                                 : Base_Resource(uuid, OBJECT, path)
+{}
 
-using namespace std;
+std::vector<int> Object_Resource::get_indices() const
+{
+    if (indices.size() != 0)
+        return this->indices;
 
-// Attributes (Init of global/static Attributes)
+    return std::vector<int>();
+}
 
-// Constructor
+void Object_Resource::set_indices(const std::vector<int>& new_Indices)
+{
+    if (new_Indices.size() != this->vertices.size())
+    {
+        Logger::log(MessageType::SEVERE, "Object_Resource::set_indices(): Size of new_Indices does not match size of this->vertices!");
+        return;
+    }
 
-// Destructor
+    this->indices = new_Indices;
+}
 
-// Private Methods
+std::vector<Vertex> Object_Resource::get_vertices() const
+{
+    if (vertices.size() != 0)
+        return this->vertices;
 
-// Public Methods
+    return std::vector<Vertex>();
+}
+
+void Object_Resource::set_vertices(const std::vector<Vertex>& new_Vertices)
+{
+    if (new_Vertices.size() != this->indices.size())
+    {
+        Logger::log(MessageType::SEVERE, "Object_Resource::set_vertices(): Size of new_Vertices does not match size of this->indices!");
+        return;
+    }
+
+    this->vertices = new_Vertices;
+}
