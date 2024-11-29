@@ -4,7 +4,52 @@
 
 ---
 
-### Logo's:
+### **Logo's:**
 
 RaytRazor Logo: [ChatGPT Logo Generator](https://chatgpt.com/g/g-9i7ARxKhj-logo)<br>
 RayForge Logo: [ChatGPT Logo Generator](https://chatgpt.com/g/g-9i7ARxKhj-logo)<br>
+
+### **Workflow's:**
+
+#### **build.yml**
+
+- [softprops/action-gh-release@v2](https://github.com/softprops/action-gh-release)
+
+#### **code-scan.yml**
+
+- [GitHub Repository of CodeQL GitHub Action](https://github.com/github/codeql-action)
+- [github/codeql-action/init@v3](https://github.com/github/codeql-action/blob/main/init/action.yml)
+- [github/codeql-action/analyze@v3](https://github.com/github/codeql-action/blob/main/analyze/action.yml)
+- [CodeQL Documentation](https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql)
+
+### **External Libraries:**
+
+#### **Boost:** (UUID)
+
+- [GitHub](https://github.com/boostorg/uuid)
+- [Website / Documentation](https://www.boost.org/doc/libs/1_86_0/libs/uuid/doc/html/uuid.html#introduction)
+
+#### **GLM:**
+
+- [GitHub](https://github.com/g-truc/glm)
+- [Website / Documentation](https://glm.g-truc.net/) -> Redirects to GitHub.
+
+#### **NanoGUI:**
+
+- [GitHub](https://github.com/wjakob/nanogui)
+- [Website / Documentation](https://nanogui.readthedocs.io/en/latest/)
+
+#### **NLohmann:**
+
+- [GitHub](https://github.com/nlohmann/json)
+- [Website / Documentation](https://json.nlohmann.me/)
+
+#### **STB_Image:**
+
+- [GitHub](https://github.com/nothings/stb/tree/master)
+
+#### **--Example--**
+
+- GitHub:
+- Website:
+- Documentation:

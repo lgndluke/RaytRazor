@@ -1,19 +1,28 @@
 #include "Base_Resource.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+Base_Resource::Base_Resource(const boost::uuids::uuid uuid, const ResourceType type, const string& path)
+{
+    this->uuid = uuid;
+    this->type = type;
+    this->path = path;
+}
 
-using namespace std;
+boost::uuids::uuid Base_Resource::get_uuid() const
+{
+    return this->uuid;
+}
 
-// Attributes (Init of global/static Attributes)
+ResourceType Base_Resource::get_type() const
+{
+    return this->type;
+}
 
-// Constructor
+string Base_Resource::get_path() const
+{
+    return this->path;
+}
 
-// Destructor
-
-// Private Methods
-
-// Public Methods
+void Base_Resource::set_path(const string& new_path)
+{
+    this->path = new_path;
+}
