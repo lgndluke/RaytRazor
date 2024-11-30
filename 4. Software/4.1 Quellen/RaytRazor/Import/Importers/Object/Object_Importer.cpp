@@ -1,11 +1,49 @@
 #include "Object_Importer.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <Eigen/Dense>  // Für die Verwendung von Eigen-Matrizen und -Vektoren
 
-bool loadOBJ(
+//TODO's:
+// - Object_Importer::import_Object() -> Prüfen, ob Datei im .obj Format vorliegt.
+// - Object_Importer::fetch_indices() implementieren.
+// - Object_Importer::fetch_vertices() implementieren.
+
+std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids::uuid& uuid,
+                                                              const string& path_to_file)
+{
+
+    // Prüfung, ob Datei im .obj Format vorliegt hier.
+
+    if (std::ifstream file(path_to_file); !file.is_open())
+    {
+        Logger::log(MessageType::SEVERE, "Object_Importer::import_Object(): Unable to open object file: " + path_to_file);
+        return std::nullopt;
+    }
+
+    const vector<int> indices = fetch_indices(uuid, path_to_file);
+    const vector<Vertex> vertices = fetch_vertices(uuid, path_to_file);
+
+    Object_Resource return_Resource(uuid, path_to_file, indices, vertices);
+    return return_Resource;
+
+}
+
+std::vector<int> Object_Importer::fetch_indices(const boost::uuids::uuid& uuid,
+                                                const string& path_to_file)
+{
+
+    // Index Daten aus .obj Datei auslesen -> Datei ist bereits geprüft und eine valide .obj Datei.
+    return vector<int>{};
+
+}
+
+std::vector<Vertex> Object_Importer::fetch_vertices(const boost::uuids::uuid& uuid,
+                                                    const string& path_to_file)
+{
+
+    // Material Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
+    return vector<Vertex>{};
+
+}
+
+/*bool loadOBJ(
     const char* path,
     nanogui::MatrixXf& out_vertices,    // Verwende Eigen::MatrixXf für Vertices
     nanogui::MatrixXu& out_indices,     // Verwende Eigen::MatrixXu für Indices
@@ -104,3 +142,4 @@ bool loadOBJ(
 
     return true;
 }
+*/
