@@ -6,32 +6,16 @@
 #include "../../Logger/Logger.h"
 #include <string>
 #include <vector>
+#include <Eigen/Dense>  // Für die Verwendung von Eigen-Matrizen und -Vektoren
 
-using namespace std;
+// Die neue Funktionsdeklaration mit den Eigen Matrizen für Vertices, Indices und Farben
+bool loadOBJ(
+    const char* path,
+    nanogui::MatrixXf& out_vertices,   // Matrix für Vertices des Modells
+    nanogui::MatrixXu& out_indices,    // Matrix für Indices, um das Mesh zusammenzusetzen
+    nanogui::MatrixXf& out_uvs,        // Matrix für UV-Koordinaten des Modells
+    nanogui::MatrixXf& out_normals,    // Matrix für Normale des Modells
+    nanogui::MatrixXf& out_colors      // Matrix für Farben der Vertices
+);
 
-/**
- * @brief //TODO
- * @author //TODO
- */
-class Object_Importer
-{
-
-    public:
-
-        //TODO add public Method definitions.
-        Object_Importer();
-        ~Object_Importer();
-
-        /**
-         * @brief //TODO
-         * @param filePath //TODO
-         */
-        static vector<Vertex> loadObject(const string& filePath);
-
-    private:
-
-        //TODO add private Method definitions.
-
-};
-
-#endif
+#endif // OBJECT_IMPORTER_H
