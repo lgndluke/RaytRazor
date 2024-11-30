@@ -1,25 +1,44 @@
 #include "Material_Importer.h"
-//TODO Add imports.
 
 //TODO
-// - Define further tasks here.
-// - task2
-// - task3
+// - Material_Importer::import_Material() implementieren.
 
-using namespace std;
+std::optional<Material_Resource> Material_Importer::import_Material(const boost::uuids::uuid& uuid,
+                                                                    const string& path_to_file)
+{
+    if (std::ifstream file(path_to_file); !file.is_open())
+    {
+        Logger::log(MessageType::SEVERE, "Material_Importer::import_Material(): Unable to open material file: " + path_to_file);
+        return std::nullopt;
+    }
 
-// Attributes (Init of global/static Attributes)
+    const vector<int> indices = fetch_indices(uuid, path_to_file);
+    const vector<Material> materials = fetch_materials(uuid, path_to_file);
 
-// Constructor
-Material_Importer::Material_Importer() = default;
+    Material_Resource return_Resource(uuid, path_to_file, indices, materials);
+    return return_Resource;
 
-// Destructor
-Material_Importer::~Material_Importer() = default;
+}
 
-// Private Methods
+std::vector<int> Material_Importer::fetch_indices(const boost::uuids::uuid& uuid,
+                                                  const string& path_to_file)
+{
+
+    // TODO Index Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
+    return vector<int>{};
+}
+
+std::vector<Material> Material_Importer::fetch_materials(const boost::uuids::uuid& uuid,
+                                                         const string& path_to_file)
+{
+
+    // TODO Material Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
+    return vector<Material>{};
+
+}
 
 // Public Methods
-vector<Material> Material_Importer::loadMaterial(const string& filePath)
+/*vector<Material> Material_Importer::loadMaterial(const string& filePath)
 {
     // Vektoren - Materialbeschreibung
     std::vector<glm::vec3> vec_ambient;         // Ka
@@ -190,3 +209,4 @@ vector<Material> Material_Importer::loadMaterial(const string& filePath)
     // Endprodukt zurück geben
     return materials;
 }
+*/

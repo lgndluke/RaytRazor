@@ -1,36 +1,54 @@
 #ifndef MATERIAL_IMPORTER_H
 #define MATERIAL_IMPORTER_H
 
-//TODO Add imports here.
 #include "../../Resources/Material/Material_Resource.h"
 #include "../../Logger/Logger.h"
+#include <optional>
 #include <string>
 #include <vector>
 
 using namespace std;
 
 /**
- * @brief //TODO
- * @author //TODO
+ * @brief Die Klasse Material_Importer erstellt @link Material_Resource Objekte.
+ * @author Christian Kasper, Lukas Jeckle
  */
 class Material_Importer
 {
 
     public:
 
-        //TODO add public Method definitions.
-        Material_Importer();
-        ~Material_Importer();
+        /**
+         * @brief Statische Klasse ohne Konstruktor.
+         */
+        Material_Importer() = delete;
 
         /**
-         * @brief //TODO
-         * @param filePath //TODO
+         * @brief Methode, um den Inhalt einer .mtl Datei in eine @link Material_Resource umzuwandeln.
+         *
+         * @param uuid                      Die UUID der @link Material_Resource
+         * @param path_to_file              Der Pfad der @link Material_Resource
+         *
+         * @return Material_Resource        Die importierte @link Material_Resource, falls diese erstellt wurde. Andernfalls, std::nullopt.
          */
-        static vector<Material> loadMaterial(const string& filePath);
+        static std::optional<Material_Resource> import_Material(const boost::uuids::uuid& uuid,
+                                                                const string& path_to_file);
 
     private:
 
-        //TODO add private Method definitions.
+        /**
+         * @brief Methode, um den Inhalt des Vektors indices zu füllen.
+         * @return std::vector<int>         Den importierten Inhalt des Vektors indices.
+         */
+        static std::vector<int> fetch_indices(const boost::uuids::uuid& uuid,
+                                              const string& path_to_file);
+
+        /**
+         * @brief Methode, um den Inhalt des Vektors materials zu füllen.
+         * @return std::vector<Material>    Den importieren Inhalt des Vektors materials.
+         */
+        static vector<Material> fetch_materials(const boost::uuids::uuid& uuid,
+                                                const string& path_to_file);
 
 };
 
