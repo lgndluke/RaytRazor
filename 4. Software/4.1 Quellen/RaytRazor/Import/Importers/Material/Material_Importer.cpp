@@ -1,11 +1,16 @@
 #include "Material_Importer.h"
 
-//TODO
-// - Material_Importer::import_Material() implementieren.
+//TODO's:
+// - Material_Importer::import_Material() -> Prüfen, ob Datei im .mtl Format vorliegt.
+// - Material_Importer::fetch_indices() implementieren.
+// - Material_Importer::fetch_materials() implementieren.
 
 std::optional<Material_Resource> Material_Importer::import_Material(const boost::uuids::uuid& uuid,
                                                                     const string& path_to_file)
 {
+
+    // Prüfung, ob Datei im .mtl Format vorliegt hier.
+
     if (std::ifstream file(path_to_file); !file.is_open())
     {
         Logger::log(MessageType::SEVERE, "Material_Importer::import_Material(): Unable to open material file: " + path_to_file);
@@ -24,15 +29,16 @@ std::vector<int> Material_Importer::fetch_indices(const boost::uuids::uuid& uuid
                                                   const string& path_to_file)
 {
 
-    // TODO Index Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
+    // Index Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
     return vector<int>{};
+
 }
 
 std::vector<Material> Material_Importer::fetch_materials(const boost::uuids::uuid& uuid,
                                                          const string& path_to_file)
 {
 
-    // TODO Material Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
+    // Material Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
     return vector<Material>{};
 
 }
