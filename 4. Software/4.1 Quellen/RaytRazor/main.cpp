@@ -238,3 +238,162 @@ int main(int /* argc */, char ** /* argv */) {
     SDL_Quit();
     return 0;
 }
+
+/*
+main
+
+
+#include <nanogui/nanogui.h>
+#include <iostream>
+#include <string>
+
+// Includes for the GLTexture class.
+#include <cstdint>
+#include <memory>
+#include <utility>
+#include <SDL.h>
+
+#include "Import/Importers/Object/Object_Importer.h"
+#include "Utility/Logger/Logger.h"
+
+#if defined(__GNUC__)
+#  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+#if defined(_WIN32)
+#  pragma warning(push)
+#  pragma warning(disable: 4457 4456 4005 4312)
+#endif
+
+#if defined(_WIN32)
+#  pragma warning(pop)
+#endif
+#if defined(_WIN32)
+#  if defined(APIENTRY)
+#    undef APIENTRY
+#  endif
+#  include <windows.h>
+#endif
+
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::string;
+using std::vector;
+using std::pair;
+using std::to_string;
+
+
+class MyGLCanvas : public nanogui::GLCanvas {
+public:
+    MyGLCanvas(Widget *parent) : nanogui::GLCanvas(parent), mRotation(nanogui::Vector3f(0.25f, 0.5f, 0.33f)) {
+        using namespace nanogui;
+
+        mShader.init(
+    "a_simple_shader",
+
+
+    R"(
+    #version 330 core
+
+    uniform mat4 modelViewProj; // Uniform for the transformation matrix
+
+    in vec3 position;
+    in vec3 color;
+    in vec2 uv;
+    in vec3 normal;
+
+    out vec3 fragColor;
+    out vec2 fragUV;
+    out vec3 fragNormal;
+
+    void main() {
+        gl_Position = modelViewProj * vec4(position, 1.0);
+        fragColor = color;
+        fragUV = uv;
+        fragNormal = normal;
+    }
+    )",
+
+    R"(
+    #version 330 core
+
+    in vec3 fragColor;
+    in vec2 fragUV;
+    in vec3 fragNormal;
+
+    out vec4 outColor;
+
+    void main() {
+        outColor = vec4(fragColor, 1.0);
+    }
+    )"
+);
+
+        printf("");
+
+        const char* objPath = "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj";
+
+        ObjectImporter *importer = new ObjectImporter();
+
+        // OBJ-Datei laden
+        if (!importer->loadOBJ(objPath)) {
+            std::cerr << "Fehler beim Laden der OBJ-Datei!" << std::endl;
+            return;
+        }
+
+        printf("");
+
+        std::cout << "OBJ-Datei erfolgreich geladen!" << std::endl;
+
+        // Debug-Ausgabe (optional)
+        std::cout << "Vertices:\n" << importer->getVertices() << std::endl;
+        std::cout << "Indices:\n" << importer->getIndices() << std::endl;
+        std::cout << "UVs:\n" << importer->getUVs() << std::endl;
+        std::cout << "Normals:\n" << importer->getNormals() << std::endl;
+        std::cout << "Colors:\n" << importer->getColors() << std::endl;
+
+        mShader.bind();
+        mShader.uploadIndices(importer->getIndices());
+        mShader.uploadAttrib("position", importer->getVertices());
+        mShader.uploadAttrib("color", importer->getColors());
+        if (!importer->getUVs().isZero()) {
+            mShader.uploadAttrib("uv",importer->getUVs());
+        }
+        if (!importer->getNormals().isZero()) {
+            mShader.uploadAttrib("normal", importer->getNormals());
+        }
+    }
+
+    ~MyGLCanvas() {
+        mShader.free();
+    }
+
+    void setRotation(nanogui::Vector3f vRotation) {
+        mRotation = vRotation;
+    }
+
+    virtual void drawGL() override {
+        using namespace nanogui;
+
+        mShader.bind();
+
+        Matrix4f mvp;
+        mvp.setIdentity();
+        float fTime = (float)glfwGetTime();
+        mvp.topLeftCorner<3,3>() = Eigen::Matrix3f(Eigen::AngleAxisf(mRotation[0]*fTime, Vector3f::UnitX()) *
+                                                   Eigen::AngleAxisf(mRotation[1]*fTime,  Vector3f::UnitY()) *
+                                                   Eigen::AngleAxisf(mRotation[2]*fTime, Vector3f::UnitZ())) * .25f;
+
+        mShader.setUniform("modelViewProj", mvp);
+
+        glEnable(GL_DEPTH_TEST);
+        mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+        glDisable(GL_DEPTH_TEST);
+    }
+
+private:
+    nanogui::GLShader mShader;
+    Eigen::Vector3f mRotation;
+};
+
+
