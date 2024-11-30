@@ -53,3 +53,37 @@ class Object_Importer
 };
 
 #endif
+
+/*
+Import.h
+
+#ifndef OBJECT_IMPORTER_H
+#define OBJECT_IMPORTER_H
+
+#include <Eigen/Dense>
+#include <nanogui/nanogui.h>
+#include <string>
+
+class ObjectImporter {
+private:
+// Private Member zur Speicherung der Daten
+nanogui::MatrixXf m_vertices;
+nanogui::MatrixXu m_indices;
+nanogui::MatrixXf m_uvs;
+nanogui::MatrixXf m_normals;
+nanogui::MatrixXf m_colors;
+
+public:
+// Getter
+const nanogui::MatrixXf& getVertices() const { return m_vertices; }
+const nanogui::MatrixXu& getIndices() const { return m_indices; }
+const nanogui::MatrixXf& getUVs() const { return m_uvs; }
+const nanogui::MatrixXf& getNormals() const { return m_normals; }
+const nanogui::MatrixXf& getColors() const { return m_colors; }
+
+// OBJ-Datei laden
+bool loadOBJ(const std::string& path);
+};
+
+#endif // OBJECT_IMPORTER_H
+*/

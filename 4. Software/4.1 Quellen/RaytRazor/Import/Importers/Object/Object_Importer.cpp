@@ -43,19 +43,20 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const boost::uuids::uuid& uu
 
 }
 
-/*bool loadOBJ(
-    const char* path,
-    nanogui::MatrixXf& out_vertices,    // Verwende Eigen::MatrixXf für Vertices
-    nanogui::MatrixXu& out_indices,     // Verwende Eigen::MatrixXu für Indices
-    nanogui::MatrixXf& out_uvs,         // Verwende Eigen::MatrixXf für UVs
-    nanogui::MatrixXf& out_normals,     // Verwende Eigen::MatrixXf für Normals
-    nanogui::MatrixXf& out_colors       // Verwende Eigen::MatrixXf für Colors
-) {
+/*
+Impoorter. cpp
+#include "Object_Importer.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+
+bool ObjectImporter::loadOBJ(const std::string& path) {
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<Eigen::Vector3f> temp_vertices;
     std::vector<Eigen::Vector2f> temp_uvs;
     std::vector<Eigen::Vector3f> temp_normals;
-    std::vector<Eigen::Vector3f> temp_colors;  // Temporäres Array für Farben
+    std::vector<Eigen::Vector3f> temp_colors;
 
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -69,75 +70,115 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const boost::uuids::uuid& uu
         std::string header;
         s >> header;
 
-        if (header == "v") {  // Vertex Position
+        // Ignore comments (lines starting with #)
+        if (header.empty() || header[0] == '#') {
+            continue;
+        }
+
+
+        if (header == "v") {
             Eigen::Vector3f vertex;
             s >> vertex.x() >> vertex.y() >> vertex.z();
             temp_vertices.push_back(vertex);
-        } else if (header == "vt") {  // UV
+        } else if (header == "vt") {
             Eigen::Vector2f uv;
             s >> uv.x() >> uv.y();
             temp_uvs.push_back(uv);
-        } else if (header == "vn") {  // Normal
+        } else if (header == "vn") {
             Eigen::Vector3f normal;
             s >> normal.x() >> normal.y() >> normal.z();
             temp_normals.push_back(normal);
-        } else if (header == "vc") {  // Vertex Color (neu hinzugefügt)
+        } else if (header == "vc") {
             Eigen::Vector3f color;
             s >> color.x() >> color.y() >> color.z();
             temp_colors.push_back(color);
-        } else if (header == "f") {  // Face
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            for (int i = 0; i < 3; i++) {
-                char slash1, slash2;
-                s >> vertexIndex[i] >> slash1 >> uvIndex[i] >> slash2 >> normalIndex[i];
+        } else if (header == "f") {
+            std::vector<unsigned int> vertexIndex, uvIndex, normalIndex;
+            std::string vertexData;
+
+            while (s >> vertexData) {
+                std::istringstream vertexStream(vertexData);
+                std::string v, vt, vn;
+                std::getline(vertexStream, v, '/');
+                std::getline(vertexStream, vt, '/');
+                std::getline(vertexStream, vn, '/');
+
+                if (!v.empty()) vertexIndex.push_back(std::stoi(v));
+                if (!vt.empty()) uvIndex.push_back(std::stoi(vt));
+                if (!vn.empty()) normalIndex.push_back(std::stoi(vn));
             }
 
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
+            for (size_t i = 0; i < vertexIndex.size(); i++) {
+                if (vertexIndex[i] > temp_vertices.size()) {
+                    std::cerr << "Invalid vertex index: " << vertexIndex[i] << std::endl;
+                    return false;
+                }
+
+                vertexIndices.push_back(vertexIndex[i]);
+                if (!uvIndex.empty()) uvIndices.push_back(uvIndex[i]);
+                if (!normalIndex.empty()) normalIndices.push_back(normalIndex[i]);
+            }
         }
     }
 
-    // Überprüfen, ob es Farben gibt und die Anzahl der Farben korrekt ist
-    if (temp_colors.size() == 0) {
-        // Falls keine Farben definiert sind, setze eine Standardfarbe (z.B. weiß)
-        Eigen::Vector3f defaultColor(1, 0, 0);
-        for (size_t i = 0; i < temp_vertices.size(); i++) {
-            temp_colors.push_back(defaultColor);
-        }
+    file.close();
+
+    // Validierung der Größe
+    if (vertexIndices.empty() || temp_vertices.empty()) {
+        std::cerr << "Invalid OBJ file: No vertices or faces found." << std::endl;
+        return false;
     }
 
-    // Verarbeite die Indizes und Daten
-    out_vertices.resize(3, vertexIndices.size() / 3);
-    out_uvs.resize(2, uvIndices.size() / 3);
-    out_normals.resize(3, normalIndices.size() / 3);
-    out_colors.resize(3, vertexIndices.size() / 3);
+    // Standardfarben hinzufügen, falls keine definiert sind
+    if (temp_colors.empty()) {
+        temp_colors.resize(temp_vertices.size(), Eigen::Vector3f(1.0f, 1.0f, 1.0f));  // Weiß als Standardfarbe
+    }
 
-    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-        unsigned int vertexIndex = vertexIndices[i];
-        unsigned int uvIndex = uvIndices[i];
-        unsigned int normalIndex = normalIndices[i];
+    // Dimensionieren der Member-Matrizen
+    m_vertices.resize(3, vertexIndices.size());
+    m_indices.resize(3, vertexIndices.size() / 3);
+    if (!temp_uvs.empty()) m_uvs.resize(2, uvIndices.size());
+    if (!temp_normals.empty()) m_normals.resize(3, normalIndices.size());
+    m_colors.resize(3, vertexIndices.size());
 
-        // Vertices
-        out_vertices.col(i) = temp_vertices[vertexIndex - 1];
+    // Daten zuweisen
+    for (size_t i = 0; i < vertexIndices.size(); i++) {
+        unsigned int vIdx = vertexIndices[i] - 1;
+        if (vIdx >= temp_vertices.size()) {
+            std::cerr << "Vertex index out of bounds: " << vIdx << std::endl;
+            return false;
+        }
+        m_vertices.col(i) = temp_vertices[vIdx];
 
-        // UVs
-        out_uvs.col(i) = temp_uvs[uvIndex - 1];
+        if (!temp_uvs.empty()) {
+            unsigned int uvIdx = uvIndices[i] - 1;
+            if (uvIdx >= temp_uvs.size()) {
+                std::cerr << "UV index out of bounds: " << uvIdx << std::endl;
+                return false;
+            }
+            m_uvs.col(i) = temp_uvs[uvIdx];
+        }
 
-        // Normals
-        out_normals.col(i) = temp_normals[normalIndex - 1];
+        if (!temp_normals.empty()) {
+            unsigned int nIdx = normalIndices[i] - 1;
+            if (nIdx >= temp_normals.size()) {
+                std::cerr << "Normal index out of bounds: " << nIdx << std::endl;
+                return false;
+            }
+            m_normals.col(i) = temp_normals[nIdx];
+        }
 
-        // Farben
-        out_colors.col(i) = temp_colors[vertexIndex - 1];  // Weisen die Farbe dem Vertex zu
+        unsigned int cIdx = vertexIndices[i] - 1;
+        if (cIdx >= temp_colors.size()) {
+            std::cerr << "Color index out of bounds: " << cIdx << std::endl;
+            return false;
+        }
+        m_colors.col(i) = temp_colors[cIdx];
+    }
 
-        // Indices (MatrixXu ist die Eigen-Implementierung für unsigned int Matrizen)
-        out_indices(i) = i;  // Füge den Index in das Indices-Array ein
+    // Indizes
+    for (size_t i = 0; i < vertexIndices.size() / 3; i++) {
+        m_indices.col(i) << i * 3, i * 3 + 1, i * 3 + 2;
     }
 
     return true;
