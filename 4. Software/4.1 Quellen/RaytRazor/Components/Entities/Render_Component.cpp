@@ -7,7 +7,7 @@ Render_Component::Render_Component(const boost::uuids::uuid uuid,
                                    const optional<glm::vec3> scale,
                                    const boost::uuids::uuid object_UUID,
                                    const boost::uuids::uuid material_UUID)
-                                   : Base_Component(uuid, name, position, rotation, scale)
+                                   : Base_Component(uuid, RENDER, name, position, rotation, scale)
 {
     this->object_UUID = object_UUID;
     this->material_UUID = material_UUID;

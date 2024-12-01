@@ -32,7 +32,7 @@ class Light_Component : public Base_Component
          * @brief Methode, um die Intensität des Light_Components zu erhalten.
          * @return float                 Intensität des Light_Components.
          */
-        float get_intensity() const;
+        [[nodiscard]] float get_intensity() const;
 
         /**
          * @brief Methode, um die Intensität des Light_Components zu ändern.
@@ -44,7 +44,7 @@ class Light_Component : public Base_Component
          * @brief Methode, um die Farbe des Light_Components zu erhalten.
          * @return glm::vec3             Farbe des Light_Components.
          */
-        glm::vec3 get_color() const;
+        [[nodiscard]] glm::vec3 get_color() const;
 
         /**
          * @brief Methode, um die Farbe des Light_Components zu ändern.
@@ -55,7 +55,7 @@ class Light_Component : public Base_Component
     private:
 
         float intensity;
-        glm::vec3 color;
+        glm::vec3 color{};
 
 };
 
