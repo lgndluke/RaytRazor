@@ -4,10 +4,10 @@
 #include "../../Components/Base_Component.h"
 #include "../../Import/Resources/Base_Resource.h"
 #include "../Scenes/Main/Main_Scene.h"
-#include <nanogui/nanogui.h>
+#include <map>
+#include <vector>
 
 using namespace std;
-using namespace nanogui;
 
 /**
  * @brief Die Klasse Scene_Manager verwaltet die Ressourcen der Szenen.
