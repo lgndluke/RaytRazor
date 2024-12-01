@@ -1,19 +1,20 @@
 #include "Main_Scene.h"
-//TODO Add imports.
 
-//TODO
-// - Define further tasks here.
-// - task2
-// - task3
+//TODO's:
+// -> Main_Scene::Main_Scene() implementieren.
+// -> Main_Scene::update() implementieren.
+// ->
 
-using namespace std;
+Main_Scene::Main_Scene(const int window_width,
+                       const int window_height,
+                       const string& window_title,
+                       const bool is_resizeable)
+                       : Screen(Eigen::Vector2i(window_width, window_height), window_title, is_resizeable)
+{
+    //
+}
 
-// Attributes (Init of global/static Attributes)
-
-// Constructor
-
-// Destructor
-
-// Private Methods
-
-// Public Methods
+void Main_Scene::update()
+{
+    //
+}

@@ -55,8 +55,6 @@ set(SOURCE_FILES
         Import/Importers/Object/Object_Importer.h
         Parsing/Json_Parser.cpp
         Parsing/Json_Parser.h
-        UI/Scenes/Base_Scene.cpp
-        UI/Scenes/Base_Scene.h
         UI/Scenes/Main/Main_Scene.cpp
         UI/Scenes/Main/Main_Scene.h
         UI/Scenes/Settings/Settings_Scene.cpp
