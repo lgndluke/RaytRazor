@@ -35,7 +35,7 @@ class Render_Component : public Base_Component
          * @brief Methode, um die UUID der verwendeten Object_Resource zu erhalten.
          * @return boost::uuids::uuid       UUID der verwendeten Object_Resource.
          */
-        boost::uuids::uuid get_object_UUID() const;
+        [[nodiscard]] boost::uuids::uuid get_object_UUID() const;
 
         /**
          * @brief Methode, um die UUID der verwendeten Object_Resource zu ändern.
@@ -47,7 +47,7 @@ class Render_Component : public Base_Component
          * @brief Methode, um die UUID der verwendeten Material_Resource zu erhalten.
          * @return boost::uuids::uuid       UUID der verwendeten Material_Resource.
          */
-        boost::uuids::uuid get_material_UUID() const;
+        [[nodiscard]] boost::uuids::uuid get_material_UUID() const;
 
         /**
          * @brief Methode, um die UUID der verwendeten Material_Resource zu ändern.

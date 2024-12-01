@@ -1,12 +1,14 @@
 #include "Base_Component.h"
 
-using namespace std;
-
-Base_Component::Base_Component(const boost::uuids::uuid uuid, const string& name,
-                               const optional<glm::vec3> position, const optional<glm::vec3> rotation,
+Base_Component::Base_Component(const boost::uuids::uuid uuid,
+                               const ComponentType type,
+                               const string& name,
+                               const optional<glm::vec3> position,
+                               const optional<glm::vec3> rotation,
                                const optional<glm::vec3> scale)
 {
     this->uuid = uuid;
+    this->type = type;
     this->name = name;
     this->position = position;
     this->rotation = rotation;
@@ -33,7 +35,7 @@ glm::vec3 Base_Component::get_position() const
     if (position.has_value())
         return *position;
 
-    return glm::vec3(0.0f, 0.0f, 0.0f);
+    return {0.0f, 0.0f, 0.0f};
 }
 
 void Base_Component::set_position(glm::vec3 new_Position)
@@ -46,7 +48,7 @@ glm::vec3 Base_Component::get_rotation() const
     if (rotation.has_value())
         return *rotation;
 
-    return glm::vec3(0.0f, 0.0f, 0.0f);
+    return {0.0f, 0.0f, 0.0f};
 }
 
 void Base_Component::set_rotation(glm::vec3 new_Rotation)
@@ -59,7 +61,7 @@ glm::vec3 Base_Component::get_scale() const
     if (scale.has_value())
         return *scale;
 
-    return glm::vec3(0, 0, 0);
+    return {0, 0, 0};
 }
 
 void Base_Component::set_scale(glm::vec3 new_Scale)
