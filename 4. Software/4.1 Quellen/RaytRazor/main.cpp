@@ -395,5 +395,4 @@ private:
     nanogui::GLShader mShader;
     Eigen::Vector3f mRotation;
 };
-
-
+*/
