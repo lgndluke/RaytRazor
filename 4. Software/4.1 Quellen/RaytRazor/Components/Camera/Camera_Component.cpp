@@ -9,7 +9,7 @@ Camera_Component::Camera_Component(const boost::uuids::uuid uuid,
                                    const float aspect_ratio,
                                    const float near_clip,
                                    const float far_clip)
-                                   : Base_Component(uuid, name, position, rotation, scale)
+                                   : Base_Component(uuid, CAMERA, name, position, rotation, scale)
 {
     this->fov = fov;
     this->aspect_ratio = aspect_ratio;
@@ -70,12 +70,12 @@ glm::mat4 Camera_Component::getViewMatrix() const
     direction.x = cos(pitch) * cos(yaw);
     direction.y = sin(pitch);
     direction.z = cos(pitch) * sin(yaw);
-    direction = glm::normalize(direction);
+    direction = normalize(direction);
 
     const glm::vec3 target = position + direction;
     constexpr auto up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    return glm::lookAt(position, target, up);
+    return lookAt(position, target, up);
 }
 
 glm::mat4 Camera_Component::getProjectionMatrix() const

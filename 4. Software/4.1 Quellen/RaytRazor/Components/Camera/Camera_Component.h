@@ -40,7 +40,7 @@ class Camera_Component : public Base_Component
          * @brief Methode, um das FOV des Camera_Components zu erhalten.
          * @return float                FOV des Camera_Components.
          */
-        float get_fov() const;
+        [[nodiscard]] float get_fov() const;
 
         /**
          * @brief Methode, um das FOV des Camera_Components zu ändern.
@@ -52,7 +52,7 @@ class Camera_Component : public Base_Component
          * @brief Methode, um das Aspekt-Ratio des Camera_Components zu erhalten.
          * @return float                Aspekt-Ratio des Camera_Components.
          */
-        float get_aspect_ratio() const;
+        [[nodiscard]] float get_aspect_ratio() const;
 
         /**
          * @brief Methode, um das Aspekt-Ratio des Camera_Components zu ändern.
@@ -64,7 +64,7 @@ class Camera_Component : public Base_Component
          * @brief Methode, um den Near-Clip des Camera_Components zu erhalten.
          * @return float                Near-Clip des Camera_Components.
          */
-        float get_near_clip() const;
+        [[nodiscard]] float get_near_clip() const;
 
         /**
          * @brief Methode, um den Near-Clip des Camera_Components zu ändern.
@@ -76,7 +76,7 @@ class Camera_Component : public Base_Component
          * @brief Methode, um den Far-Clip des Camera_Components zu erhalten.
          * @return float                Far-Clip des Camera_Components.
          */
-        float get_far_clip() const;
+        [[nodiscard]] float get_far_clip() const;
 
         /**
          * @brief Methode, um den Far-Clip des Camera_Components zu ändern.
@@ -88,13 +88,13 @@ class Camera_Component : public Base_Component
          * @brief Methode, um die View-Matrix der Kamera zu berechnen.
          * @return glm::mat4            Die berechnete View-Matrix.
          */
-        glm::mat4 getViewMatrix() const;
+        [[nodiscard]] glm::mat4 getViewMatrix() const;
 
         /**
          * @brief Methode, um die Projections-Matrix der Kamera zu berechnen.
          * @return glm::mat4            Die berechnete Projektions-Matrix.
          */
-        glm::mat4 getProjectionMatrix() const;
+        [[nodiscard]] glm::mat4 getProjectionMatrix() const;
 
     private:
 
