@@ -4,6 +4,7 @@
 #include "../../../Components/Base_Component.h"
 #include "../../../Import/Resources/Base_Resource.h"
 #include "../../../Utility/Logger/Logger.h"
+#include "../../../Raytracer/RT_App.h"
 #include <nanogui/nanogui.h>
 #include <vector>
 #include <map>
