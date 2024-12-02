@@ -55,7 +55,7 @@ std::vector<Material> Material_Importer::fetch_materials(const string& path_to_f
         ss.str(line);
         ss >> prefix;
 
-        //creates a new Material in the list, and fills the info
+        //erstellt eine neue Material in der list, and füllt diese mit der benötigten info
         if (prefix == "newmtl"){
             mtlNR += 1;
             ss >> word;
