@@ -21,6 +21,7 @@
 #include <utility>
 #include <SDL.h>
 
+#include "UI/Scenes/Main/Main_Scene.h"
 #include "Utility/Logger/Logger.h"
 
 #if defined(__GNUC__)
@@ -169,7 +170,7 @@ public:
 
         mCanvas = new MyGLCanvas(window);
         mCanvas->setBackgroundColor({100, 100, 100, 255});
-        mCanvas->setSize({400, 400});
+        mCanvas->setSize({800, 900});
 
         Widget *tools = new Widget(window);
         tools->setLayout(new BoxLayout(Orientation::Horizontal,
@@ -213,10 +214,10 @@ private:
 int main(int /* argc */, char ** /* argv */) {
     try {
         Logger::log(MessageType::INFO, "Initializing NanoGUI");
-        nanogui::init();
+        init();
 
         /* scoped variables */ {
-            nanogui::ref<ExampleApplication> app = new ExampleApplication();
+            nanogui::ref<Main_Scene> app = new Main_Scene(800, 600, "Test_GUI", true);
             app->drawAll();
             app->setVisible(true);
             nanogui::mainloop();
