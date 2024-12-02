@@ -91,14 +91,14 @@ jobs:
           New-Item -ItemType Directory -Path release
           
           Write-Host "Copying RaytRazor executable and other important files into the release directory"
-            Copy-Item -Path "RaytRazor/build/RaytRazor.exe" -Destination "release/"
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/settings.json" -Destination "release/"
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
+          Copy-Item -Path "RaytRazor/build/RaytRazor.exe" -Destination "release/"
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/settings.json" -Destination "release/"
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
           
-            Write-Host "Compressing "release/*" into an archive.
-            Compress-Archive -Path "release/*" -DestinationPath "release/RaytRazor-${{ env.version }}.zip" 
+          Write-Host "Compressing release/* into an archive."
+          Compress-Archive -Path "release/*" -DestinationPath "release/RaytRazor-${{ env.version }}.zip"
 
       - name: Deploy Pre-Release
         uses: softprops/action-gh-release@v2
@@ -201,7 +201,7 @@ jobs:
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
             
-            Write-Host "Compressing "release/*" into an archive.
+            Write-Host "Compressing release/* into an archive."
             Compress-Archive -Path "release/*" -DestinationPath "release/RaytRazor-${{ env.version }}.zip"        
 
         - name: Deploy Release
