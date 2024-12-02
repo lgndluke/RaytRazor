@@ -1,5 +1,8 @@
 #include "Json_Parser.h"
 
+#include "../Import/Importers/Material/Material_Importer.h"
+#include "../Import/Importers/Object/Object_Importer.h"
+
 //TODO:
 // - Methode: Json_Parser::parseJSON()
 // -> Ressourcen-Abschnitts -> Importer Aufrufe hinzufügen.
@@ -180,19 +183,13 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 
         if (type == "obj")
         {
-            std::vector<int> indices;           //TODO Call to Object-Import?
-            std::vector<Vertex> vertices;       //TODO Call to Object-Import?
-
-            Object_Resource object_resource(uuid, path, indices, vertices);
-            resources.insert({uuid, object_resource});
+            optional<Object_Resource> object_resource = Object_Importer::import_Object(uuid, path);
+            resources.insert({uuid, object_resource.value()});
         }
         else if (type == "mat")
         {
-            std::vector<int> indices;           //TODO Call to Material-Import?
-            std::vector<Material> materials;    //TODO Call to Material-Import?
-
-            Material_Resource material_resource(uuid, path, indices, materials);
-            resources.insert({uuid, material_resource});
+            optional<Material_Resource> material_resource = Material_Importer::import_Material(uuid, path);
+            resources.insert({uuid, material_resource.value()});
         }
         else
         {
