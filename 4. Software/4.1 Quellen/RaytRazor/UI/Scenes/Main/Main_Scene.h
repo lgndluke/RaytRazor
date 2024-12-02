@@ -98,6 +98,12 @@ class Main_Scene final : public Screen
          */
         void initialize();
 
+        /**
+         * @brief Methode, um die 3D-Preview der Main Szene mittels raytracing zu rendern.
+         * @return nullptr
+         */
+        void* (*raytrace_preview())(void*);
+
 };
 
 #endif
