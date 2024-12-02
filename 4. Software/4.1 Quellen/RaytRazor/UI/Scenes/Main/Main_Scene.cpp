@@ -1,5 +1,7 @@
 #include "Main_Scene.h"
 
+#include "../../../Parsing/Json_Parser.h"
+
 //TODO's:
 // -> Main_Scene::Main_Scene() implementieren.
 // -> Main_Scene::update() implementieren.
@@ -42,7 +44,7 @@ void Main_Scene::initialize()
 
     const auto preview_window = new Window(this, "3D-Preview");
     preview_window->setPosition(Eigen::Vector2i(preview_position_x, preview_position_y));
-    preview_window->setLayout(new GroupLayout());
+    preview_window->setSize(Eigen::Vector2i(preview_width, preview_height));
 
     const auto component_tree = new Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
@@ -52,23 +54,32 @@ void Main_Scene::initialize()
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
-    GLCanvas preview_canvas = new GLCanvas(preview_window);
-    preview_canvas.setBackgroundColor({100, 100, 100, 255});
-    preview_canvas.setSize({600, 300});
+    const auto preview_canvas = new GLCanvas(preview_window);
+    preview_window->addChild(preview_canvas);
+    preview_canvas->setPosition({ preview_position_x + 10, preview_position_y + 35 });
+    preview_canvas->setSize({preview_width - 20, preview_height - 80});
 
-    const auto preview_tools = new Widget(preview_window);
-    preview_tools->setLayout(new BoxLayout(Orientation::Horizontal,
-                                           Alignment::Middle, 0, 5));
-
-    const auto button1 = new Button(preview_tools, "Raytrace Preview");
-    button1->setCallback([this]()
+    const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
+    preview_window->addChild(raytrace_preview_button);
+    raytrace_preview_button->setCallback([this]()
     {
-        Logger::log(MessageType::INFO, "Button1 Clicked!");
-    });
+        Logger::log(MessageType::INFO, "Raytrace Preview Button Clicked!");
 
-    performLayout();
-    preview_window->setSize(Eigen::Vector2i(preview_width, preview_height));
-    preview_canvas.setSize({500, 500});
+        // SDL2 ...
+    });
+    raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
+    raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
+
+    const auto load_json_button = new Button(preview_window, "Import Scene");
+    preview_window->addChild(load_json_button);
+    load_json_button->setCallback([this]()
+    {
+        Logger::log(MessageType::INFO, "Import Scene Button Clicked!");
+
+        // Json_Parser::parseJSON();
+    });
+    load_json_button->setSize({(preview_width / 2) - 20, 30});
+    load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
 
 }
 
