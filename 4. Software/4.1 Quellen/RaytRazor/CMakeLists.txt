@@ -54,8 +54,6 @@ set(SOURCE_FILES
         Import/Importers/Object/Object_Importer.h
         Parsing/Json_Parser.cpp
         Parsing/Json_Parser.h
-        UI/Scenes/Base_Scene.cpp
-        UI/Scenes/Base_Scene.h
         UI/Scenes/Main/Main_Scene.cpp
         UI/Scenes/Main/Main_Scene.h
         UI/Scenes/Settings/Settings_Scene.cpp
@@ -76,8 +74,6 @@ set(SOURCE_FILES
         Import/Resources/Material/Material_Resource.h
         Import/Resources/Object/Object_Resource.cpp
         Import/Resources/Object/Object_Resource.h
-        UI/SceneManager/Scene_Manager.cpp
-        UI/SceneManager/Scene_Manager.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
