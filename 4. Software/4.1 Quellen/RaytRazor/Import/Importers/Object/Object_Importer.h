@@ -36,19 +36,26 @@ class Object_Importer
 
     private:
 
+
         /**
          * @brief Methode, um den Inhalt des Vektors indices zu füllen.
          * @return std::vector<int>         Den importierten Inhalt des Vektors indices.
          */
-        static std::vector<int> fetch_indices(const boost::uuids::uuid& uuid,
-                                              const string& path_to_file);
+        static std::vector<int> fetch_indices(const string& path_to_file);
 
         /**
          * @brief Methode, um den Inhalt des Vektors vertices zu füllen.
          * @return std::vector<Vertex>    Den importieren Inhalt des Vektors vertices.
          */
-        static vector<Vertex> fetch_vertices(const boost::uuids::uuid& uuid,
-                                             const string& path_to_file);
+        static vector<Vertex> fetch_vertices(const string& path_to_file);
+
+        /**
+        *
+        * @param fileName File, das überprüft werden soll ob es den, (.obj)-Handle hat.
+        * @param extensions Die zu überprüfenden Handle
+        * @return true wenn es Typ von (.obj) ist.
+        */
+        static bool hasExtension(const std::string& fileName);
 
 };
 
