@@ -50,11 +50,12 @@ class Object_Importer
         static vector<Vertex> fetch_vertices(const string& path_to_file);
 
         /**
-        * @brief Methode, um die Dateiendung zu validieren.
-        * @param fileName                 Der zu überprüfende Dateiname.
-        * @return bool                    True, falls die Datei auf .obj endet. Andernfalls, False.
-        */
-        static bool validate_extension(const std::string& fileName);
+         * @brief Methode, um die Dateiendung zu validieren.
+         * @param path_to_file              Der zu überprüfende Dateiname.
+         * @param suffix                    Die Dateiendung, auf die geprüft werden soll.
+         * @return bool                     True, falls die Datei auf .obj endet. Andernfalls, False.
+         */
+        static bool validate_extension(const std::string& path_to_file, const std::string& suffix);
 
 };
 
