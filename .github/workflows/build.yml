@@ -196,6 +196,9 @@ jobs:
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/settings.json" -Destination "release/"
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
+            
+            Write-Host "Compressing "release/*" into an archive.
+            Compress-Archive -Path "release/*" -DestinationPath "release/RaytRazor-${{ env.version }}.zip"        
 
         - name: Deploy Release
           uses: softprops/action-gh-release@v2
@@ -208,4 +211,4 @@ jobs:
             generate_release_notes: true
             append_body: true
             prerelease: false
-            files: D:/a/RaytRazor/release/*
+            files: D:/a/RaytRazor/release/RaytRazor-${{ env.version }}.zip
