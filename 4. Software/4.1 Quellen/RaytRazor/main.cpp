@@ -21,6 +21,7 @@
 #include <utility>
 #include <SDL.h>
 
+#include "Raytracer/RT_App.h"
 #include "Utility/Logger/Logger.h"
 
 #if defined(__GNUC__)
@@ -210,12 +211,14 @@ private:
     MyGLCanvas *mCanvas;
 };
 
-int main(int /* argc */, char ** /* argv */) {
+int main(int argc, char * argv[]) {
+    bool rayTrace = true;
     try {
         Logger::log(MessageType::INFO, "Initializing NanoGUI");
         nanogui::init();
 
-        /* scoped variables */ {
+        // scoped variables
+        {
             nanogui::ref<ExampleApplication> app = new ExampleApplication();
             app->drawAll();
             app->setVisible(true);
@@ -233,8 +236,10 @@ int main(int /* argc */, char ** /* argv */) {
         #endif
         return -1;
     }
+    if (rayTrace) {
+        RT_App app;
+        return app.onExecute();;
+    }
 
-    SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_Quit();
     return 0;
 }

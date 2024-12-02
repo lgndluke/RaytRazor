@@ -77,6 +77,10 @@ set(SOURCE_FILES
         Import/Resources/Object/Object_Resource.h
         UI/SceneManager/Scene_Manager.cpp
         UI/SceneManager/Scene_Manager.h
+        Raytracer/RT_App.h
+        Raytracer/RT_Image.h
+        Raytracer/RT_App.cpp
+        Raytracer/RT_Image.cpp
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
