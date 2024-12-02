@@ -4,7 +4,7 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
                                                               const string& path_to_file)
 {
 
-    if(!hasExtension(path_to_file))
+    if(!validate_extension(path_to_file))
     {
         return std::nullopt;
     }
@@ -188,7 +188,7 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const string& path_to_file)
     return vertices;
 }
 
-bool Object_Importer::hasExtension(const std::string& fileName) {
+bool Object_Importer::validate_extension(const std::string& fileName) {
     std::vector<std::string> validExtensions = {"obj"};
     size_t dotPos = fileName.find_last_of('.');
     if (dotPos == std::string::npos) {

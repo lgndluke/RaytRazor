@@ -50,12 +50,11 @@ class Object_Importer
         static vector<Vertex> fetch_vertices(const string& path_to_file);
 
         /**
-        *
-        * @param fileName File, das überprüft werden soll ob es den, (.obj)-Handle hat.
-        * @param extensions Die zu überprüfenden Handle
-        * @return true wenn es Typ von (.obj) ist.
+        * @brief Methode, um die Dateiendung zu validieren.
+        * @param fileName                 Der zu überprüfende Dateiname.
+        * @return bool                    True, falls die Datei auf .obj endet. Andernfalls, False.
         */
-        static bool hasExtension(const std::string& fileName);
+        static bool validate_extension(const std::string& fileName);
 
 };
 
