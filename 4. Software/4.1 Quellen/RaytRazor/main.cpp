@@ -9,14 +9,10 @@ int main(int argc, char* argv[]) {
     try
     {
         init();
-
-        {
-            nanogui::ref app = new Main_Scene(800, 600, "RaytRazor", true);
-            app->drawAll();
-            app->setVisible(true);
-            mainloop();
-        }
-
+        nanogui::ref app = new Main_Scene(1920, 1010, "RaytRazor", true);
+        app->drawAll();
+        app->setVisible(true);
+        mainloop();
         shutdown();
     }
     catch (const std::runtime_error &e)

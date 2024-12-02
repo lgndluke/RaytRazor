@@ -4,12 +4,34 @@
 #include "../../../Components/Base_Component.h"
 #include "../../../Import/Resources/Base_Resource.h"
 #include "../../../Utility/Logger/Logger.h"
+#include "../../../Raytracer/RT_App.h"
 #include <nanogui/nanogui.h>
 #include <vector>
 #include <map>
 
 using namespace std;
 using namespace nanogui;
+
+/**
+ * @brief Abgeleitete Klasse FixedWindow repräsentiert ein nicht bewegbares Fenster in der Main_Scene.
+ * @author Lukas Jeckle
+ */
+class Fixed_Window final : public Window
+{
+    public:
+
+        /**
+         * @brief Konstruktor zum Erstellen eines Fixed_Window Objekts.
+         */
+        Fixed_Window(Widget *parent, const std::string &title);
+
+        /**
+         * @brief Überschriebene Methode der Klasse Window um Mouse-Drag Events zu deaktivieren.
+         */
+        bool mouseDragEvent(const Vector2i& p, const Vector2i &rel,
+                            int button, int /* modifiers */) override;
+
+};
 
 /**
  * @brief Abgeleitete Klasse Preview_Canvas repräsentiert die OpenGL Preview in der Main_Scene.
@@ -75,6 +97,12 @@ class Main_Scene final : public Screen
          * @brief Methode, um die Main Szene zu initialisieren.
          */
         void initialize();
+
+        /**
+         * @brief Methode, um die 3D-Preview der Main Szene mittels raytracing zu rendern.
+         * @return nullptr
+         */
+        void* (*raytrace_preview())(void*);
 
 };
 
