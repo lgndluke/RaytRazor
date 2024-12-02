@@ -22,7 +22,7 @@ class Preview_Canvas final : public GLCanvas
 
         /**
          * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
-         * @param parent
+         * @param parent                Der Eltern-Widget des Canvas.
          */
         explicit Preview_Canvas(Widget* parent);
 
