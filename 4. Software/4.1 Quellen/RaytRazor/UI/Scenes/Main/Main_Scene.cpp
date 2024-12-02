@@ -1,13 +1,12 @@
 #include "Main_Scene.h"
 
-#include "../../../Parsing/Json_Parser.h"
-
 //TODO's:
+// -> Preview_Canvas::drawGL() implementieren.
 // -> Main_Scene::Main_Scene() implementieren.
 // -> Main_Scene::update() implementieren.
-// ->
 
-Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent) {}
+Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
+{}
 
 void Preview_Canvas::drawGL()
 {
