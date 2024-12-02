@@ -7,7 +7,7 @@ Light_Component::Light_Component(const boost::uuids::uuid uuid,
                                  const optional<glm::vec3> scale,
                                  const float intensity,
                                  const glm::vec3 color)
-                                 : Base_Component(uuid, name, position, rotation, scale)
+                                 : Base_Component(uuid, LIGHT, name, position, rotation, scale)
 {
     this->intensity = intensity;
     this->color = color;
