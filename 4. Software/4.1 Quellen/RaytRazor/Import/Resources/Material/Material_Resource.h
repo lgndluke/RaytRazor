@@ -21,6 +21,7 @@ struct Material
     GLfloat illumination;
     GLfloat transparency;
     GLfloat shininess;
+    GLfloat opacity;
     string map_Ka;
     string map_Kd;
     string map_Ks;
@@ -46,8 +47,7 @@ class Material_Resource : public Base_Resource
          * @param indices                Indices der Material_Resource.
          * @param materials              Materials der Material_Resource.
          */
-        Material_Resource(const boost::uuids::uuid uuid, const string& path,
-                          const std::vector<int>& indices, const std::vector<Material>& materials);
+        Material_Resource(const boost::uuids::uuid uuid, const string& path, const std::vector<Material>& materials);
 
         /**
          * @brief Methode, um die Indices der Material_Resource zu erhalten.
@@ -75,7 +75,6 @@ class Material_Resource : public Base_Resource
 
     private:
 
-        vector<int> indices;
         vector<Material> materials;
 
 };

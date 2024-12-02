@@ -35,7 +35,6 @@ class Material_Importer
                                                                 const string& path_to_file);
 
     private:
-
         /**
          * @brief Methode, um den Inhalt des Vektors indices zu füllen.
          * @return std::vector<int>         Den importierten Inhalt des Vektors indices.
@@ -47,8 +46,7 @@ class Material_Importer
          * @brief Methode, um den Inhalt des Vektors materials zu füllen.
          * @return std::vector<Material>    Den importieren Inhalt des Vektors materials.
          */
-        static vector<Material> fetch_materials(const boost::uuids::uuid& uuid,
-                                                const string& path_to_file);
+        static vector<Material> fetch_materials(const string& path_to_file);
 
         /**
          * @brief Methode, um den suffix eines strings zu prüfen.
