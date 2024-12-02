@@ -75,8 +75,6 @@ set(SOURCE_FILES
         Import/Resources/Material/Material_Resource.h
         Import/Resources/Object/Object_Resource.cpp
         Import/Resources/Object/Object_Resource.h
-        UI/SceneManager/Scene_Manager.cpp
-        UI/SceneManager/Scene_Manager.h
         Raytracer/RT_App.h
         Raytracer/RT_Image.h
         Raytracer/RT_App.cpp
