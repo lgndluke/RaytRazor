@@ -1,7 +1,12 @@
 #ifndef MAIN_SCENE_H
 #define MAIN_SCENE_H
 
+#include "../../../Components/Base_Component.h"
+#include "../../../Import/Resources/Base_Resource.h"
+#include "../../../Utility/Logger/Logger.h"
 #include <nanogui/nanogui.h>
+#include <vector>
+#include <map>
 
 using namespace std;
 using namespace nanogui;
@@ -35,7 +40,19 @@ class Main_Scene final : public Screen
 
     private:
 
-        //
+        int window_width;
+        int window_height;
+        string window_title;
+        bool is_resizeable;
+
+        vector<int> ids;
+        map<int, Base_Component> components;
+        map<int, Base_Resource> resources;
+
+        /**
+         * @brief Methode, um die Main Szene zu initialisieren.
+         */
+        void initialize();
 
 };
 
