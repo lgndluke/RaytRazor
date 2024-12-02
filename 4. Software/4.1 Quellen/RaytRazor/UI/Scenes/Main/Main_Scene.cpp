@@ -87,3 +87,9 @@ void Main_Scene::update()
 {
     //
 }
+
+void Main_Scene::draw(NVGcontext* ctx)
+{
+    //
+}
+

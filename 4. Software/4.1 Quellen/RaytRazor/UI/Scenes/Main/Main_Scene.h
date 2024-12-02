@@ -54,6 +54,11 @@ class Main_Scene final : public Screen
          */
         void initialize();
 
+        /**
+         * @brief Methode, um den GLCanvas der Main Szene zu zeichnen.
+         */
+        void draw(NVGcontext* ctx) override;
+
 };
 
 #endif
