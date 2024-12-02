@@ -50,6 +50,11 @@ class Material_Importer
         static vector<Material> fetch_materials(const boost::uuids::uuid& uuid,
                                                 const string& path_to_file);
 
+        /**
+         * @brief Methode, um den suffix eines strings zu prüfen.
+         * @return Boolean                  True falls der suffix übereinsteht.
+         */
+        static bool has_suffix(const std::string& path_to_file, const std::string& suffix);
 };
 
 #endif

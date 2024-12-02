@@ -1,7 +1,9 @@
 #include "Material_Importer.h"
+#include <iostream>
+#include <string>
 
 //TODO's:
-// - Material_Importer::import_Material() -> Prüfen, ob Datei im .mtl Format vorliegt.
+// - Material_Importer::import_Material() -> Prüfen, ob Datei im .mtl Format vorliegt. -> sollte passen?
 // - Material_Importer::fetch_indices() implementieren.
 // - Material_Importer::fetch_materials() implementieren.
 
@@ -10,8 +12,7 @@ std::optional<Material_Resource> Material_Importer::import_Material(const boost:
 {
 
     // Prüfung, ob Datei im .mtl Format vorliegt hier.
-
-    if (std::ifstream file(path_to_file); !file.is_open())
+    if (std::ifstream file(path_to_file); !file.is_open() || has_suffix(path_to_file,".mtl"))
     {
         Logger::log(MessageType::SEVERE, "Material_Importer::import_Material(): Unable to open material file: " + path_to_file);
         return std::nullopt;
@@ -41,6 +42,13 @@ std::vector<Material> Material_Importer::fetch_materials(const boost::uuids::uui
     // Material Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
     return vector<Material>{};
 
+}
+
+bool Material_Importer::has_suffix(const string &path_to_file, const string &suffix) {
+    if (path_to_file.size() < suffix.size()) {
+        return false; // Suffix is longer than the file path
+    }
+    return path_to_file.substr(path_to_file.size() - suffix.size()) == suffix;
 }
 
 // Public Methods
