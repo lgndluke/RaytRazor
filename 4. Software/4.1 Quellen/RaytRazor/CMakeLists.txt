@@ -11,7 +11,11 @@ else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Ofast")
 endif ()
 
+set(SDL2_PATH "Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32")
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32/lib/cmake/SDL2)
+
 find_package(OpenGL REQUIRED)
+find_package(SDL2 REQUIRED)
 
 # Include Boost
 include_directories(Utility/External_Libraries/boost)
@@ -41,9 +45,6 @@ include_directories(Utility/External_Libraries/nlohmann)
 include_directories(Utility/External_Libraries/stb_image)
 
 # Include SDL2
-set(SDL2_PATH "Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32")
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32/lib/cmake/SDL2)
-find_package(SDL2 REQUIRED)
 include_directories( ${SDL2_INCLUDE_DIR} )
 
 set(SOURCE_FILES
@@ -74,6 +75,32 @@ set(SOURCE_FILES
         Import/Resources/Material/Material_Resource.h
         Import/Resources/Object/Object_Resource.cpp
         Import/Resources/Object/Object_Resource.h
+        UI/SceneManager/Scene_Manager.cpp
+        UI/SceneManager/Scene_Manager.h
+        Raytracer/RT_App.h
+        Raytracer/RT_Image.h
+        Raytracer/RT_App.cpp
+        Raytracer/RT_Image.cpp
+        Raytracer/RT_Camera.h
+        Raytracer/RT_Camera.cpp
+        Raytracer/RT_geometricTransform.h
+        Raytracer/RT_geometricTransform.cpp
+        Raytracer/RT_Light.h
+        Raytracer/RT_Light.cpp
+        Raytracer/RT_Matrix.h
+        Raytracer/RT_Object.h
+        Raytracer/RT_Object.cpp
+        Raytracer/RT_Plane.h
+        Raytracer/RT_Plane.cpp
+        Raytracer/RT_PointLight.h
+        Raytracer/RT_PointLight.cpp
+        Raytracer/RT_Ray.h
+        Raytracer/RT_Ray.cpp
+        Raytracer/RT_Scene.h
+        Raytracer/RT_Scene.cpp
+        Raytracer/RT_Sphere.h
+        Raytracer/RT_Sphere.cpp
+        Raytracer/RT_Vector.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
