@@ -111,7 +111,7 @@ jobs:
           generate_release_notes: true
           append_body: true
           prerelease: true
-          files: D:/a/RaytRazor/release/RaytRazor-${{ env.version }}.zip"
+          files: D:/a/RaytRazor/release/RaytRazor-${{ env.version }}.zip
 
   build-release:
       if: github.ref_name == 'main'
@@ -215,4 +215,4 @@ jobs:
             generate_release_notes: true
             append_body: true
             prerelease: false
-            files: D:/a/RaytRazor/release/RaytRazor-${{ env.version }}.zip"
+            files: D:/a/RaytRazor/release/RaytRazor-${{ env.version }}.zip
