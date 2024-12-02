@@ -184,12 +184,14 @@ void Json_Parser::parseJSON(const string& path_To_Json,
         if (type == "obj")
         {
             optional<Object_Resource> object_resource = Object_Importer::import_Object(uuid, path);
-            resources.insert({uuid, object_resource.value()});
+            if (object_resource.has_value())
+                resources.insert({uuid, object_resource.value()});
         }
         else if (type == "mat")
         {
             optional<Material_Resource> material_resource = Material_Importer::import_Material(uuid, path);
-            resources.insert({uuid, material_resource.value()});
+            if (material_resource.has_value())
+                resources.insert({uuid, material_resource.value()});
         }
         else
         {
