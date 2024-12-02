@@ -1,68 +1,104 @@
-//
-// Created by leonm on 12/2/2024.
-//
-
 #include "RT_App.h"
 
-RT_App::RT_App() {
-    app_running = true;
-    app_window = NULL;
-    app_renderer = NULL;
+CApp::CApp()
+{
+    isRunning = true;
+    pWindow = NULL;
+    pRenderer = NULL;
 }
 
-bool RT_App::onInit() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) return false;
+bool CApp::OnInit()
+{
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    {
+        return false;
+    }
 
-    app_window = SDL_CreateWindow("RayTracing", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
+    pWindow = SDL_CreateWindow("RayTraced", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 
-    if (app_window != NULL){
-        app_renderer = SDL_CreateRenderer(app_window, -1, 0);
+    if (pWindow != NULL)
+    {
+        // Initialise the renderer.
+        pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
-        app_image.initialize(1280, 720, app_renderer);
+        // Initialise the qbImage instance.
+        m_image.Initialize(1280, 720, pRenderer);
 
-        for (int x=0; x<1280; ++x){
-            for (int y=0; y<720; ++y){
-                double red = (static_cast<double>(x)/1280.0) * 255.0;
-                double green = (static_cast<double>(y)/720.0) * 255.0;
-                app_image.setPx(x, y, red, green, 0.0);
-            }
-        }
+        SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+        SDL_RenderClear(pRenderer);
+
+        m_scene.render(m_image);
+
+        m_image.Display();
+
+        SDL_RenderPresent(pRenderer);
 
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 
     return true;
 }
 
-int RT_App::onExecute() {
+int CApp::OnExecute()
+{
     SDL_Event event;
-    if (!onInit()) return -1;
-    while (app_running) {
-        while (SDL_PollEvent(&event) != 0) {onEvent(&event);}
-        onLoop();
-        onRender();
+
+    if (OnInit() == false)
+    {
+        return -1;
     }
-    onExit();
+
+    while (isRunning)
+    {
+        while (SDL_PollEvent(&event) != 0)
+        {
+            OnEvent(&event);
+        }
+
+        OnLoop();
+        OnRender();
+    }
+
+    OnExit();
     return 0;
 }
 
-void RT_App::onEvent(SDL_Event *event) {
-    if (event->type == SDL_QUIT) app_running = false;
+void CApp::OnEvent(SDL_Event *event)
+{
+    if (event->type == SDL_QUIT)
+    {
+        isRunning = false;
+    }
 }
 
-void RT_App::onLoop() {}
+void CApp::OnLoop()
+{
 
-void RT_App::onRender() {
-    SDL_SetRenderDrawColor(app_renderer, 255, 255, 255, 255);
-    SDL_RenderClear(app_renderer);
-    SDL_RenderPresent(app_renderer);
 }
 
-void RT_App::onExit() {
-    SDL_DestroyRenderer(app_renderer);
-    SDL_DestroyWindow(app_window);
-    app_window = NULL;
+void CApp::OnRender()
+{
+    // Set the background colour to white.
+    //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+    //SDL_RenderClear(pRenderer);
+
+    //m_scene.render(m_image);
+
+    // Display the image.
+    //m_image.Display();
+
+    // Show the result.
+    //SDL_RenderPresent(pRenderer);
+}
+
+void CApp::OnExit()
+{
+    // Tidy up SDL2 stuff.
+    SDL_DestroyRenderer(pRenderer);
+    SDL_DestroyWindow(pWindow);
+    pWindow = NULL;
     SDL_Quit();
 }
-
-
