@@ -19,7 +19,6 @@
 #include <cstdint>
 #include <memory>
 #include <utility>
-#include <SDL.h>
 
 #include "Raytracer/RT_App.h"
 #include "Utility/Logger/Logger.h"
@@ -200,6 +199,10 @@ public:
             setVisible(false);
             return true;
         }
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+            setVisible(false);
+            return true;
+        }
         return false;
     }
 
@@ -213,33 +216,34 @@ private:
 
 int main(int argc, char * argv[]) {
     bool rayTrace = true;
-    try {
-        Logger::log(MessageType::INFO, "Initializing NanoGUI");
-        nanogui::init();
+    int appint;
+        appint = 0;
+        try {
+            Logger::log(MessageType::INFO, "Initializing NanoGUI");
+            nanogui::init();
 
-        // scoped variables
-        {
-            nanogui::ref<ExampleApplication> app = new ExampleApplication();
-            app->drawAll();
-            app->setVisible(true);
-            nanogui::mainloop();
-        }
+            // scoped variables
+            {
+                nanogui::ref<ExampleApplication> app = new ExampleApplication();
+                app->drawAll();
+                app->setVisible(true);
+                nanogui::mainloop();
+            }
 
-        nanogui::shutdown();
-        Logger::log(MessageType::INFO, "Terminated NanoGUI");
-    } catch (const std::runtime_error &e) {
-        std::string error_msg = std::string("Caught a fatal error: ") + std::string(e.what());
-        #if defined(_WIN32)
+            nanogui::shutdown();
+            Logger::log(MessageType::INFO, "Terminated NanoGUI");
+        } catch (const std::runtime_error &e) {
+            std::string error_msg = std::string("Caught a fatal error: ") + std::string(e.what());
+#if defined(_WIN32)
             MessageBoxA(nullptr, error_msg.c_str(), NULL, MB_ICONERROR | MB_OK);
-        #else
+#else
             std::cerr << error_msg << endl;
-        #endif
-        return -1;
-    }
-    if (rayTrace) {
-        RT_App app;
-        return app.onExecute();;
-    }
-
-    return 0;
+#endif
+            return -1;
+        }
+        if (rayTrace) {
+            CApp app;
+            appint =  app.OnExecute(); // Returnt '2' wenn man Leertaste drückt (nochmal 3D preview öffnen)
+        }
+    return appint;
 }
