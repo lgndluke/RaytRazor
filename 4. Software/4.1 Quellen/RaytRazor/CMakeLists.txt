@@ -74,8 +74,6 @@ set(SOURCE_FILES
         Import/Resources/Material/Material_Resource.h
         Import/Resources/Object/Object_Resource.cpp
         Import/Resources/Object/Object_Resource.h
-        UI/SceneManager/Scene_Manager.cpp
-        UI/SceneManager/Scene_Manager.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
