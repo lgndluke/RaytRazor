@@ -1,11 +1,17 @@
 #include "Main_Scene.h"
 
-#include "../../../Parsing/Json_Parser.h"
-
 //TODO's:
+// -> Preview_Canvas::drawGL() implementieren.
 // -> Main_Scene::Main_Scene() implementieren.
 // -> Main_Scene::update() implementieren.
-// ->
+
+Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
+{}
+
+void Preview_Canvas::drawGL()
+{
+
+}
 
 Main_Scene::Main_Scene(const int window_width,
                        const int window_height,
@@ -54,7 +60,7 @@ void Main_Scene::initialize()
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
-    const auto preview_canvas = new GLCanvas(preview_window);
+    const auto preview_canvas = new Preview_Canvas(preview_window);
     preview_window->addChild(preview_canvas);
     preview_canvas->setPosition({ preview_position_x + 10, preview_position_y + 35 });
     preview_canvas->setSize({preview_width - 20, preview_height - 80});
@@ -72,7 +78,7 @@ void Main_Scene::initialize()
 
     const auto load_json_button = new Button(preview_window, "Import Scene");
     preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this]()
+    load_json_button->setCallback([this, preview_canvas]()
     {
         Logger::log(MessageType::INFO, "Import Scene Button Clicked!");
 

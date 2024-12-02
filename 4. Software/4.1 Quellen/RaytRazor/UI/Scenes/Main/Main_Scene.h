@@ -12,6 +12,28 @@ using namespace std;
 using namespace nanogui;
 
 /**
+ * @brief Abgeleitete Klasse Preview_Canvas repräsentiert die OpenGL Preview in der Main_Scene.
+ * @author Lukas Jeckle, Dennis Welsch
+ */
+class Preview_Canvas final : public GLCanvas
+{
+
+    public:
+
+        /**
+         * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
+         * @param parent                Der Eltern-Widget des Canvas.
+         */
+        explicit Preview_Canvas(Widget* parent);
+
+        /**
+         * @brief Methode, um den GLCanvas der Main Szene zu zeichnen.
+         */
+        void drawGL() override;
+
+};
+
+/**
  * @brief Die Klasse Main_Scene repräsentiert das Haupt-Fenster der Anwendung.
  * @author Lukas Jeckle
  */
