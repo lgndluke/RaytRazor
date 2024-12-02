@@ -49,10 +49,12 @@ class Material_Importer
         static vector<Material> fetch_materials(const string& path_to_file);
 
         /**
-         * @brief Methode, um den suffix eines strings zu prüfen.
-         * @return Boolean                  True falls der suffix übereinsteht.
+         * @brief Methode, um die Dateiendung zu validieren.
+         * @param path_to_file              Der zu überprüfende Dateiname.
+         * @param suffix                    Die Dateiendung, auf die geprüft werden soll.
+         * @return bool                     True, falls die Datei auf .obj endet. Andernfalls, False.
          */
-        static bool has_suffix(const std::string& path_to_file, const std::string& suffix);
+        static bool validate_extension(const std::string& path_to_file, const std::string& suffix);
 };
 
 #endif
