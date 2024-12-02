@@ -6,14 +6,13 @@
 // -> Überlegen und implementieren, was passiert wenn dem nicht so sein sollte.
 // - Material_Resource::update_indices_and_materials()? Implementieren?
 
-Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string& path,
-                                     const std::vector<int>& indices, const std::vector<Material>& materials)
+Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string& path, const std::vector<Material>& materials)
                                      : Base_Resource(uuid, MATERIAL, path)
 {
-    this->indices = indices;
     this->materials = materials;
 }
 
+/*
 std::vector<int> Material_Resource::get_indices() const
 {
     if (indices.size() != 0)
@@ -32,7 +31,7 @@ void Material_Resource::set_indices(const std::vector<int>& new_Indices)
 
     this->indices = new_Indices;
 }
-
+*/
 std::vector<Material> Material_Resource::get_materials() const
 {
     if (materials.size() != 0)
@@ -43,11 +42,13 @@ std::vector<Material> Material_Resource::get_materials() const
 
 void Material_Resource::set_materials(const std::vector<Material>& new_Materials)
 {
+    /*
     if (new_Materials.size() != this->indices.size())
     {
         Logger::log(MessageType::SEVERE, "Material_Resource::set_materials(): Size of new_Materials does not match size of this->indices!");
         return;
     }
+     */
 
     this->materials = new_Materials;
 }

@@ -41,13 +41,6 @@ Main_Scene::Main_Scene(const int window_width,
     initialize();
 }
 
-void *(*thread_code())(void*)
-{
-    CApp app;
-    app.OnExecute();
-    return NULL;
-}
-
 void Main_Scene::initialize()
 {
     constexpr int preview_position_x = 0;
@@ -84,30 +77,56 @@ void Main_Scene::initialize()
 
     const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
     preview_window->addChild(raytrace_preview_button);
-    raytrace_preview_button->setCallback([this]()
+    raytrace_preview_button->setCallback([this]
     {
-        Logger::log(MessageType::INFO, "Raytrace Preview Button Clicked!");
-        // SDL2 ...
-        pthread_t SDL_thread;
-        pthread_create(&SDL_thread, NULL, thread_code(), NULL);
+        try
+        {
+            pthread_t SDL_thread;
+            pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
+        }
+        catch(...)
+        {
+            // TODO: Error Handling.
+        }
     });
     raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
     raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
 
     const auto load_json_button = new Button(preview_window, "Import Scene");
     preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this]()
+    load_json_button->setCallback([this]
     {
-        Logger::log(MessageType::INFO, "Import Scene Button Clicked!");
+        try
+        {
+            /*
+            FileSelector file_Selector();
+            string path_to_json = file_Selector().get_input_path();
 
-        // Json_Parser::parseJSON();
+            this->components.clear();
+            this->resources.clear();
+
+            Json_parser::parse_json(path_to_json, this->components, this->resources);
+            */
+            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+        }
+        catch(...)
+        {
+            // TODO: Error Handling.
+        }
     });
     load_json_button->setSize({(preview_width / 2) - 20, 30});
     load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
 
 }
 
+void*(*Main_Scene::raytrace_preview())(void*)
+{
+    CApp app;
+    app.OnExecute();
+    return nullptr;
+}
+
 void Main_Scene::update()
 {
-    //
+    // Update Main_Scene?
 }
