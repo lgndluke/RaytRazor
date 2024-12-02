@@ -31,6 +31,13 @@ Main_Scene::Main_Scene(const int window_width,
     initialize();
 }
 
+void *(*thread_code())(void*)
+{
+    CApp app;
+    app.OnExecute();
+    return NULL;
+}
+
 void Main_Scene::initialize()
 {
     constexpr int preview_position_x = 0;
@@ -70,8 +77,9 @@ void Main_Scene::initialize()
     raytrace_preview_button->setCallback([this]()
     {
         Logger::log(MessageType::INFO, "Raytrace Preview Button Clicked!");
-
         // SDL2 ...
+        pthread_t SDL_thread;
+        pthread_create(&SDL_thread, NULL, thread_code(), NULL);
     });
     raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
     raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
