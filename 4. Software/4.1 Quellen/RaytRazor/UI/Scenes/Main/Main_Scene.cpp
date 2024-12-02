@@ -5,6 +5,16 @@
 // -> Main_Scene::Main_Scene() implementieren.
 // -> Main_Scene::update() implementieren.
 
+Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
+                           : Window(parent, title)
+{};
+
+bool Fixed_Window::mouseDragEvent(const Vector2i& p, const Vector2i &rel,
+                                  int button, int /* modifiers */)
+{
+    return false;
+}
+
 Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
 {}
 
@@ -48,15 +58,15 @@ void Main_Scene::initialize()
     const int component_attributes_width = this->window_width * 0.33f;
     const int component_attributes_height = this->window_height * 0.6f;
 
-    const auto preview_window = new Window(this, "3D-Preview");
+    const auto preview_window = new Fixed_Window(this, "3D-Preview");
     preview_window->setPosition(Eigen::Vector2i(preview_position_x, preview_position_y));
     preview_window->setSize(Eigen::Vector2i(preview_width, preview_height));
 
-    const auto component_tree = new Window(this, "Component Tree");
+    const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
     component_tree->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));
 
-    const auto component_attributes = new Window(this, "Component Attributes");
+    const auto component_attributes = new Fixed_Window(this, "Component Attributes");
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
@@ -78,7 +88,7 @@ void Main_Scene::initialize()
 
     const auto load_json_button = new Button(preview_window, "Import Scene");
     preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this, preview_canvas]()
+    load_json_button->setCallback([this]()
     {
         Logger::log(MessageType::INFO, "Import Scene Button Clicked!");
 
