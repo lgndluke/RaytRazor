@@ -141,6 +141,22 @@ void Main_Scene::initialize()
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
     component_tree->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));
 
+    // Setze ein Layout für das Fenster
+    component_tree->setLayout(new BoxLayout(
+        Orientation::Vertical, Alignment::Fill, 10, 10
+    ));
+
+    auto tree_view = new TreeView_Widget(component_tree);
+    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30)); // Offset für den Rahmen und die Titelleiste
+    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));
+
+    tree_view->addNode("Root Node");
+    tree_view->addNode("Child 1", "Root Node");
+    tree_view->addNode("Child 2", "Root Node");
+    tree_view->addNode("Subchild 1", "Child 1");
+
+    printf("");
+
     const auto component_attributes = new Fixed_Window(this, "Component Attributes");
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
@@ -192,6 +208,7 @@ void Main_Scene::initialize()
     load_json_button->setSize({(preview_width / 2) - 20, 30});
     load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
 
+    performLayout();
 }
 
 void*(*Main_Scene::raytrace_preview())(void*)

@@ -10,6 +10,7 @@
 #include <map>
 #include "../../../Shaders/Fragment/FragmentShader.h"
 #include "../../../Shaders/Vertex/VertexShader.h"
+#include "../../Widget/TreeView_Widget.h"
 
 using namespace std;
 using namespace nanogui;
