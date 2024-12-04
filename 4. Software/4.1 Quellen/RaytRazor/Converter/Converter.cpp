@@ -1,30 +1,49 @@
 #include "Converter.h"
 
-nanogui::MatrixXu Convert_to_Indices(const Object_Resource& source){
+void Converter::convert_to_matrix_indices(Object_Resource& source)
+{
+    if (!source.matrix_indices_is_empty())
+        return;
 
-    vector<int> input = source.get_indices();
-    nanogui::MatrixXu output(3,input.size()/3);
+    const vector<int> input = source.get_indices();
+    MatrixXu output(3,input.size()/3);
 
-    for (int i = 0; i < input.size()/3; i++) {
+    for (int i = 0; i < input.size()/3; i++)
+    {
         output.col(i) << input[i], input[i+1], input[i+2];
     }
+
+    source.set_matrix_indices(output);
 }
 
-nanogui::MatrixXf Convert_to_Vertices(const Object_Resource& source){
+void Converter::convert_to_matrix_vertices(Object_Resource& source)
+{
+    if (!source.matrix_vertices_is_empty())
+        return;
 
-    vector<Vertex> input = source.get_vertices();
-    nanogui::MatrixXf output(3,input.size()/3);
+    const vector<Vertex> input = source.get_vertices();
+    MatrixXu output(3,input.size()/3);
 
-    for (int i = 0; i < input.size(); ++i) {
+    for (int i = 0; i < input.size(); ++i)
+    {
         output.col(i) << input[i].position.x, input[i].position.y, input[i].position.z;
     }
+
+    source.set_matrix_vertices(output);
 }
 
-nanogui::MatrixXf Convert_to_Color(const Object_Resource& source){
-    vector<Vertex> input = source.get_vertices();
-    nanogui::MatrixXf output(3,input.size()/3);
+void Converter::convert_to_matrix_colors(Object_Resource& source)
+{
+    if (!source.matrix_colors_is_empty())
+        return;
 
-    for (int i = 0; i < input.size(); ++i) {
+    const vector<Vertex> input = source.get_vertices();
+    MatrixXf output(3,input.size()/3);
+
+    for (int i = 0; i < input.size(); ++i)
+    {
         output.col(i) << input[i].color.x, input[i].color.y, input[i].color.z;
     }
+
+    source.set_matrix_colors(output);
 }
