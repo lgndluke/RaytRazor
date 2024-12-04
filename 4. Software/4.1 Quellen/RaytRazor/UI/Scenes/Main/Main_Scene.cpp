@@ -141,6 +141,9 @@ void Main_Scene::initialize()
     preview_window->setPosition(Eigen::Vector2i(preview_position_x, preview_position_y));
     preview_window->setSize(Eigen::Vector2i(preview_width, preview_height));
 
+    auto menu_bar = new MenuBar_Widget(preview_window);
+    menu_bar->initialize();
+
     const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
     component_tree->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));

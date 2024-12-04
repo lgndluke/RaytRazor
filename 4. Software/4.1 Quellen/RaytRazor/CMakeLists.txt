@@ -101,6 +101,8 @@ set(SOURCE_FILES
         Raytracer/RT_Vector.h
         UI/Widget/TreeView_Widget.cpp
         UI/Widget/TreeView_Widget.h
+        UI/Widget/MenuBar_Widget.cpp
+        UI/Widget/MenuBar_Widget.h
         Shaders/Vertex/Vertex_Shader.cpp
         Shaders/Vertex/Vertex_Shader.h
         Shaders/Fragment/Fragment_Shader.cpp
