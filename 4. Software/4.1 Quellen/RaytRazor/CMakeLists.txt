@@ -99,10 +99,12 @@ set(SOURCE_FILES
         Raytracer/RT_Sphere.h
         Raytracer/RT_Sphere.cpp
         Raytracer/RT_Vector.h
-        Shaders/Vertex/VertexShader.h
-        Shaders/Fragment/FragmentShader.h
         UI/Widget/TreeView_Widget.cpp
         UI/Widget/TreeView_Widget.h
+        Shaders/Vertex/Vertex_Shader.cpp
+        Shaders/Vertex/Vertex_Shader.h
+        Shaders/Fragment/Fragment_Shader.cpp
+        Shaders/Fragment/Fragment_Shader.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
