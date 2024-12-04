@@ -99,6 +99,8 @@ set(SOURCE_FILES
         Raytracer/RT_Sphere.h
         Raytracer/RT_Sphere.cpp
         Raytracer/RT_Vector.h
+        Converter/Converter.cpp
+        Converter/Converter.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
