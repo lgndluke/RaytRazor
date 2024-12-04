@@ -13,12 +13,15 @@
 #include "nanogui/layout.h"
 #include <string>
 #include <vector>
+#include "../utility/Custom_Label.h"
 
 using namespace nanogui;
 using namespace std;
 
 class TreeView_Widget : public Widget {
 public:
+    vector<Custom_Label> getLabelRef();
+
     explicit TreeView_Widget(Widget* parent);
 
     /**
@@ -37,6 +40,7 @@ public:
 private:
     Widget* mContainer; ///< Container für die Baumstruktur
     map<std::string, Widget*> mNodeMap; ///< Map für Knoten und deren Widgets
+    vector<Custom_Label> LabelRef;
 };
 
 #endif // TREEVIEW_WIDGET_H

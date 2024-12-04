@@ -109,6 +109,8 @@ set(SOURCE_FILES
         Shaders/Fragment/Fragment_Shader.h
         UI/Widget/ComponentAttributes_Widget.cpp
         UI/Widget/ComponentAttributes_Widget.h
+        UI/utility/Custom_Label.cpp
+        UI/utility/Custom_Label.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})

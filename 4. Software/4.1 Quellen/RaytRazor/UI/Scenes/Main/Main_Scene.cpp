@@ -210,6 +210,11 @@ void Main_Scene::initialize()
                 tree_view->addNode(component.second.get_name(), "3D-Szene");
             }
 
+            const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
+
+
+            printf("");
+
             performLayout();
 
         }

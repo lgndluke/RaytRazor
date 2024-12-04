@@ -11,6 +11,7 @@
 #include "../../Widget/TreeView_Widget.h"
 #include "../../Widget/MenuBar_Widget.h"
 #include "../../Widget/ComponentAttributes_Widget.h"
+#include "../../utility/Custom_Label.h"
 #include <boost/uuid.hpp>
 #include <nanogui/nanogui.h>
 #include <vector>
