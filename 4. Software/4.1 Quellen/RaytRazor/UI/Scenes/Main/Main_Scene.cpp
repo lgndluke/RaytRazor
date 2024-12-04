@@ -114,8 +114,8 @@ Main_Scene::Main_Scene(const int window_width,
     this->is_resizeable = is_resizeable;
 
     this->ids = vector<int>();
-    this->components = map<int, Base_Component>();
-    this->resources = map<int, Base_Resource>();
+    this->components = map<boost::uuids::uuid, Base_Component>();
+    this->resources = map<boost::uuids::uuid, Base_Resource>();
 
     initialize();
 }
@@ -154,13 +154,6 @@ void Main_Scene::initialize()
     tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30)); // Offset für den Rahmen und die Titelleiste
     tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));
 
-    tree_view->addNode("Root Node");
-    tree_view->addNode("Child 1", "Root Node");
-    tree_view->addNode("Child 2", "Root Node");
-    tree_view->addNode("Subchild 1", "Child 1");
-
-    printf("");
-
     const auto component_attributes = new Fixed_Window(this, "Component Attributes");
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
@@ -189,20 +182,45 @@ void Main_Scene::initialize()
 
     const auto load_json_button = new Button(preview_window, "Import Scene");
     preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this]
+    load_json_button->setCallback([this, tree_view]
     {
         try
         {
-            /*
-            FileSelector file_Selector();
-            string path_to_json = file_Selector().get_input_path();
+            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+
+            string path_to_json = ".\\scenes\\JsonParser_DummyFile.json";
+
+            //FileSelector file_Selector();
+            //string path_to_json = file_Selector().get_input_path();
 
             this->components.clear();
             this->resources.clear();
 
-            Json_parser::parse_json(path_to_json, this->components, this->resources);
-            */
-            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+            Json_Parser::parseJSON(path_to_json, this->components, this->resources);
+
+            tree_view->clear();
+            tree_view->addNode("3D-Szene");
+
+            for (const auto& component : this->components)
+            {
+                tree_view->addNode(component.second.get_name(), "3D-Szene");
+                tree_view->addNode("UUID: " + boost::uuids::to_string(component.second.get_uuid()), component.second.get_name());
+                /*tree_view->addNode("Position: ", component.second.get_name());
+                tree_view->addNode("X:" + to_string(component.second.get_position().x), "Position:");
+                tree_view->addNode("Y:" + to_string(component.second.get_position().y), "Position:");
+                tree_view->addNode("Z:" + to_string(component.second.get_position().z), "Position:");
+                tree_view->addNode("Rotation: ", component.second.get_name());
+                tree_view->addNode("X:" + to_string(component.second.get_position().x), "Rotation: ");
+                tree_view->addNode("Y:" + to_string(component.second.get_position().y), "Rotation: ");
+                tree_view->addNode("Z:" + to_string(component.second.get_position().z), "Rotation: ");
+                tree_view->addNode("Scale: ", component.second.get_name());
+                tree_view->addNode("X:" + to_string(component.second.get_position().x), "Scale: ");
+                tree_view->addNode("Y:" + to_string(component.second.get_position().y), "Scale: ");
+                tree_view->addNode("Z:" + to_string(component.second.get_position().z), "Scale: ");*/
+            }
+
+            performLayout();
+
         }
         catch(...)
         {
