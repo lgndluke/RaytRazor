@@ -146,7 +146,6 @@ void Main_Scene::initialize()
 
     const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
-    component_tree->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));
 
     // Setze ein Layout für das Fenster
     component_tree->setLayout(new BoxLayout(
@@ -154,8 +153,8 @@ void Main_Scene::initialize()
     ));
 
     auto tree_view = new TreeView_Widget(component_tree);
-    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30)); // Offset für den Rahmen und die Titelleiste
-    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height));
+    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
+    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
 
     const auto component_attributes = new Fixed_Window(this, "Component Attributes");
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
