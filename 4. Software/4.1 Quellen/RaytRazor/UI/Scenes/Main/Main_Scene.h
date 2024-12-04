@@ -8,6 +8,8 @@
 #include <nanogui/nanogui.h>
 #include <vector>
 #include <map>
+#include "../../../Shaders/Fragment/FragmentShader.h"
+#include "../../../Shaders/Vertex/VertexShader.h"
 
 using namespace std;
 using namespace nanogui;
@@ -53,6 +55,9 @@ class Preview_Canvas final : public GLCanvas
          */
         void drawGL() override;
 
+    private:
+        GLShader mShader;
+        Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
 };
 
 /**
