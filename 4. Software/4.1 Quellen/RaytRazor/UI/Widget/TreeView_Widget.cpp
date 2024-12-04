@@ -20,7 +20,6 @@ TreeView_Widget::TreeView_Widget(Widget* parent)
 }
 
 void TreeView_Widget::addNode(const std::string& nodeName, const std::string& parentName) {
-    using namespace nanogui;
 
     if (parentName.empty()) {
         auto rootContainer = new Widget(mContainer);
