@@ -205,12 +205,15 @@ void Main_Scene::initialize()
             tree_view->clear();
             tree_view->addNode("3D-Szene");
 
+            int i = -1;
             for (const auto& component : this->components)
             {
+                if(++i == 0) {
+                    attributesWidget->showAttributesOfComponent(component.second);
+                }
                 tree_view->addNode(component.second.get_name(), "3D-Szene");
             }
-
-            const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
+            //const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
 
 
             printf("");
