@@ -99,6 +99,18 @@ set(SOURCE_FILES
         Raytracer/RT_Sphere.h
         Raytracer/RT_Sphere.cpp
         Raytracer/RT_Vector.h
+        UI/Widget/TreeView_Widget.cpp
+        UI/Widget/TreeView_Widget.h
+        UI/Widget/MenuBar_Widget.cpp
+        UI/Widget/MenuBar_Widget.h
+        Shaders/Vertex/Vertex_Shader.cpp
+        Shaders/Vertex/Vertex_Shader.h
+        Shaders/Fragment/Fragment_Shader.cpp
+        Shaders/Fragment/Fragment_Shader.h
+        UI/Widget/ComponentAttributes_Widget.cpp
+        UI/Widget/ComponentAttributes_Widget.h
+        UI/utility/Custom_Label.cpp
+        UI/utility/Custom_Label.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
