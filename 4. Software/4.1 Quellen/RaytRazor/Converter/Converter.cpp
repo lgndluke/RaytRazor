@@ -22,7 +22,7 @@ void Converter::convert_to_matrix_vertices(Object_Resource& source)
         return;
 
     const vector<Vertex> input = source.get_vertices();
-    MatrixXu output(3,input.size()/3);
+    MatrixXf output(3,input.size()/3);
 
     for (int i = 0; i < input.size(); ++i)
     {
