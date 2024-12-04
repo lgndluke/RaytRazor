@@ -56,9 +56,9 @@ class Object_Resource : public Base_Resource
 
         /**
          * @brief Methode, um die Indices der Object_Resource zu ändern.
-         * @param new_Indices           Neue Indices der Objekt_Resource.
+         * @param new_indices           Neue Indices der Objekt_Resource.
          */
-        void set_indices(const std::vector<int>& new_Indices);
+        void set_indices(const std::vector<int>& new_indices);
 
         /**
          * @brief Methode, um die Vertices der Object_Resource zu erhalten.
@@ -68,9 +68,9 @@ class Object_Resource : public Base_Resource
 
         /**
          * @brief Methode, um die Vertices der Objekt_Resource zu ändern.
-         * @param new_Vertices           Neue Vertices der Object_Resource.
+         * @param new_vertices           Neue Vertices der Object_Resource.
          */
-        void set_vertices(const std::vector<Vertex>& new_Vertices);
+        void set_vertices(const std::vector<Vertex>& new_vertices);
 
         /**
          * @brief Methode, um die Matrix der Indices zu erhalten.
@@ -118,7 +118,7 @@ class Object_Resource : public Base_Resource
          * @brief Methode, um die Matrix der Colors zu setzten.
          * @param new_matrix_colors     Neue Matrix der Colors der Object_Resource.
          */
-        void set_matrix_colors(const MatrixXf& new_matrix_color);
+        void set_matrix_colors(const MatrixXf& new_matrix_colors);
 
         /**
          * @brief Methode, um zu überprüfen, ob die Matrix der Colors leer ist.
