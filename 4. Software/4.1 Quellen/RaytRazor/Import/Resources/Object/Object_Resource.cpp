@@ -1,11 +1,5 @@
 #include "Object_Resource.h"
 
-//TODO:
-// - Object_Resource::Object_Resource:
-// -> Prüfen, ob indices und vertices die gleiche größe besitzen.
-// -> Überlegen und implementieren, was passiert wenn dem nicht so sein sollte.
-// - Object_Resource::update_indices_and_vertices()? Implementieren?
-
 Object_Resource::Object_Resource(const boost::uuids::uuid uuid, const string& path,
                                  const std::vector<int>& indices, const std::vector<Vertex>& vertices)
                                  : Base_Resource(uuid, OBJECT, path)
@@ -50,4 +44,67 @@ void Object_Resource::set_vertices(const std::vector<Vertex>& new_Vertices)
     }
 
     this->vertices = new_Vertices;
+}
+
+optional<MatrixXu> Object_Resource::get_matrix_indices() const
+{
+    if (matrix_indices_is_empty())
+        return std::nullopt;
+
+    return this->matrix_indices;
+}
+
+void Object_Resource::set_matrix_indices(const MatrixXu& new_matrix_indices)
+{
+    this->matrix_indices = new_matrix_indices;
+}
+
+bool Object_Resource::matrix_indices_is_empty() const
+{
+    if (this->matrix_indices.size() == 0)
+        return true;
+
+    return false;
+}
+
+optional<MatrixXf> Object_Resource::get_matrix_vertices() const
+{
+    if (matrix_vertices_is_empty())
+        return std::nullopt;
+
+    return this->matrix_vertices;
+}
+
+void Object_Resource::set_matrix_vertices(const MatrixXf& new_matrix_vertices)
+{
+    this->matrix_vertices = new_matrix_vertices;
+}
+
+bool Object_Resource::matrix_vertices_is_empty() const
+{
+    if (this->matrix_vertices.size() == 0)
+        return true;
+
+    return false;
+}
+
+optional<MatrixXf> Object_Resource::get_matrix_colors() const
+{
+    if (matrix_colors_is_empty())
+        return std::nullopt;
+
+    return this->matrix_colors;
+}
+
+void Object_Resource::set_matrix_colors(const MatrixXf& new_matrix_color)
+{
+    this->matrix_colors = new_matrix_color;
+}
+
+bool Object_Resource::matrix_colors_is_empty() const
+{
+    if (matrix_colors.size() == 0)
+        return true;
+
+    return false;
 }
