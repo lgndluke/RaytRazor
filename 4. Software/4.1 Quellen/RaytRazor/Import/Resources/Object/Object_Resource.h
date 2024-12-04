@@ -4,7 +4,7 @@
 #include "../Base_Resource.h"
 #include "../../../Utility/Logger/Logger.h"
 #include <glm/glm.hpp>
-#include <nanogui/glutil.h>
+#include <nanogui/nanogui.h>
 #include <optional>
 
 using namespace std;
