@@ -5,12 +5,12 @@
 #include "../../../Import/Resources/Base_Resource.h"
 #include "../../../Utility/Logger/Logger.h"
 #include "../../../Raytracer/RT_App.h"
+#include "../../../Shaders/Fragment/Fragment_Shader.h"
+#include "../../../Shaders/Vertex/Vertex_Shader.h"
+#include "../../Widget/TreeView_Widget.h"
 #include <nanogui/nanogui.h>
 #include <vector>
 #include <map>
-#include "../../../Shaders/Fragment/FragmentShader.h"
-#include "../../../Shaders/Vertex/VertexShader.h"
-#include "../../Widget/TreeView_Widget.h"
 
 using namespace std;
 using namespace nanogui;

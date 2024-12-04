@@ -7,7 +7,7 @@
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
-{};
+{}
 
 bool Fixed_Window::mouseDragEvent(const Vector2i& p, const Vector2i &rel,
                                   int button, int /* modifiers */)
@@ -15,26 +15,31 @@ bool Fixed_Window::mouseDragEvent(const Vector2i& p, const Vector2i &rel,
     return false;
 }
 
-Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent) {
+Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
+{}
 
-}
+void Preview_Canvas::drawGL()
+{
 
-
-void Preview_Canvas::drawGL() {
-    using namespace nanogui;
-
-    // Initialisiere den Shader (einmalig)
     static bool initialized = false;
-    if (!initialized) {
-        mShader.init(
-            /* Name des Shaders */
-            "preview_shader",
-            vertexShaderSource,
-            fragmentShaderSource
-        );
 
-        // Definiere Geometrie-Daten
-        MatrixXu indices(3, 12); /* Cube */
+    if (!initialized)
+    {
+
+        // Initialisierung des Shaders.
+        mShader.init(
+            "3d_Preview_Shader",
+            Vertex_Shader::get_vertex_shader(),
+            Fragment_Shader::get_fragment_shader()
+        );
+        initialized = true;
+
+        // TODO Components in 3D Preview laden.
+
+        // Dummy Daten -> TODO Delete afterwards.
+        // ==================================================================
+
+        MatrixXu indices(3, 12);
         indices.col( 0) << 0, 1, 3;
         indices.col( 1) << 3, 2, 1;
         indices.col( 2) << 3, 2, 6;
@@ -68,13 +73,14 @@ void Preview_Canvas::drawGL() {
         colors.col(6) << 1, 1, 1;
         colors.col(7) << 0.5, 0.5, 0.5;
 
-        // Lade Daten in den Shader
+        // ==================================================================
+
+        // Daten in Shader laden.
         mShader.bind();
         mShader.uploadIndices(indices);
         mShader.uploadAttrib("position", positions);
         mShader.uploadAttrib("color", colors);
 
-        initialized = true;
     }
 
     // Shader binden und Szene rendern
@@ -95,8 +101,6 @@ void Preview_Canvas::drawGL() {
     mShader.drawIndexed(GL_TRIANGLES, 0, 12);
     glDisable(GL_DEPTH_TEST);
 }
-
-
 
 Main_Scene::Main_Scene(const int window_width,
                        const int window_height,
