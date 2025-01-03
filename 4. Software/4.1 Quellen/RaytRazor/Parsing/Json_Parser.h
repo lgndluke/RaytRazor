@@ -13,6 +13,8 @@
 #include <map>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <variant>
+#include <boost/uuid/uuid_io.hpp>
 
 using namespace std;
 
@@ -40,11 +42,35 @@ class Json_Parser
                               map<boost::uuids::uuid, Base_Resource>& resources);
 
         /**
-         *
-         * @param exportPath
-         * @return bool
-         */
-        static bool exportToJSON(const string& exportPath);
+        * @brief Exportiert die übergebenen Komponenten und Ressourcen in eine JSON-Datei.
+        *
+        * Diese Methode nimmt eine Sammlung von Komponenten und Ressourcen und generiert
+        * eine strukturierte JSON-Datei, die die Details dieser Objekte enthält. Die
+        * Komponenten können von verschiedenen Typen sein (z. B. Render_Component, Light_Component)
+        * und werden basierend auf ihrem Typ in entsprechende JSON-Abschnitte aufgeteilt.
+        *
+        * @param exportPath Der Dateipfad, unter dem die JSON-Datei gespeichert werden soll.
+        * @param components Eine Map mit UUIDs als Schlüsseln und verschiedenen Komponenten
+        *                   (Base_Component, Render_Component, Light_Component, Camera_Light) als Werten.
+        * @param resources  Eine Map mit UUIDs als Schlüsseln und Ressourcen (Base_Resource) als Werten.
+        *
+        * @return true, wenn die JSON-Datei erfolgreich exportiert wurde, andernfalls false.
+        *
+        * @details
+        * - Komponenten werden in spezifische JSON-Arrays wie "renderentity", "lightentity"
+        *   und "cameraentity" unterteilt.
+        * - Ressourcen werden in einem separaten "resources"-Array abgelegt.
+        * - Jede Komponente und Ressource wird anhand ihrer UUID und spezifischen Eigenschaften
+        *   in der JSON-Struktur repräsentiert.
+        * - Falls ein Fehler beim Schreiben der Datei auftritt, wird dieser protokolliert.
+        *
+        * @note Diese Funktion verwendet externe Bibliotheken wie nlohmann::json für die JSON-Verarbeitung
+        *       und boost::uuids für die Verwaltung von UUIDs.
+        * @author Christan Kasper, Dennis Welsch
+        */
+        static bool exportToJSON(const std::string& exportPath,
+                             const std::map<boost::uuids::uuid, variant<Base_Component, Render_Component, Light_Component, Camera_Component>> components,
+                             const std::map<boost::uuids::uuid, Base_Resource>& resources);
 
 };
 

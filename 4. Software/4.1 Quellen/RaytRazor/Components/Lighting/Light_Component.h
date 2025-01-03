@@ -11,7 +11,11 @@ class Light_Component : public Base_Component
 {
 
     public:
+        ~Light_Component() override = default;
 
+        [[nodiscard]] ComponentType get_type() const {
+          return CAMERA;
+        }
         /**
          * @brief Konstruktor zum Erstellen eines Light_Component Objekts.
          *
