@@ -4,7 +4,10 @@
 #include "../Base_Resource.h"
 #include "../../../Utility/Logger/Logger.h"
 #include <glm/glm.hpp>
-#include <nanogui/glutil.h>
+#include <optional>
+
+#include "glad/glad.h"
+#include "nanogui/common.h"
 
 using namespace std;
 
@@ -54,9 +57,9 @@ class Object_Resource : public Base_Resource
 
         /**
          * @brief Methode, um die Indices der Object_Resource zu ändern.
-         * @param new_Indices           Neue Indices der Objekt_Resource.
+         * @param new_indices           Neue Indices der Objekt_Resource.
          */
-        void set_indices(const std::vector<int>& new_Indices);
+        void set_indices(const std::vector<int>& new_indices);
 
         /**
          * @brief Methode, um die Vertices der Object_Resource zu erhalten.
@@ -66,14 +69,72 @@ class Object_Resource : public Base_Resource
 
         /**
          * @brief Methode, um die Vertices der Objekt_Resource zu ändern.
-         * @param new_Vertices           Neue Vertices der Object_Resource.
+         * @param new_vertices           Neue Vertices der Object_Resource.
          */
-        void set_vertices(const std::vector<Vertex>& new_Vertices);
+        void set_vertices(const std::vector<Vertex>& new_vertices);
+
+        /**
+         * @brief Methode, um die Matrix der Indices zu erhalten.
+         * @return nanogui::MatrixXu     Die Indices-Matrix der Object_Resource, falls diese gesetzt ist. Andernfalls, std::nullopt.
+         */
+        [[nodiscard]] optional<nanogui::MatrixXu> get_matrix_indices() const;
+
+        /**
+         * @brief Methode, um die Matrix der Indices zu setzen.
+         * @param new_matrix_indices    Neue Matrix der Indices der Object_Resource.
+         */
+        void set_matrix_indices(const nanogui::MatrixXu& new_matrix_indices);
+
+        /**
+         * @brief Methode, um zu überprüfen, ob die Matrix der Indices leer ist.
+         * @return bool                 True, falls die Matrix leer ist. Andernfalls, False.
+         */
+        bool matrix_indices_is_empty() const;
+
+        /**
+         * @brief Methode, um die Matrix der Vertices zu erhalten.
+         * @return nanogui::MatrixXf    Die Vertices-Matrix der Object_Resource, falls diese gesetzt ist. Andernfalls, std::nullopt.
+         */
+        [[nodiscard]] optional<nanogui::MatrixXf> get_matrix_vertices() const;
+
+        /**
+         * @brief Methode, um die Matrix der Vertices zu setzten.
+         * @param new_matrix_vertices   Neue Matrix der Vertices der Object_Resource.
+         */
+        void set_matrix_vertices(const nanogui::MatrixXf& new_matrix_vertices);
+
+        /**
+         * @brief Methode, um zu überprüfen, ob die Matrix der Vertices leer ist.
+         * @return bool                 True, falls die Matrix leer ist. Andernfalls, False.
+         */
+        bool matrix_vertices_is_empty() const;
+
+        /**
+         * @brief Methode, um die Matrix der Colors zu erhalten.
+         * @return nanogui::MatrixXf    Die Colors-Matrix der Object_Resource, falls diese gesetzt ist. Andernfalls, std::nullopt.
+         */
+        [[nodiscard]] optional<nanogui::MatrixXf> get_matrix_colors() const;
+
+        /**
+         * @brief Methode, um die Matrix der Colors zu setzten.
+         * @param new_matrix_colors     Neue Matrix der Colors der Object_Resource.
+         */
+        void set_matrix_colors(const nanogui::MatrixXf& new_matrix_colors);
+
+        /**
+         * @brief Methode, um zu überprüfen, ob die Matrix der Colors leer ist.
+         * @return bool                 True, falls die Matrix leer ist. Andernfalls, False.
+         */
+        bool matrix_colors_is_empty() const;
 
     private:
 
         vector<int> indices;
         vector<Vertex> vertices;
+
+        nanogui::MatrixXu matrix_indices;
+        nanogui::MatrixXf matrix_vertices;
+        nanogui::MatrixXf matrix_colors;
 
 };
 

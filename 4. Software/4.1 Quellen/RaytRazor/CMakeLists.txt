@@ -111,6 +111,8 @@ set(SOURCE_FILES
         UI/Widget/ComponentAttributes_Widget.h
         UI/utility/Custom_Label.cpp
         UI/utility/Custom_Label.h
+        Converter/Converter.cpp
+        Converter/Converter.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
