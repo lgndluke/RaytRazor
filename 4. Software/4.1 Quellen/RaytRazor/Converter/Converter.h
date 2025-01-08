@@ -5,7 +5,6 @@
 #include <nanogui/nanogui.h>
 
 using namespace std;
-using namespace nanogui;
 
 /**
  * @brief Converter Klasse, um die eingelesenen Daten einer Object_Resource in die von @link nanogui @endlink geforderten Matrizen umzuwandeln.

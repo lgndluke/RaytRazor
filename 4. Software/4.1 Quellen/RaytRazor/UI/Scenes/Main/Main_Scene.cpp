@@ -1,5 +1,8 @@
 #include "Main_Scene.h"
 
+#include "../../../Converter/Converter.h"
+#include "../../../Import/Importers/Object/Object_Importer.h"
+
 //TODO's:
 // -> Preview_Canvas::drawGL() implementieren.
 // -> Main_Scene::Main_Scene() implementieren.
@@ -39,48 +42,41 @@ void Preview_Canvas::drawGL()
         // Dummy Daten -> TODO Delete afterwards.
         // ==================================================================
 
-        MatrixXu indices(3, 12);
-        indices.col( 0) << 0, 1, 3;
-        indices.col( 1) << 3, 2, 1;
-        indices.col( 2) << 3, 2, 6;
-        indices.col( 3) << 6, 7, 3;
-        indices.col( 4) << 7, 6, 5;
-        indices.col( 5) << 5, 4, 7;
-        indices.col( 6) << 4, 5, 1;
-        indices.col( 7) << 1, 0, 4;
-        indices.col( 8) << 4, 0, 3;
-        indices.col( 9) << 3, 7, 4;
-        indices.col(10) << 5, 6, 2;
-        indices.col(11) << 2, 1, 5;
+        boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
-        MatrixXf positions(3, 8);
-        positions.col(0) << -1,  1,  1;
-        positions.col(1) << -1,  1, -1;
-        positions.col(2) <<  1,  1, -1;
-        positions.col(3) <<  1,  1,  1;
-        positions.col(4) << -1, -1,  1;
-        positions.col(5) << -1, -1, -1;
-        positions.col(6) <<  1, -1, -1;
-        positions.col(7) <<  1, -1,  1;
+        Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
 
-        MatrixXf colors(3, 8);
-        colors.col(0) << 1, 0, 0;
-        colors.col(1) << 0, 1, 0;
-        colors.col(2) << 1, 1, 0;
-        colors.col(3) << 0, 0, 1;
-        colors.col(4) << 1, 0, 1;
-        colors.col(5) << 0, 1, 1;
-        colors.col(6) << 1, 1, 1;
-        colors.col(7) << 0.5, 0.5, 0.5;
+        const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
+        for (int i = 0; i < static_cast<int>(vertices.size()); i++)
+        {
+            // Zugriff auf jedes Element im Vektor
+            const Vertex& vertex = vertices[i];
 
+            if( i >= 0)
+            {
+                std::cout << "Vertex " << i << ": "
+                      << "Position = (" << vertex.position.x << ", "
+                                        << vertex.position.y << ", "
+                                        << vertex.position.z << "), "
+                      << "Color = (" << vertex.color.r << ", "
+                                     << vertex.color.g << ", "
+                                     << vertex.color.b << ")" << std::endl;
+            }
+        }
+
+
+        Converter::convert_to_matrix_colors(OR);
+        Converter::convert_to_matrix_indices(OR);
+        Converter::convert_to_matrix_vertices(OR);
         // ==================================================================
+
+        printf("");
 
         // Daten in Shader laden.
         mShader.bind();
-        mShader.uploadIndices(indices);
-        mShader.uploadAttrib("position", positions);
-        mShader.uploadAttrib("color", colors);
-
+        //mShader.uploadIndices(OR.get_matrix_indices());
+        //mShader.uploadAttrib("position", OR.get_matrix_vertices());
+        //mShader.uploadAttrib("color", OR.get_matrix_colors());
     }
 
     // Shader binden und Szene rendern
