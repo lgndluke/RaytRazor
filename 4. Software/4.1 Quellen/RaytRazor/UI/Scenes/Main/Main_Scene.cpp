@@ -47,23 +47,36 @@ void Preview_Canvas::drawGL()
         Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
 
         const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
-        for (int i = 0; i < static_cast<int>(vertices.size()); i++)
-        {
-            // Zugriff auf jedes Element im Vektor
+        const std::vector<int>& indices = OR.get_indices(); // Zugriff auf Indizes
+
+        /*
+        // Ausgabe der Vertices
+        for (int i = 0; i < static_cast<int>(vertices.size()); i++) {
             const Vertex& vertex = vertices[i];
 
-            if( i >= 0)
-            {
+            if (i >= 0) {
                 std::cout << "Vertex " << i << ": "
-                      << "Position = (" << vertex.position.x << ", "
-                                        << vertex.position.y << ", "
-                                        << vertex.position.z << "), "
-                      << "Color = (" << vertex.color.r << ", "
-                                     << vertex.color.g << ", "
-                                     << vertex.color.b << ")" << std::endl;
+                          << "Position = (" << vertex.position.x << ", "
+                                            << vertex.position.y << ", "
+                                            << vertex.position.z << "), "
+                          << "Color = (" << vertex.color.r << ", "
+                                         << vertex.color.g << ", "
+                                         << vertex.color.b << ")" << std::endl;
             }
         }
 
+        // Ausgabe der Indizes
+        if (!indices.empty() && indices.size() % 3 == 0) {
+            for (size_t i = 0; i < indices.size() / 3; i++) {
+                std::cout << "Face " << i << ": "
+                          << "Indices = (" << indices[i * 3] << ", "
+                                           << indices[i * 3 + 1] << ", "
+                                           << indices[i * 3 + 2] << ")" << std::endl;
+            }
+        } else {
+            std::cerr << "Warning: Indices vector is empty or not divisible by 3!" << std::endl;
+        }
+        */
 
         Converter::convert_to_matrix_colors(OR);
         Converter::convert_to_matrix_indices(OR);
@@ -74,9 +87,11 @@ void Preview_Canvas::drawGL()
 
         // Daten in Shader laden.
         mShader.bind();
-        //mShader.uploadIndices(OR.get_matrix_indices());
-        //mShader.uploadAttrib("position", OR.get_matrix_vertices());
-        //mShader.uploadAttrib("color", OR.get_matrix_colors());
+        mShader.uploadIndices(OR.get_matrix_indices());
+
+        printf("");
+        mShader.uploadAttrib("position", OR.get_matrix_vertices());
+        mShader.uploadAttrib("color", OR.get_matrix_colors());
     }
 
     // Shader binden und Szene rendern
@@ -84,17 +99,18 @@ void Preview_Canvas::drawGL()
 
     Eigen::Matrix4f mvp;
     mvp.setIdentity();
-    float time = (float)glfwGetTime();
-    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f(
-        Eigen::AngleAxisf(mRotation[0] * time, Eigen::Vector3f::UnitX()) *
-        Eigen::AngleAxisf(mRotation[1] * time, Eigen::Vector3f::UnitY()) *
-        Eigen::AngleAxisf(mRotation[2] * time, Eigen::Vector3f::UnitZ())
-    ) * 0.25f;
+
+    // Skalierung und Translation
+    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f::Identity() * 0.5f; // Skalierung auf 50%
+    mvp(0, 3) = 0.0f;
+    mvp(1, 3) = 0.0f;
+    mvp(2, 3) = -2.0f;
 
     mShader.setUniform("modelViewProj", mvp);
 
     glEnable(GL_DEPTH_TEST);
-    mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+    //todo 992 dynamisch machen
+    mShader.drawIndexed(GL_TRIANGLES, 0, 992);
     glDisable(GL_DEPTH_TEST);
 }
 
