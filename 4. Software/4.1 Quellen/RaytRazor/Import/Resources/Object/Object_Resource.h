@@ -4,6 +4,7 @@
 #include "../Base_Resource.h"
 #include "../../../Utility/Logger/Logger.h"
 #include <glm/glm.hpp>
+#include <utility>
 #include <vector>
 #include "glad/glad.h"
 #include "nanogui/common.h"
@@ -14,6 +15,17 @@ using namespace std;
  * @brief Struktur Vertex repräsentiert den Aufbau eines Vertex Objekts.
  * @author Leon Musliu
  */
+struct Indice {
+    std::vector<int> vertexIndices_v;       // Store vertex indices as vector
+    std::vector<int> textureCoordinates_vt; // Store texture coordinates as vector
+    std::vector<int> vertexNormalIndices_vn;// Store normal indices as vector
+    std::string materialName;               // Store the material name
+
+    // Constructor to initialize the struct
+    Indice(const std::vector<int>& v, const std::vector<int>& vt, const std::vector<int>& vn, const std::string& matname)
+            : vertexIndices_v(v), textureCoordinates_vt(vt), vertexNormalIndices_vn(vn), materialName(matname) {}
+};
+
 struct Vertex {
     glm::vec3 position;
     glm::vec3 color;
@@ -41,7 +53,7 @@ public:
      * @param vertices               Vertices der Object_Resource.
      */
     Object_Resource(const boost::uuids::uuid uuid, const string& path,
-                    const std::vector<int>& indices, const std::vector<Vertex>& vertices);
+                    const std::vector<Indice>& indices, const std::vector<Vertex>& vertices);
 
     Object_Resource() = default;
 
@@ -49,13 +61,13 @@ public:
      * @brief Methode, um die Indices der Object_Resource zu erhalten.
      * @return std::vector<int>      Die Indices der Object_Resource.
      */
-    [[nodiscard]] std::vector<int> get_indices() const;
+    [[nodiscard]] std::vector<Indice> get_indices() const;
 
     /**
      * @brief Methode, um die Indices der Object_Resource zu ändern.
      * @param new_indices           Neue Indices der Objekt_Resource.
      */
-    void set_indices(const std::vector<int>& new_indices);
+    void set_indices(const std::vector<Indice>& new_indices);
 
     /**
      * @brief Methode, um die Vertices der Object_Resource zu erhalten.
@@ -124,7 +136,7 @@ public:
     bool matrix_colors_is_empty() const;
 
 private:
-    std::vector<int> indices;
+    std::vector<Indice> indices;
     std::vector<Vertex> vertices;
 
     nanogui::MatrixXu matrix_indices;

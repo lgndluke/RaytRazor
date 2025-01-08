@@ -41,7 +41,7 @@ class Object_Importer
          * @brief Methode, um den Inhalt des Vektors indices zu füllen.
          * @return std::vector<int>         Den importierten Inhalt des Vektors indices.
          */
-        static std::vector<int> fetch_indices(const string& path_to_file);
+        static vector<Indice> fetch_indices(const string& path_to_file);
 
         /**
          * @brief Methode, um den Inhalt des Vektors vertices zu füllen.

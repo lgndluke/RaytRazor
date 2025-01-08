@@ -1,19 +1,19 @@
 #include "Object_Resource.h"
 
 Object_Resource::Object_Resource(const boost::uuids::uuid uuid, const string& path,
-                                 const std::vector<int>& indices, const std::vector<Vertex>& vertices)
+                                 const std::vector<Indice>& indices, const std::vector<Vertex>& vertices)
                                  : Base_Resource(uuid, OBJECT, path)
 {
     this->indices = indices;
     this->vertices = vertices;
 }
 
-std::vector<int> Object_Resource::get_indices() const
+std::vector<Indice> Object_Resource::get_indices() const
 {
     return this->indices; // Direkte Rückgabe
 }
 
-void Object_Resource::set_indices(const std::vector<int>& new_indices)
+void Object_Resource::set_indices(const std::vector<Indice>& new_indices)
 {
     if (new_indices.size() % 3 != 0) {
         Logger::log(MessageType::SEVERE, "Object_Resource::set_indices(): Size of new_indices is not a multiple of 3!");

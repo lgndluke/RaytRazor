@@ -16,7 +16,7 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
         return std::nullopt;
     }
 
-    const vector<int> indices = fetch_indices(path_to_file);
+    const vector<Indice> indices = fetch_indices(path_to_file);
     const vector<Vertex> vertices = fetch_vertices(path_to_file);
 
     Object_Resource return_Resource(uuid, path_to_file, indices, vertices);
@@ -24,14 +24,15 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
 
 }
 
-std::vector<int> Object_Importer::fetch_indices(const string& path_to_file)
+std::vector<Indice> Object_Importer::fetch_indices(const string& path_to_file)
 {
     // Index Daten aus .obj Datei auslesen -> Datei ist bereits geprüft und eine valide .obj Datei.
     std::stringstream ss;
     std::ifstream objFile(path_to_file);
     std::string line;
     std::string prefix;
-    std::vector<int> indices;
+    std::vector<Indice> indices;
+    std::string currentMaterial;
 
     while (std::getline(objFile, line)) {
         if(line.empty()) continue;
@@ -39,16 +40,43 @@ std::vector<int> Object_Importer::fetch_indices(const string& path_to_file)
         ss.str(line);
         ss >> prefix;
 
+        // extract the material and set it for the following faces
+        if (prefix == "usemtl")
+            {
+            std::string currentWord;
+            ss >> currentWord;
+            currentMaterial = currentWord;
+            }
         if (prefix == "f") {
             std::string vertexData;
+            std::vector<int> v;    // For vertex indices
+            std::vector<int> vt;   // For texture coordinate indices
+            std::vector<int> vn;   // For normal vector indices
+            int count = 0;
 
             while (ss >> vertexData) {
                 std::istringstream vertexStream(vertexData);
-                std::string v;
-                std::getline(vertexStream, v, '/');
+                std::string vStr, vtStr, vnStr;
 
-                if (!v.empty()) {
-                    indices.push_back(std::stoi(v));
+                // Extract V, VT, and VN as strings
+                std::getline(vertexStream, vStr, '/');
+                std::getline(vertexStream, vtStr, '/');
+                std::getline(vertexStream, vnStr, '/');
+
+                // Convert to integers and store in the vectors
+                if (!vStr.empty()) v.push_back(std::stoi(vStr));
+                if (!vtStr.empty()) vt.push_back(std::stoi(vtStr));
+                if (!vnStr.empty()) vn.push_back(std::stoi(vnStr));
+
+                count++;
+
+                if (count >= 3) {
+                    // After parsing three vertices, create the Indice object and push it to the vector
+                    indices.emplace_back(v, vt, vn, currentMaterial);
+                    v.clear();
+                    vt.clear();
+                    vn.clear(); // Clear vectors for next face
+                    count = 0;  // Reset count for the next face
                 }
             }
         }

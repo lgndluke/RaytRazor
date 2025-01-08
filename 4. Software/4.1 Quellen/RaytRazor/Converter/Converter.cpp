@@ -4,7 +4,7 @@ void Converter::convert_to_matrix_indices(Object_Resource& source) {
     if (!source.matrix_indices_is_empty())
         return;
 
-    const std::vector<int>& input = source.get_indices();
+    const std::vector<Indice>& input = source.get_indices();
 
     // Überprüfen, ob der Input leer ist
     if (input.empty()) {
@@ -13,22 +13,23 @@ void Converter::convert_to_matrix_indices(Object_Resource& source) {
         return;
     }
 
-    // Überprüfen, ob die Eingabe ein Vielfaches von 3 ist
+    // Überprüfen, ob die Eingabe ein Vielfaches von 3 ist -> nichtmehr benötigt sollte immer normale größe haben wie in obj. datei angegebene face anzahl
+    /*
     if (input.size() % 3 != 0) {
         Logger::log(MessageType::SEVERE,
                     "Converter::convert_to_matrix_indices(): Input indices size is not a multiple of 3!");
         return;
     }
-
+    */
     try {
         // Erstellung der MatrixXu für Indizes
-        nanogui::MatrixXu output(3, input.size() / 3);
+        nanogui::MatrixXu output(3, input.size());
 
         // Befüllung der Matrix
-        for (size_t i = 0; i < input.size() / 3; ++i) {
-            output(0, i) = static_cast<unsigned int>(input[i * 3]);
-            output(1, i) = static_cast<unsigned int>(input[i * 3 + 1]);
-            output(2, i) = static_cast<unsigned int>(input[i * 3 + 2]);
+        for (size_t i = 0; i < input.size(); ++i) {
+            output(0, i) = static_cast<unsigned int>(input[i].vertexIndices_v[1]); //x vertex pos
+            output(1, i) = static_cast<unsigned int>(input[i].vertexIndices_v[2]); //y vertex pos
+            output(2, i) = static_cast<unsigned int>(input[i].vertexIndices_v[3]); //z vertex pos
         }
 
         // Setzen der Matrix in `source`
