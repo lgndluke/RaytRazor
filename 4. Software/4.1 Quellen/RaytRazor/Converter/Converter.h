@@ -2,6 +2,7 @@
 #define CONVERTER_H
 
 #include "../Import/Resources/Object/Object_Resource.h"
+#include "../Import/Resources/Material/Material_Resource.h"
 #include <nanogui/nanogui.h>
 
 using namespace std;
@@ -35,7 +36,7 @@ public:
      * @brief Methode, um die Colors-Matrix einer Object_Resource zu füllen.
      * @param source                Die betreffende Object_Resource.
      */
-    static void convert_to_matrix_colors(Object_Resource& source);
+    static void convert_to_matrix_colors(Material_Resource& source);
 
 };
 

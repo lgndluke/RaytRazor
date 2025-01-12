@@ -117,31 +117,12 @@ public:
      */
     bool matrix_vertices_is_empty() const;
 
-    /**
-     * @brief Methode, um die Matrix der Colors zu erhalten.
-     * @return const nanogui::MatrixXf& Die Colors-Matrix der Object_Resource.
-     */
-    [[nodiscard]] const nanogui::MatrixXf& get_matrix_colors() const;
-
-    /**
-     * @brief Methode, um die Matrix der Colors zu setzen.
-     * @param new_matrix_colors     Neue Matrix der Colors der Object_Resource.
-     */
-    void set_matrix_colors(const nanogui::MatrixXf& new_matrix_colors);
-
-    /**
-     * @brief Methode, um zu überprüfen, ob die Matrix der Colors leer ist.
-     * @return bool                 True, falls die Matrix leer ist. Andernfalls, False.
-     */
-    bool matrix_colors_is_empty() const;
-
 private:
     std::vector<Indice> indices;
     std::vector<Vertex> vertices;
 
     nanogui::MatrixXu matrix_indices;
     nanogui::MatrixXf matrix_vertices;
-    nanogui::MatrixXf matrix_colors;
 };
 
 #endif
