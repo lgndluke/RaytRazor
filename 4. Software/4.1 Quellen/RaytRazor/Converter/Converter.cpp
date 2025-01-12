@@ -54,15 +54,18 @@ void Converter::convert_to_matrix_vertices(Object_Resource& source) {
     source.set_matrix_vertices(output);
 }
 
-void Converter::convert_to_matrix_colors(Object_Resource& source) {
-    if (!source.matrix_colors_is_empty())
+void Converter::convert_to_matrix_colors(Material_Resource& source) {
+    if (source.get_materials().empty()) {
+        Logger::log(MessageType::SEVERE,
+                    "Material_Resource has no materials attached");
         return;
+    }
 
-    const std::vector<Vertex>& input = source.get_vertices();
+    const std::vector<Material>& input = source.get_materials();
     Eigen::MatrixXf output(3, input.size());
 
     for (size_t i = 0; i < input.size(); ++i) {
-        output.col(i) << input[i].color.x, input[i].color.y, input[i].color.z;
+        output.col(i) << input[i].diffuse.x, input[i].diffuse.y, input[i].diffuse.z;
     }
 
     source.set_matrix_colors(output);

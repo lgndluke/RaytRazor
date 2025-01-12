@@ -2,6 +2,7 @@
 
 #include "../../../Converter/Converter.h"
 #include "../../../Import/Importers/Object/Object_Importer.h"
+#include "../../../Import/Importers/Material/Material_Importer.h"
 
 //TODO's:
 // -> Preview_Canvas::drawGL() implementieren.
@@ -26,6 +27,13 @@ void Preview_Canvas::drawGL()
 
     static bool initialized = false;
 
+
+    //gesamte scene muss hier vorliegen
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+
+    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
+    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
+
     if (!initialized)
     {
 
@@ -42,12 +50,9 @@ void Preview_Canvas::drawGL()
         // Dummy Daten -> TODO Delete afterwards.
         // ==================================================================
 
-        boost::uuids::uuid uuid = boost::uuids::random_generator()();
-
-        Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
 
         const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
-        const std::vector<int>& indices = OR.get_indices(); // Zugriff auf Indizes
+        const std::vector<Indice>& indices = OR.get_indices(); // Zugriff auf Indizes
 
         /*
         // Ausgabe der Vertices
@@ -78,7 +83,7 @@ void Preview_Canvas::drawGL()
         }
         */
 
-        Converter::convert_to_matrix_colors(OR);
+        Converter::convert_to_matrix_colors(MR);
         Converter::convert_to_matrix_indices(OR);
         Converter::convert_to_matrix_vertices(OR);
         // ==================================================================
@@ -91,7 +96,7 @@ void Preview_Canvas::drawGL()
 
         printf("");
         mShader.uploadAttrib("position", OR.get_matrix_vertices());
-        mShader.uploadAttrib("color", OR.get_matrix_colors());
+        mShader.uploadAttrib("color", MR.get_matrix_colors());
     }
 
     // Shader binden und Szene rendern
@@ -101,16 +106,15 @@ void Preview_Canvas::drawGL()
     mvp.setIdentity();
 
     // Skalierung und Translation
-    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f::Identity() * 0.5f; // Skalierung auf 50%
+    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f::Identity() * 0.1f; // Skalierung auf 50%
     mvp(0, 3) = 0.0f;
     mvp(1, 3) = 0.0f;
-    mvp(2, 3) = -2.0f;
+    mvp(2, 3) = -50.0f;
 
     mShader.setUniform("modelViewProj", mvp);
 
     glEnable(GL_DEPTH_TEST);
-    //todo 992 dynamisch machen
-    mShader.drawIndexed(GL_TRIANGLES, 0, 992);
+    mShader.drawIndexed(GL_TRIANGLES, 0, OR.get_indices().size());
     glDisable(GL_DEPTH_TEST);
 }
 

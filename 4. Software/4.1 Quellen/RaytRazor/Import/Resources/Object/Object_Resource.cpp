@@ -15,11 +15,12 @@ std::vector<Indice> Object_Resource::get_indices() const
 
 void Object_Resource::set_indices(const std::vector<Indice>& new_indices)
 {
+    /* nichtmehr benötigt
     if (new_indices.size() % 3 != 0) {
         Logger::log(MessageType::SEVERE, "Object_Resource::set_indices(): Size of new_indices is not a multiple of 3!");
         return;
     }
-
+    */
     this->indices = new_indices;
 }
 
@@ -40,11 +41,12 @@ const nanogui::MatrixXu& Object_Resource::get_matrix_indices() const
 
 void Object_Resource::set_matrix_indices(const nanogui::MatrixXu& new_matrix_indices)
 {
+    /* nichtmehr benötigt
     if (new_matrix_indices.rows() != 3) {
         Logger::log(MessageType::SEVERE, "Object_Resource::set_matrix_indices(): Matrix must have 3 rows for valid indices!");
         return;
     }
-
+    */
     this->matrix_indices = new_matrix_indices;
 }
 
@@ -71,24 +73,4 @@ void Object_Resource::set_matrix_vertices(const nanogui::MatrixXf& new_matrix_ve
 bool Object_Resource::matrix_vertices_is_empty() const
 {
     return this->matrix_vertices.cols() == 0; // Direkte Prüfung auf leere Matrix
-}
-
-const nanogui::MatrixXf& Object_Resource::get_matrix_colors() const
-{
-    return this->matrix_colors; // Direkte Rückgabe
-}
-
-void Object_Resource::set_matrix_colors(const nanogui::MatrixXf& new_matrix_colors)
-{
-    if (new_matrix_colors.rows() != 3) {
-        Logger::log(MessageType::SEVERE, "Object_Resource::set_matrix_colors(): Matrix must have 3 rows for valid colors!");
-        return;
-    }
-
-    this->matrix_colors = new_matrix_colors;
-}
-
-bool Object_Resource::matrix_colors_is_empty() const
-{
-    return this->matrix_colors.cols() == 0; // Direkte Prüfung auf leere Matrix
 }
