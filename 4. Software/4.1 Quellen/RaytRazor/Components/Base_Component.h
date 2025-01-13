@@ -36,6 +36,11 @@ class Base_Component
 
        virtual ~Base_Component() = default;
 
+    template<class c> inline bool instanceOf(const Base_Component* base)
+    {
+        return dynamic_cast <const c*> (base);
+    }
+
        //[[nodiscard]] virtual ComponentType get_type() const = 0;
        /**
         * @brief Konstruktor zum Erstellen eines Base_Component Objekts.

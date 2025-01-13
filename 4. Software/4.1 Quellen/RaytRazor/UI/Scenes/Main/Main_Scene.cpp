@@ -54,6 +54,9 @@ void Preview_Canvas::drawGL()
         const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
         const std::vector<Indice>& indices = OR.get_indices(); // Zugriff auf Indizes
 
+    int size = indices.size();
+    int size2 = vertices.size();
+
         /*
         // Ausgabe der Vertices
         for (int i = 0; i < static_cast<int>(vertices.size()); i++) {
@@ -104,18 +107,62 @@ void Preview_Canvas::drawGL()
 
     Eigen::Matrix4f mvp;
     mvp.setIdentity();
+    glm::mat4 mvpGLM;
+    map<boost::uuids::uuid, Base_Component*> components = Main_Scene::getComponents();
+    map<boost::uuids::uuid, Base_Resource*> resources = Main_Scene::getResources();
+    //create projection and view matrix
+    for (auto& pair  : components) {
 
-    // Skalierung und Translation
-    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f::Identity() * 0.1f; // Skalierung auf 50%
-    mvp(0, 3) = 0.0f;
-    mvp(1, 3) = 0.0f;
-    mvp(2, 3) = -50.0f;
+        Camera_Component* Camtest = dynamic_cast<Camera_Component*>(pair.second);
+    }
+        std::visit([&](auto&& comp) {
+            using T = std::decay_t<decltype(comp)>;
+
+            if constexpr (std::is_same_v<T, Camera_Component>) {
+
+                Camera_Component camera = component;
+                std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera.get_position(),camera.get_rotation());
+                glm::mat4 ViewGLMmat = glm::lookAt(camera.get_position(), cameraPair.first, cameraPair.second);
+                glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera.get_fov()), camera.get_aspect_ratio(),
+                                                        camera.get_near_clip(), camera.get_far_clip());
+            }
+
+        });
+    //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
+    //model matrix
+
+    //convert mvpGLM -> mvp von eigen
+
 
     mShader.setUniform("modelViewProj", mvp);
 
     glEnable(GL_DEPTH_TEST);
     mShader.drawIndexed(GL_TRIANGLES, 0, OR.get_indices().size());
     glDisable(GL_DEPTH_TEST);
+}
+
+glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
+{
+    float rotX = glm::radians(rotation.x);
+    float rotY = glm::radians(rotation.y);
+
+    glm::vec3 result;
+
+    result.x = cos(rotX) * cos(rotY);
+    result.y = sin(rotX);
+    result.z = cos(rotX) * sin(rotY);
+
+    return glm::normalize(result);
+}
+
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(glm::vec3 position, glm::vec3 rotation)
+{
+    glm::vec3 viewDirection = calculateViewDir(rotation);
+    glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
+    glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
+
+    std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
+    return result;
 }
 
 Main_Scene::Main_Scene(const int window_width,
