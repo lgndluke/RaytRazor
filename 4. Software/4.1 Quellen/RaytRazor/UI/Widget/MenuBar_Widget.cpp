@@ -38,7 +38,7 @@ void MenuBar_Widget::initialize() {
     addMenu("Help",
             {"Documentation", "About"},
             {
-                []() { std::cout << "Documentation clicked!" << std::endl; },
+                []() { ShellExecuteA(nullptr, "open", "https://github.com/lgndluke/RaytRazor/wiki/", nullptr, nullptr, SW_SHOWNORMAL); },
                 []() { std::cout << "About clicked!" << std::endl; }
             });
 }
