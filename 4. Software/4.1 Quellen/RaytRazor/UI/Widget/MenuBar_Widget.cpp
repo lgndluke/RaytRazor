@@ -22,7 +22,7 @@ void MenuBar_Widget::initialize() {
                     if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
 
                 },
-                []() { nanogui::shutdown(); }
+                []() {  }
             });
 
     // Add-Menü hinzufügen
