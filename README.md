@@ -12,11 +12,12 @@
 
 ## ⚡️ Quick start:
 
-//TODO Add Quick start section
+Simply download, extract and run the latest release on Windows. <br>
+You can always find the latest version here: [RaytRazor-Latest](https://github.com/lgndluke/RaytRazor/releases/latest/)
 
 ## 📖 Project Wiki:
 
-//TODO Add Project Wiki section
+Find the Project-Documentation here: [Work in progress ...]()
 
 ## 🔩 Commit Syntax:
 
