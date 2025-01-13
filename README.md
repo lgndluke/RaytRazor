@@ -17,7 +17,7 @@ Zum aktuellsten Release: [RaytRazor-Latest](https://github.com/lgndluke/RaytRazo
 
 ## 📖 Project Wiki:
 
-Die Projekt-Dokumentation kann hier gefunden werden: [Work in progress ...]()
+Die Projekt-Dokumentation kann hier gefunden werden: [Wiki](https://github.com/lgndluke/RaytRazor/wiki/)
 
 ## 🔩 Commit Syntax:
 
