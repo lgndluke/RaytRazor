@@ -12,12 +12,12 @@
 
 ## ⚡️ Quick start:
 
-Simply download, extract and run the latest release on Windows. <br>
-You can always find the latest version here: [RaytRazor-Latest](https://github.com/lgndluke/RaytRazor/releases/latest/)
+Neuesten Release herunterladen, Archiv entpacken und direkt unter Windows durchstarten. <br>
+Zum aktuellsten Release: [RaytRazor-Latest](https://github.com/lgndluke/RaytRazor/releases/latest/)
 
 ## 📖 Project Wiki:
 
-Find the Project-Documentation here: [Work in progress ...]()
+Die Projekt-Dokumentation kann hier gefunden werden: [Work in progress ...]()
 
 ## 🔩 Commit Syntax:
 
