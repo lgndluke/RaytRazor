@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <SDL.h>
+#include <cstring>
 
 // TODO: Kommentare schreiben
 class Image {

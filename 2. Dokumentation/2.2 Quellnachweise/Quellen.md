@@ -48,8 +48,12 @@ RayForge Logo: [ChatGPT Logo Generator](https://chatgpt.com/g/g-9i7ARxKhj-logo)<
 
 - [GitHub](https://github.com/nothings/stb/tree/master)
 
-#### **--Example--**
+### Weitere Quellangaben:
 
-- GitHub:
-- Website:
-- Documentation:
+#### **OpenGL Tutorial:**
+
+- [Website / Documentation](https://www.opengl-tutorial.org)
+
+#### **Fundamentals of Computer Graphics:**
+
+- Citation: Marschner, S., & Shirley, P. (2021). Fundamentals of Computer Graphics (5th ed.). A K Peters/CRC Press. https://doi.org/10.1201/9781003050339
