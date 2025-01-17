@@ -12,12 +12,12 @@
 #include <nanogui/button.h>
 #include "nanogui/layout.h"
 #include <string>
+#include "../Scenes/Main/Main_Scene.h"
 #include <vector>
 
 #include "ComponentAttributes_Widget.h"
 #include "../utility/Custom_Label.h"
 
-using namespace nanogui;
 using namespace std;
 
 class TreeView_Widget : public Widget {

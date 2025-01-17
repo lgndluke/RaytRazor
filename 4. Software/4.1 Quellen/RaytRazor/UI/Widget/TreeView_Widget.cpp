@@ -1,6 +1,6 @@
 #include "TreeView_Widget.h"
 
-using namespace nanogui;
+
 using namespace std;
 
 int Basis_Root_Font = 35;
@@ -36,7 +36,7 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
         label->setFontSize(Basis_Child_Font);
         label->setCallback([this, nodeName]() {
             printf("Node name: %s\n", nodeName.c_str());
-            //todo mAttributes->showAttributesOfComponent()
+            //todo mAttributes->showAttributesOfComponent(Main_Scene::getComponents());
         });
 
         mNodeMap[nodeName] = childContainer;

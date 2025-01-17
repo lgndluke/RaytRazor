@@ -19,8 +19,7 @@ void MenuBar_Widget::initialize() {
                 []() {
                     std::string path_to_DIR = openFileDialog();
                     if(isDirectory(path_to_DIR)) return;
-                    if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
-
+                    //if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
                 },
                 []() {  }
             });

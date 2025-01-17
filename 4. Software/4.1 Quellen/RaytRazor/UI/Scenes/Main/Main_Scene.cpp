@@ -34,8 +34,9 @@ void Preview_Canvas::drawGL()
     //gesamte scene muss hier vorliegen
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
-    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
-    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
+    //C:\Users\chris\CLionProjects\RaytRazor\RaytRazor\5. Modelle\5.1 Beispielmodelle\miscellaneous\miscellaneous\teapot\Teapot.obj
+    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
+    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
 
     if (!initialized)
     {
@@ -118,12 +119,12 @@ void Preview_Canvas::drawGL()
     //create projection and view matrix
     for (auto& pair  : components) {
 
-        shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+        //shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
 
-        std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
-        glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-        glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
-                                                        camera->get_near_clip(), camera->get_far_clip());
+        //std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+        //glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+        //glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
+                                                        //camera->get_near_clip(), camera->get_far_clip());
     }
 
     //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
@@ -255,7 +256,7 @@ void Main_Scene::initialize()
 
             //Path muss angepasst werden wenn sich wd die Struktur ändert
             //todo über explorer setzen :)
-            string path_to_json = "../resources/scenes/JsonParser_DummyFile.json";
+            string path_to_json = "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
 
             //FileSelector file_Selector();
             //string path_to_json = file_Selector().get_input_path();
@@ -272,14 +273,12 @@ void Main_Scene::initialize()
             for (const auto& component : components)
             {
                 if(++i == 0) {
-                    attributesWidget->showAttributesOfComponent(component.second);
+                    //attributesWidget->showAttributesOfComponent(component.second);
                 }
-                tree_view->addNode(component.second->get_name(), "3D-Szene");
+                string s = component.second->get_name();
+                printf("");
+                tree_view->addNode(s, "3D-Szene");
             }
-            //const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
-
-
-            printf("");
 
             performLayout();
 
