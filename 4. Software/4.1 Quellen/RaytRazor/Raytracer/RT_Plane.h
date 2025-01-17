@@ -2,7 +2,7 @@
 #define PLANE_H
 
 #include"RT_Object.h"
-#include"rt_geometricTransform.h"
+#include"RT_geometricTransform.h"
 
 // TODO: Kommentare schreiben
 
