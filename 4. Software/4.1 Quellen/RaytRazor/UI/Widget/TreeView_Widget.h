@@ -42,6 +42,7 @@ private:
     Widget* mContainer; ///< Container für die Baumstruktur
     map<std::string, Widget*> mNodeMap; ///< Map für Knoten und deren Widgets
     ComponentAttributes_Widget *mAttributes;
+    Custom_Label* mCurrentSelectedLabel = nullptr;
 };
 
 #endif // TREEVIEW_WIDGET_H

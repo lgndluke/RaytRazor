@@ -32,13 +32,34 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
 
         auto childContainer = new Widget(parentWidget);
         childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 0));
+
         auto label = new Custom_Label(childContainer, "|-------> " + nodeName, "sans");
         label->setFontSize(Basis_Child_Font);
-        label->setCallback([this, nodeName]() {
+
+        // Callback für das Hervorheben des angeklickten Labels
+        label->setCallback([this, label, nodeName]() {
             printf("Node name: %s\n", nodeName.c_str());
-            //todo mAttributes->showAttributesOfComponent(Main_Scene::getComponents());
+
+            // Reset the previous label's color if it exists
+            if (mCurrentSelectedLabel) {
+                mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
+            }
+
+            // Highlight the clicked label
+            label->setColor(Color(255, 0, 0, 255)); // Highlight-Farbe (z. B. Rot)
+
+            // Update the current selected label
+            mCurrentSelectedLabel = label;
+
+            // Update the component attributes
+            for (auto componets : Main_Scene::getComponents()) {
+                if (nodeName == componets.second->get_name()) {
+                    mAttributes->updateFromComponent(componets.second);
+                }
+            }
         });
 
+        // Speichere das neue Widget in der Map
         mNodeMap[nodeName] = childContainer;
     }
 }

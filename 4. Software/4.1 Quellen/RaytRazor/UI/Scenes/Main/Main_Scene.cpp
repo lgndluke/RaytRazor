@@ -269,15 +269,22 @@ void Main_Scene::initialize()
             tree_view->clear();
             tree_view->addNode("3D-Szene");
 
-            int i = -1;
-            for (const auto& component : components)
-            {
-                if(++i == 0) {
-                    //attributesWidget->showAttributesOfComponent(component.second);
+            if (components.empty()) {
+                printf("No components to display.\n");
+                return;
+            }
+
+            // Zeige die Attribute des ersten Elements an
+            bool isFirstComponent = true;
+
+            for (const auto& [key, component] : components) {
+                if (isFirstComponent) {
+                    attributesWidget->showAttributesOfComponent(component);
+                    isFirstComponent = false;
                 }
-                string s = component.second->get_name();
-                printf("");
-                tree_view->addNode(s, "3D-Szene");
+
+                // Füge den Knoten zum Baum hinzu
+                tree_view->addNode(component->get_name(), "3D-Szene");
             }
 
             performLayout();
@@ -303,5 +310,5 @@ void*(*Main_Scene::raytrace_preview())(void*)
 
 void Main_Scene::update()
 {
-    // Update Main_Scene?
+    performLayout();
 }
