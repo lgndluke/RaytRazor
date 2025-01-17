@@ -106,13 +106,13 @@ class Main_Scene final : public Screen
          */
         void update();
 
-        map<boost::uuids::uuid, Base_Component*> getComponents()
+        static map<boost::uuids::uuid, shared_ptr<Base_Component>> getComponents()
         {
-            return this->components;
+            return components;
         }
-        map<boost::uuids::uuid, Base_Resource*> getResources()
+        static map<boost::uuids::uuid, shared_ptr<Base_Resource>> getResources()
         {
-            return this->resources;
+            return resources;
         }
 
 
@@ -124,8 +124,8 @@ class Main_Scene final : public Screen
         bool is_resizeable;
 
         vector<int> ids;
-        map<boost::uuids::uuid, Base_Component*> components;
-        map<boost::uuids::uuid, Base_Resource*> resources;
+        static map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
+        static map<boost::uuids::uuid, shared_ptr<Base_Resource>> resources;
 
         /**
          * @brief Methode, um die Main Szene zu initialisieren.

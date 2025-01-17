@@ -29,6 +29,7 @@ class Base_Resource
 
     public:
 
+    virtual ~Base_Resource() = default;
         /**
          * @brief Konstruktor zum Erstellen eines Base_Resource Objekts.
          *

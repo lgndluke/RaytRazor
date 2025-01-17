@@ -38,8 +38,8 @@ class Json_Parser
          * @param resources                 Referenz auf die zu verwendende Base_Resource Map.
          */
         static void parseJSON(const string& path_To_Json,
-                              map<boost::uuids::uuid, Base_Component>& components,
-                              map<boost::uuids::uuid, Base_Resource>& resources);
+                              map<boost::uuids::uuid, shared_ptr<Base_Component>>& components,
+                              map<boost::uuids::uuid, shared_ptr<Base_Resource>>& resources);
 
         /**
         * @brief Exportiert die übergebenen Komponenten und Ressourcen in eine JSON-Datei.
