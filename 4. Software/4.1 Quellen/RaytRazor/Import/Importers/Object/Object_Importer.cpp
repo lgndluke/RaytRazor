@@ -126,13 +126,19 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const string& path_to_file)
 
                 // Parse v/vt/vn
                 std::getline(vertexStream, v, '/');
-                std::getline(vertexStream, vt, '/');
-                std::getline(vertexStream, vn, '/');
+                if (vertexStream.peek() == '/') { // Check for v//vn
+                    vertexStream.get(); // Skip the second '/'
+                    vt = ""; // Ensure vt is explicitly empty
+                    std::getline(vertexStream, vn); // Parse vn
+                } else {
+                    std::getline(vertexStream, vt, '/'); // Parse vt if it exists
+                    std::getline(vertexStream, vn); // Parse vn if it exists
+                }
 
                 // Store indices if they exist
-                if (!v.empty()) vertex_pos_indices.push_back(std::stoi(v));
-                if (!vt.empty()) vertex_texcoord_indices.push_back(std::stoi(vt));
-                if (!vn.empty()) vertex_normal_indices.push_back(std::stoi(vn));
+                vertex_pos_indices.push_back(std::stoi(v));
+                vertex_texcoord_indices.push_back(vt.empty() ? -1 : std::stoi(vt));
+                vertex_normal_indices.push_back(vn.empty() ? -1 : std::stoi(vn));
             }
 
             // Ergänzen von Material, Smoothness und Group-Daten
@@ -175,11 +181,30 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const string& path_to_file)
     // Alle indizes nutzen
     for (size_t i = 0; i < vertices.size(); i++) {
         vertices[i].position = vertex_pos[vertex_pos_indices[i]-1];
-        vertices[i].texCoord = vertex_texcoord[vertex_texcoord_indices[i]-1];
-        vertices[i].normal = vertex_normal[vertex_normal_indices[i]-1];
+        if (!vertex_texcoord_indices.empty() && vertex_texcoord_indices[i] > 0 &&
+        vertex_texcoord_indices[i] - 1 < vertex_texcoord.size()) {
+            vertices[i].texCoord = vertex_texcoord[vertex_texcoord_indices[i] - 1];
+        } else {
+            vertices[i].texCoord = glm::vec2(0.0, 0.0); // Standardwert
+        }
+
+        if (!vertex_normal_indices.empty() && vertex_normal_indices[i] > 0 &&
+            vertex_normal_indices[i] - 1 < vertex_normal.size()) {
+            vertices[i].normal = vertex_normal[vertex_normal_indices[i] - 1];
+            } else {
+                vertices[i].normal = glm::vec3(0.0, 0.0, 0.0); // Standardwert
+            }
         vertices[i].smoothness = smoothness[i];
-        vertices[i].materialName = materials[material_pos_indices[i]];
-        vertices[i].groupName = groups[group_pos_indices[i]];
+        if (!materials.empty() && material_pos_indices[i] >= 0 && material_pos_indices[i] < materials.size()) {
+            vertices[i].materialName = materials[material_pos_indices[i]];
+        } else {
+            vertices[i].materialName = "default";
+        }
+        if (!groups.empty() && group_pos_indices[i] >= 0 && group_pos_indices[i] < groups.size()) {
+            vertices[i].groupName = groups[group_pos_indices[i]];
+        } else {
+            vertices[i].groupName = "default";
+        }
         vertices[i].mtlFileName = mtlFile;
         vertices[i].objectName = objectName;
         vertices[i].color = glm::vec3(1.f, 1.f, 1.f);
