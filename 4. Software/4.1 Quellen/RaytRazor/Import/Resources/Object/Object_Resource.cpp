@@ -1,53 +1,76 @@
 #include "Object_Resource.h"
 
-//TODO:
-// - Object_Resource::Object_Resource:
-// -> Prüfen, ob indices und vertices die gleiche größe besitzen.
-// -> Überlegen und implementieren, was passiert wenn dem nicht so sein sollte.
-// - Object_Resource::update_indices_and_vertices()? Implementieren?
-
 Object_Resource::Object_Resource(const boost::uuids::uuid uuid, const string& path,
-                                 const std::vector<int>& indices, const std::vector<Vertex>& vertices)
+                                 const std::vector<Indice>& indices, const std::vector<Vertex>& vertices)
                                  : Base_Resource(uuid, OBJECT, path)
 {
     this->indices = indices;
     this->vertices = vertices;
 }
 
-std::vector<int> Object_Resource::get_indices() const
+std::vector<Indice> Object_Resource::get_indices() const
 {
-    if (indices.size() != 0)
-        return this->indices;
-
-    return std::vector<int>();
+    return this->indices; // Direkte Rückgabe
 }
 
-void Object_Resource::set_indices(const std::vector<int>& new_Indices)
+void Object_Resource::set_indices(const std::vector<Indice>& new_indices)
 {
-    if (new_Indices.size() != this->vertices.size())
-    {
-        Logger::log(MessageType::SEVERE, "Object_Resource::set_indices(): Size of new_Indices does not match size of this->vertices!");
+    /* nichtmehr benötigt
+    if (new_indices.size() % 3 != 0) {
+        Logger::log(MessageType::SEVERE, "Object_Resource::set_indices(): Size of new_indices is not a multiple of 3!");
         return;
     }
-
-    this->indices = new_Indices;
+    */
+    this->indices = new_indices;
 }
 
 std::vector<Vertex> Object_Resource::get_vertices() const
 {
-    if (vertices.size() != 0)
-        return this->vertices;
-
-    return std::vector<Vertex>();
+    return this->vertices; // Direkte Rückgabe
 }
 
-void Object_Resource::set_vertices(const std::vector<Vertex>& new_Vertices)
+void Object_Resource::set_vertices(const std::vector<Vertex>& new_vertices)
 {
-    if (new_Vertices.size() != this->indices.size())
-    {
-        Logger::log(MessageType::SEVERE, "Object_Resource::set_vertices(): Size of new_Vertices does not match size of this->indices!");
+    this->vertices = new_vertices;
+}
+
+const nanogui::MatrixXu& Object_Resource::get_matrix_indices() const
+{
+    return this->matrix_indices; // Direkte Rückgabe
+}
+
+void Object_Resource::set_matrix_indices(const nanogui::MatrixXu& new_matrix_indices)
+{
+    /* nichtmehr benötigt
+    if (new_matrix_indices.rows() != 3) {
+        Logger::log(MessageType::SEVERE, "Object_Resource::set_matrix_indices(): Matrix must have 3 rows for valid indices!");
+        return;
+    }
+    */
+    this->matrix_indices = new_matrix_indices;
+}
+
+bool Object_Resource::matrix_indices_is_empty() const
+{
+    return this->matrix_indices.cols() == 0; // Direkte Prüfung auf leere Matrix
+}
+
+const nanogui::MatrixXf& Object_Resource::get_matrix_vertices() const
+{
+    return this->matrix_vertices; // Direkte Rückgabe
+}
+
+void Object_Resource::set_matrix_vertices(const nanogui::MatrixXf& new_matrix_vertices)
+{
+    if (new_matrix_vertices.rows() != 3) {
+        Logger::log(MessageType::SEVERE, "Object_Resource::set_matrix_vertices(): Matrix must have 3 rows for valid vertices!");
         return;
     }
 
-    this->vertices = new_Vertices;
+    this->matrix_vertices = new_matrix_vertices;
+}
+
+bool Object_Resource::matrix_vertices_is_empty() const
+{
+    return this->matrix_vertices.cols() == 0; // Direkte Prüfung auf leere Matrix
 }

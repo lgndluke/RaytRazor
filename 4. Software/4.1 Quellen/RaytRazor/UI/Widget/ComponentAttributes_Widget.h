@@ -12,12 +12,12 @@ class ComponentAttributes_Widget : public Widget {
 public:
     explicit ComponentAttributes_Widget(Widget *parent);
 
-    void showAttributesOfComponent(const Base_Component &component);
+    void showAttributesOfComponent(const shared_ptr<Base_Component>& component);
 
     void clear();
 
 private:
-    void populate_widget(const Base_Component &component);
+    void populate_widget(const shared_ptr<Base_Component>& component);
     std::vector<Widget *> dynamicWidgets;
     int FONT_SIZE = 20;
 };

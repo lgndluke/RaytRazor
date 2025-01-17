@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 if (WIN32)
     # Windows specific compiler flags.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static -Ofast")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static -Ofast -fopenmp")
 else ()
     # Linux/MacOS specific compiler flags. -> Functionality has not yet been tested.
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Ofast")
@@ -111,6 +111,8 @@ set(SOURCE_FILES
         UI/Widget/ComponentAttributes_Widget.h
         UI/utility/Custom_Label.cpp
         UI/utility/Custom_Label.h
+        Converter/Converter.cpp
+        Converter/Converter.h
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})

@@ -29,6 +29,7 @@ class Base_Resource
 
     public:
 
+    virtual ~Base_Resource() = default;
         /**
          * @brief Konstruktor zum Erstellen eines Base_Resource Objekts.
          *
@@ -38,6 +39,7 @@ class Base_Resource
          */
         Base_Resource(const boost::uuids::uuid uuid, const ResourceType type, const string& path);
 
+        Base_Resource() = default;
         /**
          * @brief Methode, um die UUID der Ressource zu erhalten.
          * @return boost::uuid::uuid     UUID der Ressource.

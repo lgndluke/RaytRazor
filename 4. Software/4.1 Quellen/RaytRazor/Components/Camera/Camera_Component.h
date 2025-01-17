@@ -15,7 +15,11 @@ class Camera_Component : public Base_Component
 {
 
     public:
+        ~Camera_Component() override = default;
 
+        [[nodiscard]] ComponentType get_type() const {
+          return CAMERA;
+        }
         /**
          * @brief Konstruktor zum Erstellen eines Camera_Component Objekts.
          *
@@ -96,7 +100,7 @@ class Camera_Component : public Base_Component
          */
         [[nodiscard]] glm::mat4 getProjectionMatrix() const;
 
-    private:
+private:
 
         float fov;
         float aspect_ratio;

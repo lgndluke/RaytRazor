@@ -61,6 +61,19 @@ class Preview_Canvas final : public GLCanvas
          */
         void drawGL() override;
 
+        /**
+        * @brief zum berechnen der richtung in die das objekt (normalerweise kamera) zeigt
+        * @param rotation                Rotations vektor des objektes.
+        */
+        glm::vec3 calculateViewDir(glm::vec3 rotation);
+
+        /**
+        * @brief zum berechnung des punktes auf die die kamera zeigt und den UP vector
+        * @param rotation                Rotations vektor des objektes.
+        * @param rotation                Position des objektes.
+        */
+        std::pair<glm::vec3,glm::vec3> calculateCameraVectors(glm::vec3 position, glm::vec3 rotation);
+
     private:
         GLShader mShader;
         Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
@@ -93,6 +106,16 @@ class Main_Scene final : public Screen
          */
         void update();
 
+        static map<boost::uuids::uuid, shared_ptr<Base_Component>> getComponents()
+        {
+            return components;
+        }
+        static map<boost::uuids::uuid, shared_ptr<Base_Resource>> getResources()
+        {
+            return resources;
+        }
+
+
     private:
 
         int window_width;
@@ -101,8 +124,8 @@ class Main_Scene final : public Screen
         bool is_resizeable;
 
         vector<int> ids;
-        map<boost::uuids::uuid, Base_Component> components;
-        map<boost::uuids::uuid, Base_Resource> resources;
+        static map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
+        static map<boost::uuids::uuid, shared_ptr<Base_Resource>> resources;
 
         /**
          * @brief Methode, um die Main Szene zu initialisieren.

@@ -16,7 +16,7 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
         return std::nullopt;
     }
 
-    const vector<int> indices = fetch_indices(path_to_file);
+    const vector<Indice> indices = fetch_indices(path_to_file);
     const vector<Vertex> vertices = fetch_vertices(path_to_file);
 
     Object_Resource return_Resource(uuid, path_to_file, indices, vertices);
@@ -24,14 +24,15 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
 
 }
 
-std::vector<int> Object_Importer::fetch_indices(const string& path_to_file)
+std::vector<Indice> Object_Importer::fetch_indices(const string& path_to_file)
 {
     // Index Daten aus .obj Datei auslesen -> Datei ist bereits geprüft und eine valide .obj Datei.
     std::stringstream ss;
     std::ifstream objFile(path_to_file);
     std::string line;
     std::string prefix;
-    std::vector<int> indices;
+    std::vector<Indice> indices;
+    std::string currentMaterial;
 
     while (std::getline(objFile, line)) {
         if(line.empty()) continue;
@@ -39,16 +40,43 @@ std::vector<int> Object_Importer::fetch_indices(const string& path_to_file)
         ss.str(line);
         ss >> prefix;
 
+        // extract the material and set it for the following faces
+        if (prefix == "usemtl")
+            {
+            std::string currentWord;
+            ss >> currentWord;
+            currentMaterial = currentWord;
+            }
         if (prefix == "f") {
             std::string vertexData;
+            std::vector<int> v;    // For vertex indices
+            std::vector<int> vt;   // For texture coordinate indices
+            std::vector<int> vn;   // For normal vector indices
+            int count = 0;
 
             while (ss >> vertexData) {
                 std::istringstream vertexStream(vertexData);
-                std::string v;
-                std::getline(vertexStream, v, '/');
+                std::string vStr, vtStr, vnStr;
 
-                if (!v.empty()) {
-                    indices.push_back(std::stoi(v));
+                // Extract V, VT, and VN as strings
+                std::getline(vertexStream, vStr, '/');
+                std::getline(vertexStream, vtStr, '/');
+                std::getline(vertexStream, vnStr, '/');
+
+                // Convert to integers and store in the vectors
+                if (!vStr.empty()) v.push_back(std::stoi(vStr));
+                if (!vtStr.empty()) vt.push_back(std::stoi(vtStr));
+                if (!vnStr.empty()) vn.push_back(std::stoi(vnStr));
+
+                count++;
+
+                if (count >= 3) {
+                    // After parsing three vertices, create the Indice object and push it to the vector
+                    indices.emplace_back(v, vt, vn, currentMaterial);
+                    v.clear();
+                    vt.clear();
+                    vn.clear(); // Clear vectors for next face
+                    count = 0;  // Reset count for the next face
                 }
             }
         }
@@ -57,137 +85,108 @@ std::vector<int> Object_Importer::fetch_indices(const string& path_to_file)
     return indices;
 }
 
-std::vector<Vertex> Object_Importer::fetch_vertices(const string& path_to_file)
-{
-    std::vector<glm::fvec3> vertex_pos; //v
-    std::vector<glm::fvec2> vertex_texcoord; //vt
-    std::vector<glm::fvec3> vertex_normal; //vn
-    // Vektoren für Faces (f)
-    std::vector<GLint> vertex_pos_indices; //index für v
-    std::vector<GLint> vertex_texcoord_indices; //index für vt
-    std::vector<GLint> vertex_normal_indices; //index für vn
-    // Strukturen für MTL
-    std::vector<std::string> materials;
-    std::vector<GLint> material_pos_indices;
-    GLint current_material = 0;
 
-    std::string mtlFile;
-    std::string objectName;
+// Hash-Funktion für Indizes
+struct IndexHash {
+    size_t operator()(const std::tuple<GLint, GLint, GLint>& key) const {
+        return std::hash<GLint>()(std::get<0>(key)) ^
+               std::hash<GLint>()(std::get<1>(key)) ^
+               std::hash<GLint>()(std::get<2>(key));
+    }
+};
 
-    std::vector<GLint> smoothness;
-    GLint current_smoothness = 0;
 
-    std::vector<std::string> groups;
-    std::vector<GLint> group_pos_indices;
-    GLint current_group = 0;
 
-    // Strukturen zum Dateilesen
-    std::stringstream ss;
-    std::ifstream objFile(path_to_file);
-    std::string line;
-    std::string prefix;
-    glm::vec3 tmp_vec3;
-    glm::vec2 tmp_vec2;
-    GLint tmp_int = 0;
-    // Endprodukt
-    std::vector<Vertex> vertices;
+std::vector<Vertex> Object_Importer::fetch_vertices(const std::string& path_to_file) {
+        std::vector<glm::fvec3> vertex_pos;       // v
+        std::vector<glm::fvec2> vertex_texcoord; // vt
+        std::vector<glm::fvec3> vertex_normal;   // vn
 
-    // Falls Datei nicht geöffnet wurde, Error
-    if(!objFile.is_open()) {
-        //std::cout<<"Datei konnte nicht ge\x94 \bffnet werden.";
+        std::vector<GLint> vertex_pos_indices;       // Index für v
+        std::vector<GLint> vertex_texcoord_indices; // Index für vt
+        std::vector<GLint> vertex_normal_indices;   // Index für vn
+
+        std::vector<Vertex> vertices;
+        std::unordered_map<std::tuple<GLint, GLint, GLint>, size_t, IndexHash> unique_vertex_map;
+
+        std::stringstream ss;
+        std::ifstream objFile(path_to_file);
+        std::string line;
+        std::string prefix;
+
+        if (!objFile.is_open()) {
+            //std::cerr << "Datei konnte nicht geöffnet werden: " << path_to_file << std::endl;
+            return vertices;
+        }
+
+        while (std::getline(objFile, line)) {
+            if (line.empty()) continue;
+
+            ss.clear();
+            ss.str(line);
+            ss >> prefix;
+
+            if (prefix == "v") {
+                glm::vec3 tmp_vec3;
+                ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
+                vertex_pos.push_back(tmp_vec3);
+            } else if (prefix == "vt") {
+                glm::vec2 tmp_vec2;
+                ss >> tmp_vec2.x >> tmp_vec2.y;
+                vertex_texcoord.push_back(tmp_vec2);
+            } else if (prefix == "vn") {
+                glm::vec3 tmp_vec3;
+                ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
+                vertex_normal.push_back(tmp_vec3);
+            } else if (prefix == "f") {
+                std::string vertexData;
+                while (ss >> vertexData) {
+                    std::istringstream vertexStream(vertexData);
+                    std::string v, vt, vn;
+
+                    std::getline(vertexStream, v, '/');
+                    std::getline(vertexStream, vt, '/');
+                    std::getline(vertexStream, vn, '/');
+
+                    GLint v_idx = v.empty() ? 0 : std::stoi(v);
+                    GLint vt_idx = vt.empty() ? 0 : std::stoi(vt);
+                    GLint vn_idx = vn.empty() ? 0 : std::stoi(vn);
+
+                    auto key = std::make_tuple(v_idx, vt_idx, vn_idx);
+
+                    // Prüfen, ob die Kombination bereits existiert
+                    if (unique_vertex_map.find(key) == unique_vertex_map.end()) {
+                        Vertex vertex;
+
+                        // Position
+                        if (v_idx > 0 && v_idx <= static_cast<GLint>(vertex_pos.size())) {
+                            vertex.position = vertex_pos[v_idx - 1];
+                        }
+
+                        // Texturkoordinaten
+                        if (vt_idx > 0 && vt_idx <= static_cast<GLint>(vertex_texcoord.size())) {
+                            vertex.texCoord = vertex_texcoord[vt_idx - 1];
+                        }
+
+                        // Normalen
+                        if (vn_idx > 0 && vn_idx <= static_cast<GLint>(vertex_normal.size())) {
+                            vertex.normal = vertex_normal[vn_idx - 1];
+                        }
+
+                        vertex.color = glm::vec3(1.f, 1.f, 1.f);
+                        vertices.push_back(vertex);
+
+                        // Füge die neue Kombination in die Map ein
+                        unique_vertex_map[key] = vertices.size() - 1;
+                    }
+                }
+            }
+        }
+
         return vertices;
-    }
-
-    //Auslesen von Informationen Zeile für Zeile
-    while (std::getline(objFile, line)) {
-        //Prefix holen
-        if(line.empty()) continue;
-        ss.clear();
-        ss.str(line);
-        ss >> prefix;
-
-        if (prefix == "v") { // Punktkoordinaten
-            ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
-            vertex_pos.push_back(tmp_vec3);
-        }
-        else if (prefix == "vt") { // Texturen
-            ss >> tmp_vec2.x >> tmp_vec2.y;
-            vertex_texcoord.push_back(tmp_vec2);
-        }
-        else if (prefix == "vn") { // Normalen für Richtung
-            ss >> tmp_vec3.x >> tmp_vec3.y >> tmp_vec3.z;
-            vertex_normal.push_back(tmp_vec3);
-        }
-        else if (prefix == "f") { // Faces
-            std::string vertexData;
-            while (ss >> vertexData) {
-                std::istringstream vertexStream(vertexData);
-                std::string v, vt, vn;
-
-                // Parse v/vt/vn
-                std::getline(vertexStream, v, '/');
-                std::getline(vertexStream, vt, '/');
-                std::getline(vertexStream, vn, '/');
-
-                // Store indices if they exist
-                if (!v.empty()) vertex_pos_indices.push_back(std::stoi(v));
-                if (!vt.empty()) vertex_texcoord_indices.push_back(std::stoi(vt));
-                if (!vn.empty()) vertex_normal_indices.push_back(std::stoi(vn));
-            }
-
-            // Ergänzen von Material, Smoothness und Group-Daten
-            for (int i = 0; i < 3; i++) { // Dreiecks-Faces (3 Indizes)
-                material_pos_indices.push_back(current_material);
-                smoothness.push_back(current_smoothness);
-                group_pos_indices.push_back(current_group);
-            }
-        }
-        else if (prefix == "s") { // Kantenglättung
-            if(size_t pos = ss.str().rfind(' '); ss.str().substr(pos + 1) == "off") current_smoothness = 0;
-            ss >> current_smoothness;
-        }
-        else if (prefix == "mtllib") { // .MTL Einbindung
-            size_t pos = ss.str().rfind(' ');
-            mtlFile = ss.str().substr(pos + 1);
-        }
-        else if (prefix == "usemtl") { // Nutzen eines MTL Objektes
-            size_t pos = ss.str().rfind(' ');
-            if(!materials.empty()) if(materials.back() != ss.str().substr(pos + 1)) current_material++;
-            materials.push_back(ss.str().substr(pos + 1));
-        }
-        else if (prefix == "#") {} //Kommentar
-        else if (prefix == "o") { // Objektname
-            size_t pos = ss.str().rfind(' ');
-            objectName = ss.str().substr(pos + 1);
-        }
-        else if (prefix == "g") { // Gruppenname
-            size_t pos = ss.str().rfind(' ');
-            if(!groups.empty()) if(groups.back() != ss.str().substr(pos + 1)) current_group++;
-            groups.push_back(ss.str().substr(pos + 1));
-        }
-        else {
-            //std::cout << "Unbekannter Pr\x84 \bfix: " << prefix << std::endl;
-        }
-    }
-    // Endprodukt zusammensetzen (Mesh)
-    vertices.resize(vertex_pos_indices.size(), Vertex());
-
-    // Alle indizes nutzen
-    for (size_t i = 0; i < vertices.size(); i++) {
-        vertices[i].position = vertex_pos[vertex_pos_indices[i]-1];
-        vertices[i].texCoord = vertex_texcoord[vertex_texcoord_indices[i]-1];
-        vertices[i].normal = vertex_normal[vertex_normal_indices[i]-1];
-        vertices[i].smoothness = smoothness[i];
-        vertices[i].materialName = materials[material_pos_indices[i]];
-        vertices[i].groupName = groups[group_pos_indices[i]];
-        vertices[i].mtlFileName = mtlFile;
-        vertices[i].objectName = objectName;
-        vertices[i].color = glm::vec3(1.f, 1.f, 1.f);
-    }
-
-
-    return vertices;
 }
+
+
 
 bool Object_Importer::validate_extension(const string &path_to_file, const string &suffix)
 {

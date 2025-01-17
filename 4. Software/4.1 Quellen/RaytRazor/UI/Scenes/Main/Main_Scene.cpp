@@ -1,9 +1,16 @@
 #include "Main_Scene.h"
 
+#include "../../../Converter/Converter.h"
+#include "../../../Import/Importers/Object/Object_Importer.h"
+#include "../../../Import/Importers/Material/Material_Importer.h"
+
 //TODO's:
 // -> Preview_Canvas::drawGL() implementieren.
 // -> Main_Scene::Main_Scene() implementieren.
 // -> Main_Scene::update() implementieren.
+
+std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
+std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -23,6 +30,13 @@ void Preview_Canvas::drawGL()
 
     static bool initialized = false;
 
+
+    //gesamte scene muss hier vorliegen
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+
+    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
+    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
+
     if (!initialized)
     {
 
@@ -39,48 +53,56 @@ void Preview_Canvas::drawGL()
         // Dummy Daten -> TODO Delete afterwards.
         // ==================================================================
 
-        MatrixXu indices(3, 12);
-        indices.col( 0) << 0, 1, 3;
-        indices.col( 1) << 3, 2, 1;
-        indices.col( 2) << 3, 2, 6;
-        indices.col( 3) << 6, 7, 3;
-        indices.col( 4) << 7, 6, 5;
-        indices.col( 5) << 5, 4, 7;
-        indices.col( 6) << 4, 5, 1;
-        indices.col( 7) << 1, 0, 4;
-        indices.col( 8) << 4, 0, 3;
-        indices.col( 9) << 3, 7, 4;
-        indices.col(10) << 5, 6, 2;
-        indices.col(11) << 2, 1, 5;
 
-        MatrixXf positions(3, 8);
-        positions.col(0) << -1,  1,  1;
-        positions.col(1) << -1,  1, -1;
-        positions.col(2) <<  1,  1, -1;
-        positions.col(3) <<  1,  1,  1;
-        positions.col(4) << -1, -1,  1;
-        positions.col(5) << -1, -1, -1;
-        positions.col(6) <<  1, -1, -1;
-        positions.col(7) <<  1, -1,  1;
+        const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
+        const std::vector<Indice>& indices = OR.get_indices(); // Zugriff auf Indizes
 
-        MatrixXf colors(3, 8);
-        colors.col(0) << 1, 0, 0;
-        colors.col(1) << 0, 1, 0;
-        colors.col(2) << 1, 1, 0;
-        colors.col(3) << 0, 0, 1;
-        colors.col(4) << 1, 0, 1;
-        colors.col(5) << 0, 1, 1;
-        colors.col(6) << 1, 1, 1;
-        colors.col(7) << 0.5, 0.5, 0.5;
+    int size = indices.size();
+    int size2 = vertices.size();
 
+        /*
+        // Ausgabe der Vertices
+        for (int i = 0; i < static_cast<int>(vertices.size()); i++) {
+            const Vertex& vertex = vertices[i];
+
+            if (i >= 0) {
+                std::cout << "Vertex " << i << ": "
+                          << "Position = (" << vertex.position.x << ", "
+                                            << vertex.position.y << ", "
+                                            << vertex.position.z << "), "
+                          << "Color = (" << vertex.color.r << ", "
+                                         << vertex.color.g << ", "
+                                         << vertex.color.b << ")" << std::endl;
+            }
+        }
+
+        // Ausgabe der Indizes
+        if (!indices.empty() && indices.size() % 3 == 0) {
+            for (size_t i = 0; i < indices.size() / 3; i++) {
+                std::cout << "Face " << i << ": "
+                          << "Indices = (" << indices[i * 3] << ", "
+                                           << indices[i * 3 + 1] << ", "
+                                           << indices[i * 3 + 2] << ")" << std::endl;
+            }
+        } else {
+            std::cerr << "Warning: Indices vector is empty or not divisible by 3!" << std::endl;
+        }
+        */
+
+        Converter::convert_to_matrix_colors(MR);
+        Converter::convert_to_matrix_indices(OR);
+        Converter::convert_to_matrix_vertices(OR);
         // ==================================================================
+
+        printf("");
 
         // Daten in Shader laden.
         mShader.bind();
-        mShader.uploadIndices(indices);
-        mShader.uploadAttrib("position", positions);
-        mShader.uploadAttrib("color", colors);
+        mShader.uploadIndices(OR.get_matrix_indices());
 
+        printf("");
+        mShader.uploadAttrib("position", OR.get_matrix_vertices());
+        mShader.uploadAttrib("color", MR.get_matrix_colors());
     }
 
     // Shader binden und Szene rendern
@@ -88,18 +110,57 @@ void Preview_Canvas::drawGL()
 
     Eigen::Matrix4f mvp;
     mvp.setIdentity();
-    float time = (float)glfwGetTime();
-    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f(
-        Eigen::AngleAxisf(mRotation[0] * time, Eigen::Vector3f::UnitX()) *
-        Eigen::AngleAxisf(mRotation[1] * time, Eigen::Vector3f::UnitY()) *
-        Eigen::AngleAxisf(mRotation[2] * time, Eigen::Vector3f::UnitZ())
-    ) * 0.25f;
+    glm::mat4 mvpGLM;
+    map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
+    components = Main_Scene::getComponents();
+    map<boost::uuids::uuid, shared_ptr<Base_Resource>> resources;
+    resources = Main_Scene::getResources();
+    //create projection and view matrix
+    for (auto& pair  : components) {
+
+        shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+
+        std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+        glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+        glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
+                                                        camera->get_near_clip(), camera->get_far_clip());
+    }
+
+    //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
+    //model matrix
+
+    //convert mvpGLM -> mvp von eigen
+
 
     mShader.setUniform("modelViewProj", mvp);
 
     glEnable(GL_DEPTH_TEST);
-    mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+    mShader.drawIndexed(GL_TRIANGLES, 0, OR.get_indices().size());
     glDisable(GL_DEPTH_TEST);
+}
+
+glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
+{
+    float rotX = glm::radians(rotation.x);
+    float rotY = glm::radians(rotation.y);
+
+    glm::vec3 result;
+
+    result.x = cos(rotX) * cos(rotY);
+    result.y = sin(rotX);
+    result.z = cos(rotX) * sin(rotY);
+
+    return glm::normalize(result);
+}
+
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(glm::vec3 position, glm::vec3 rotation)
+{
+    glm::vec3 viewDirection = calculateViewDir(rotation);
+    glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
+    glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
+
+    std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
+    return result;
 }
 
 Main_Scene::Main_Scene(const int window_width,
@@ -114,8 +175,8 @@ Main_Scene::Main_Scene(const int window_width,
     this->is_resizeable = is_resizeable;
 
     this->ids = vector<int>();
-    this->components = map<boost::uuids::uuid, Base_Component>();
-    this->resources = map<boost::uuids::uuid, Base_Resource>();
+    this->components = map<boost::uuids::uuid, shared_ptr<Base_Component>>();
+    this->resources = map<boost::uuids::uuid, shared_ptr<Base_Resource>>();
 
     initialize();
 }
@@ -199,21 +260,21 @@ void Main_Scene::initialize()
             //FileSelector file_Selector();
             //string path_to_json = file_Selector().get_input_path();
 
-            this->components.clear();
-            this->resources.clear();
+            components.clear();
+            resources.clear();
 
-            Json_Parser::parseJSON(path_to_json, this->components, this->resources);
+            Json_Parser::parseJSON(path_to_json, components, resources);
 
             tree_view->clear();
             tree_view->addNode("3D-Szene");
 
             int i = -1;
-            for (const auto& component : this->components)
+            for (const auto& component : components)
             {
                 if(++i == 0) {
                     attributesWidget->showAttributesOfComponent(component.second);
                 }
-                tree_view->addNode(component.second.get_name(), "3D-Szene");
+                tree_view->addNode(component.second->get_name(), "3D-Szene");
             }
             //const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
 
