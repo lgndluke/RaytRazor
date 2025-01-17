@@ -92,7 +92,7 @@ class Base_Component
        [[nodiscard]] glm::vec3 get_position() const;
 
 
-       /**
+     /**
         * @brief Methode, um die Position des Components zu ändern.
         * @param new_Position              Neue Position des Components.
         */
@@ -104,7 +104,7 @@ class Base_Component
         */
        [[nodiscard]] glm::vec3 get_rotation() const;
 
-       /**
+        /**
         * @brief Methode, um die Rotation des Components zu ändern.
         * @param new_Rotation               Neue Rotation des Components.
         */
@@ -116,7 +116,7 @@ class Base_Component
         */
        [[nodiscard]] glm::vec3 get_scale() const;
 
-        /**
+         /**
          * @brief Methode, um die Skalierung des Components zu ändern.
          * @param new_Scale                Neue Skalierung des Components.
          */

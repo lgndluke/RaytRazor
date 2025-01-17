@@ -13,8 +13,8 @@ using namespace std;
 using json = nlohmann::json;
 
 void Json_Parser::parseJSON(const string& path_To_Json,
-                            map<boost::uuids::uuid, Base_Component>& components,
-                            map<boost::uuids::uuid, Base_Resource>& resources)
+                            map<boost::uuids::uuid, shared_ptr<Base_Component>>& components,
+                            map<boost::uuids::uuid, shared_ptr<Base_Resource>>& resources)
 {
     std::ifstream file(path_To_Json);
 
@@ -74,7 +74,7 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 
         // Adding to components.
 
-        Render_Component render_component(uuid, name, position, rotation, scale, object_UUID, material_UUID);
+        auto render_component = std::make_shared<Render_Component>(uuid, name, position, rotation, scale, object_UUID, material_UUID);
         components.insert({uuid, render_component});
 
     }
@@ -122,7 +122,7 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 
         // Adding to components.
 
-        Light_Component light_component(uuid, name, position, rotation, scale, intensity, color);
+        auto light_component = std::make_shared<Light_Component>(uuid, name, position, rotation, scale, intensity, color);
         components.insert({uuid, light_component});
 
     }
@@ -166,7 +166,8 @@ void Json_Parser::parseJSON(const string& path_To_Json,
         float far_clip = entity_data["components"]["CameraComponent"].value("farClip", 1000.0f);
 
         // Adding to components.
-        Camera_Component camera_component(uuid, name, position, rotation, scale, fov, aspect_ratio, near_clip, far_clip);
+
+        auto camera_component = std::make_shared<Camera_Component>(uuid, name, position, rotation, scale, fov, aspect_ratio, near_clip, far_clip);
         components.insert({uuid, camera_component});
 
     }
@@ -183,15 +184,16 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 
         if (type == "obj")
         {
-            optional<Object_Resource> object_resource = Object_Importer::import_Object(uuid, path);
+            std::optional<Object_Resource> object_resource = Object_Importer::import_Object(uuid, path);
             if (object_resource.has_value())
-                resources.insert({uuid, object_resource.value()});
+                resources.insert({uuid, std::make_shared<Object_Resource>(object_resource.value())});
         }
+
         else if (type == "mat")
         {
             optional<Material_Resource> material_resource = Material_Importer::import_Material(uuid, path);
             if (material_resource.has_value())
-                resources.insert({uuid, material_resource.value()});
+                resources.insert({uuid, std::make_shared<Material_Resource>(material_resource.value())});
         }
         else
         {

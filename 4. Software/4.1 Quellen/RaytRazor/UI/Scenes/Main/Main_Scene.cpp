@@ -9,6 +9,9 @@
 // -> Main_Scene::Main_Scene() implementieren.
 // -> Main_Scene::update() implementieren.
 
+std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
+std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
+
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
 {}
@@ -108,26 +111,21 @@ void Preview_Canvas::drawGL()
     Eigen::Matrix4f mvp;
     mvp.setIdentity();
     glm::mat4 mvpGLM;
-    map<boost::uuids::uuid, Base_Component*> components = Main_Scene::getComponents();
-    map<boost::uuids::uuid, Base_Resource*> resources = Main_Scene::getResources();
+    map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
+    components = Main_Scene::getComponents();
+    map<boost::uuids::uuid, shared_ptr<Base_Resource>> resources;
+    resources = Main_Scene::getResources();
     //create projection and view matrix
     for (auto& pair  : components) {
 
-        Camera_Component* Camtest = dynamic_cast<Camera_Component*>(pair.second);
+        shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+
+        std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+        glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+        glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
+                                                        camera->get_near_clip(), camera->get_far_clip());
     }
-        std::visit([&](auto&& comp) {
-            using T = std::decay_t<decltype(comp)>;
 
-            if constexpr (std::is_same_v<T, Camera_Component>) {
-
-                Camera_Component camera = component;
-                std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera.get_position(),camera.get_rotation());
-                glm::mat4 ViewGLMmat = glm::lookAt(camera.get_position(), cameraPair.first, cameraPair.second);
-                glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera.get_fov()), camera.get_aspect_ratio(),
-                                                        camera.get_near_clip(), camera.get_far_clip());
-            }
-
-        });
     //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
     //model matrix
 
@@ -177,8 +175,8 @@ Main_Scene::Main_Scene(const int window_width,
     this->is_resizeable = is_resizeable;
 
     this->ids = vector<int>();
-    this->components = map<boost::uuids::uuid, Base_Component>();
-    this->resources = map<boost::uuids::uuid, Base_Resource>();
+    this->components = map<boost::uuids::uuid, shared_ptr<Base_Component>>();
+    this->resources = map<boost::uuids::uuid, shared_ptr<Base_Resource>>();
 
     initialize();
 }
@@ -260,21 +258,21 @@ void Main_Scene::initialize()
             //FileSelector file_Selector();
             //string path_to_json = file_Selector().get_input_path();
 
-            this->components.clear();
-            this->resources.clear();
+            components.clear();
+            resources.clear();
 
-            Json_Parser::parseJSON(path_to_json, this->components, this->resources);
+            Json_Parser::parseJSON(path_to_json, components, resources);
 
             tree_view->clear();
             tree_view->addNode("3D-Szene");
 
             int i = -1;
-            for (const auto& component : this->components)
+            for (const auto& component : components)
             {
                 if(++i == 0) {
                     attributesWidget->showAttributesOfComponent(component.second);
                 }
-                tree_view->addNode(component.second.get_name(), "3D-Szene");
+                tree_view->addNode(component.second->get_name(), "3D-Szene");
             }
             //const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
 

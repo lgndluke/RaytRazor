@@ -100,7 +100,7 @@ class Camera_Component : public Base_Component
          */
         [[nodiscard]] glm::mat4 getProjectionMatrix() const;
 
-    private:
+private:
 
         float fov;
         float aspect_ratio;
