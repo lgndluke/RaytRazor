@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Code-Analysis
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 60
     permissions:
       security-events: write
@@ -38,23 +38,36 @@ jobs:
           build-mode: ${{ matrix.build-mode }}
           queries: security-extended,security-and-quality
 
+      - name: Install RaytRazor Project dependencies.
+        shell: pwsh
+        run: |
+          Write-Host "Installing Chocolatey"
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          
+          Write-Host "Refreshing environmental variables"
+          refreshenv
+          
+          Write-Host "Installing dependencies using Chocolatey"
+          choco install -y cmake make mingw
+
       - if: ${{ matrix.build-mode == 'manual' }}
         name: Build C++ Code
+        shell: pwsh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgl1-mesa-dev \
-            libxrandr-dev \
-            libxinerama-dev \
-            libxcursor-dev \
-            libx11-dev \
-            libxi-dev \
-            libxext-dev \
-            libxxf86vm-dev
-          mkdir build
-          cd build
-          cmake "/home/runner/work/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor"
-          make
+          Write-Host "Creating build directory"
+          New-Item -ItemType Directory -Path build
+          
+          Write-Host "Moving to build directory"
+          Set-Location build
+          
+          Write-Host "Building Project"
+          cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
+          mingw32-make
+          
+          Write-Host "Listing built folders/files"
+          dir
 
       - name: Perform Analysis
         uses: github/codeql-action/analyze@v3

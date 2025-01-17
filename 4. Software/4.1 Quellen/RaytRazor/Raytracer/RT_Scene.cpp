@@ -59,6 +59,7 @@ bool Scene::render(Image &output) {
     double yFact = 1.0 / (static_cast<double>(ySize) / 2.0);
     double minDist = 1e6;
     double maxDist = 0.0;
+    #pragma omp parallel for collapse(2) private(cameraRay, intersectionPoint, localNormal, localColor)
     for (int x = 0; x < xSize; x++) {
         for (int y = 0; y < ySize; y++) {
             double normalX = (static_cast<double>(x) * xFact) - 1.0;
