@@ -3,8 +3,16 @@
 
 #include "../../../Components/Base_Component.h"
 #include "../../../Import/Resources/Base_Resource.h"
+#include "../../../Parsing/Json_Parser.h"
 #include "../../../Utility/Logger/Logger.h"
 #include "../../../Raytracer/RT_App.h"
+#include "../../../Shaders/Fragment/Fragment_Shader.h"
+#include "../../../Shaders/Vertex/Vertex_Shader.h"
+#include "../../Widget/TreeView_Widget.h"
+#include "../../Widget/MenuBar_Widget.h"
+#include "../../Widget/ComponentAttributes_Widget.h"
+#include "../../utility/Custom_Label.h"
+#include <boost/uuid.hpp>
 #include <nanogui/nanogui.h>
 #include <vector>
 #include <map>
@@ -53,6 +61,9 @@ class Preview_Canvas final : public GLCanvas
          */
         void drawGL() override;
 
+    private:
+        GLShader mShader;
+        Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
 };
 
 /**
@@ -90,8 +101,8 @@ class Main_Scene final : public Screen
         bool is_resizeable;
 
         vector<int> ids;
-        map<int, Base_Component> components;
-        map<int, Base_Resource> resources;
+        map<boost::uuids::uuid, Base_Component> components;
+        map<boost::uuids::uuid, Base_Resource> resources;
 
         /**
          * @brief Methode, um die Main Szene zu initialisieren.
