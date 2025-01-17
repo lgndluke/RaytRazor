@@ -34,6 +34,12 @@ class Object_Importer
         static std::optional<Object_Resource> import_Object(const boost::uuids::uuid& uuid,
                                                             const string& path_to_file);
 
+    /**
+         * @brief Methode, um den Inhalt des Vektors vertices zu füllen.
+         * @return std::vector<Vertex>    Den importieren Inhalt des Vektors vertices.
+         */
+    static vector<Vertex> fetch_vertices(const string& path_to_file);
+
     private:
 
 
@@ -43,11 +49,7 @@ class Object_Importer
          */
         static vector<Indice> fetch_indices(const string& path_to_file);
 
-        /**
-         * @brief Methode, um den Inhalt des Vektors vertices zu füllen.
-         * @return std::vector<Vertex>    Den importieren Inhalt des Vektors vertices.
-         */
-        static vector<Vertex> fetch_vertices(const string& path_to_file);
+
 
         /**
          * @brief Methode, um die Dateiendung zu validieren.

@@ -113,6 +113,8 @@ set(SOURCE_FILES
         UI/utility/Custom_Label.h
         Converter/Converter.cpp
         Converter/Converter.h
+        Raytracer/RT_Triangle.h
+        Raytracer/RT_Triangle.cpp
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
