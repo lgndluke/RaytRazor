@@ -14,8 +14,8 @@ class Object {
     virtual bool hit(const Ray& ray, Vector<double> &point, Vector<double> &normal, Vector<double> &color);
     void setTransformMatrix(const RT::GeometricTransform& transform);
     bool closeEnough(const double f1, const double f2);
-    Vector<double> obj_color {3};
 
+    Vector<double> obj_color {3};
     RT::GeometricTransform obj_transform;
 };
 
