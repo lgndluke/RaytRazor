@@ -12,11 +12,12 @@
 
 ## ⚡️ Quick start:
 
-//TODO Add Quick start section
+Neuesten Release herunterladen, Archiv entpacken und direkt unter Windows durchstarten. <br>
+Zum aktuellsten Release: [RaytRazor-Latest](https://github.com/lgndluke/RaytRazor/releases/latest/)
 
 ## 📖 Project Wiki:
 
-//TODO Add Project Wiki section
+Die Projekt-Dokumentation kann hier gefunden werden: [Wiki](https://github.com/lgndluke/RaytRazor/wiki/)
 
 ## 🔩 Commit Syntax:
 
