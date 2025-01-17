@@ -38,7 +38,7 @@ void MenuBar_Widget::initialize() {
             {"Documentation", "About"},
             {
                 []() { ShellExecuteA(nullptr, "open", "https://github.com/lgndluke/RaytRazor/wiki/", nullptr, nullptr, SW_SHOWNORMAL); },
-                []() { std::cout << "About clicked!" << std::endl; }
+                []() { ShellExecuteA(nullptr, "open", "https://github.com/lgndluke/RaytRazor/", nullptr, nullptr, SW_SHOWNORMAL); }
             });
 }
 
