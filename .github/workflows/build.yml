@@ -93,7 +93,7 @@ jobs:
           Write-Host "Copying RaytRazor executable and other important files into the release directory"
           Copy-Item -Path "RaytRazor/build/RaytRazor.exe" -Destination "release/"
           Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
-          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/settings.json" -Destination "release/"
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/assets/" -Destination "release/" -Recurse
           Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
           Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
           
@@ -197,7 +197,7 @@ jobs:
             Write-Host "Copying RaytRazor executable and other important files into the release directory"
             Copy-Item -Path "RaytRazor/build/RaytRazor.exe" -Destination "release/"
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/settings.json" -Destination "release/"
+            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/assets/" -Destination "release/" -Recurse
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
             Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
             
