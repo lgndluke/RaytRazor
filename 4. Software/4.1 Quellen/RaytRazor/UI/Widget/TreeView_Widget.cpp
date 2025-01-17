@@ -6,9 +6,8 @@ using namespace std;
 int Basis_Root_Font = 35;
 int Basis_Child_Font = 25;
 
-
-TreeView_Widget::TreeView_Widget(Widget* parent)
-    : Widget(parent) {
+TreeView_Widget::TreeView_Widget(Widget* parent, ComponentAttributes_Widget* attributesWidget)
+    : Widget(parent), mAttributes(attributesWidget) {
     auto scrollPanel = new VScrollPanel(this);
     scrollPanel->setFixedSize({parent->width(), parent->height()});
 
@@ -32,14 +31,17 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
         auto parentWidget = mNodeMap[parentName];
 
         auto childContainer = new Widget(parentWidget);
-        childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 10, 5)); // Einrückung durch Padding (10 Pixel)
-
-        auto label = new Custom_Label(childContainer, nodeName, "sans");
+        childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 0));
+        auto label = new Custom_Label(childContainer, "|-------> " + nodeName, "sans");
         label->setFontSize(Basis_Child_Font);
+        label->setCallback([this, nodeName]() {
+            printf("Node name: %s\n", nodeName.c_str());
+            //todo mAttributes->showAttributesOfComponent()
+        });
+
         mNodeMap[nodeName] = childContainer;
     }
 }
-
 
 void TreeView_Widget::clear() {
     while (!mContainer->children().empty()) {

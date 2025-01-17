@@ -213,15 +213,15 @@ void Main_Scene::initialize()
         Orientation::Vertical, Alignment::Fill, 10, 10
     ));
 
-    auto tree_view = new TreeView_Widget(component_tree);
-    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
-    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
-
     const auto component_attributes = new Fixed_Window(this, "Component Attributes");
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
     const auto attributesWidget = new ComponentAttributes_Widget(component_attributes);
+
+    auto tree_view = new TreeView_Widget(component_tree, attributesWidget);
+    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
+    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
 
     const auto preview_canvas = new Preview_Canvas(preview_window);
     preview_window->addChild(preview_canvas);
@@ -253,7 +253,9 @@ void Main_Scene::initialize()
         {
             Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
 
-            string path_to_json = ".\\scenes\\JsonParser_DummyFile.json";
+            //Path muss angepasst werden wenn sich wd die Struktur ändert
+            //todo über explorer setzen :)
+            string path_to_json = "../resources/scenes/JsonParser_DummyFile.json";
 
             //FileSelector file_Selector();
             //string path_to_json = file_Selector().get_input_path();

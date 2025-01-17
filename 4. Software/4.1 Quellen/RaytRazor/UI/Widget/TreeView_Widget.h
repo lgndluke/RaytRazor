@@ -13,6 +13,8 @@
 #include "nanogui/layout.h"
 #include <string>
 #include <vector>
+
+#include "ComponentAttributes_Widget.h"
 #include "../utility/Custom_Label.h"
 
 using namespace nanogui;
@@ -21,7 +23,7 @@ using namespace std;
 class TreeView_Widget : public Widget {
 public:
 
-    explicit TreeView_Widget(Widget* parent);
+    explicit TreeView_Widget(Widget* parent, ComponentAttributes_Widget* attributes);
 
     /**
      * @brief Fügt einen Knoten (Node) zur Baumstruktur hinzu.
@@ -39,7 +41,7 @@ public:
 private:
     Widget* mContainer; ///< Container für die Baumstruktur
     map<std::string, Widget*> mNodeMap; ///< Map für Knoten und deren Widgets
+    ComponentAttributes_Widget *mAttributes;
 };
 
 #endif // TREEVIEW_WIDGET_H
-

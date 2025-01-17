@@ -1,6 +1,6 @@
 #include "MenuBar_Widget.h"
 
-//todo bug beim ersten anklicken der Reiter, falsche Pos.
+#include "../../Parsing/Json_Parser.h"
 
 MenuBar_Widget::MenuBar_Widget(Widget* parent) : Widget(parent) {
     setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
@@ -12,9 +12,17 @@ void MenuBar_Widget::initialize() {
     addMenu("File",
             {"Open", "Save", "Exit"},
             {
-                []() { std::cout << "Open clicked!" << std::endl; },
-                []() { std::cout << "Save clicked!" << std::endl; },
-                []() { std::cout << "Exit clicked!" << std::endl; }
+                []() {
+                    std::string path_to_file = openFileDialog();
+                    printf("%s\n", path_to_file.c_str());
+                },
+                []() {
+                    std::string path_to_DIR = openFileDialog();
+                    if(isDirectory(path_to_DIR)) return;
+                    if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
+
+                },
+                []() {  }
             });
 
     // Add-Menü hinzufügen
@@ -30,7 +38,7 @@ void MenuBar_Widget::initialize() {
     addMenu("Help",
             {"Documentation", "About"},
             {
-                []() { std::cout << "Documentation clicked!" << std::endl; },
+                []() { ShellExecuteA(nullptr, "open", "https://github.com/lgndluke/RaytRazor/wiki/", nullptr, nullptr, SW_SHOWNORMAL); },
                 []() { std::cout << "About clicked!" << std::endl; }
             });
 }
@@ -55,4 +63,30 @@ void MenuBar_Widget::addMenu(const string& title, const vector<string>& options,
             optionButton->setCallback(callbacks[i]);
         }
     }
+}
+
+
+std::string MenuBar_Widget::openFileDialog() {
+    char filePath[MAX_PATH] = {100};
+
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = nullptr;
+    ofn.lpstrFile = filePath;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFilter = "All Files\0*.*\0Text Files\0*.TXT\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    // Zeige den Dialog und prüfe, ob der Benutzer eine Datei ausgewählt hat
+    if (GetOpenFileName(&ofn)) {
+        return string(filePath);
+    } else {
+        return "";
+    }
+}
+
+bool MenuBar_Widget::isDirectory(const std::string& path) {
+    return is_directory(fs::path(path)); // Überprüft, ob der Pfad ein Verzeichnis ist
 }
