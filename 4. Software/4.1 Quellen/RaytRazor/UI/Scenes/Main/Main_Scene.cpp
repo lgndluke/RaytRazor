@@ -1,8 +1,6 @@
 #include "Main_Scene.h"
 
-#include "../../../Converter/Converter.h"
-#include "../../../Import/Importers/Object/Object_Importer.h"
-#include "../../../Import/Importers/Material/Material_Importer.h"
+
 
 //TODO's:
 // -> Preview_Canvas::drawGL() implementieren.
@@ -256,7 +254,21 @@ void Main_Scene::initialize()
 
             //Path muss angepasst werden wenn sich wd die Struktur ändert
             //todo über explorer setzen :)
-            string path_to_json = "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
+            string path_to_json1 = "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
+
+            string path_to_json = openFileDialog();
+            if (path_to_json.empty()) return;
+            if (!isJsonFileAndFixPath(path_to_json)) return;
+            if (!exists(path_to_json)) {
+                std::cerr << "File does not exist: " << path_to_json << std::endl;
+                return;
+            }
+
+
+            path_to_json = absolute(path_to_json).string();
+
+            printf("");
+
 
             //FileSelector file_Selector();
             //string path_to_json = file_Selector().get_input_path();
@@ -265,6 +277,8 @@ void Main_Scene::initialize()
             resources.clear();
 
             Json_Parser::parseJSON(path_to_json, components, resources);
+
+            printf("");
 
             tree_view->clear();
             tree_view->addNode("3D-Szene");
@@ -312,3 +326,48 @@ void Main_Scene::update()
 {
     performLayout();
 }
+
+std::string Main_Scene::openFileDialog() {
+    char filePath[MAX_PATH] = {0};
+
+    path currentPath = current_path();
+
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = nullptr;
+    ofn.lpstrFile = filePath;
+    ofn.nMaxFile = MAX_PATH;
+
+    ofn.lpstrFilter = "JSON Files\0*.json\0All Files\0*.*\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    std::string result;
+    if (GetOpenFileName(&ofn)) {
+        result = filePath;
+        std::replace(result.begin(), result.end(), '\\', '/');
+    }
+
+    current_path(currentPath);
+
+    return result;
+}
+
+
+
+bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
+    // Check if the file has a .json extension (case insensitive)
+    const std::string extension = ".json";
+    if (path.size() >= extension.size() &&
+        std::equal(extension.rbegin(), extension.rend(), path.rbegin(), [](char a, char b) {
+            return std::tolower(a) == std::tolower(b);
+        })) {
+        // Replace all backslashes with forward slashes
+        std::replace(path.begin(), path.end(), '\\', '/');
+        return true;
+        }
+    return false;
+}
+
+

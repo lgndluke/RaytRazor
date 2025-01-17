@@ -12,6 +12,11 @@
 #include "../../Widget/MenuBar_Widget.h"
 #include "../../Widget/ComponentAttributes_Widget.h"
 #include "../../utility/Custom_Label.h"
+#include <commdlg.h>
+#include <thread>
+#include "../../../Converter/Converter.h"
+#include "../../../Import/Importers/Object/Object_Importer.h"
+#include "../../../Import/Importers/Material/Material_Importer.h"
 #include <boost/uuid.hpp>
 #include <nanogui/nanogui.h>
 #include <vector>
@@ -138,6 +143,9 @@ class Main_Scene final : public Screen
          */
         void* (*raytrace_preview())(void*);
 
+        static std::string openFileDialog();
+
+        static bool isJsonFileAndFixPath(std::string& path);
 };
 
 #endif
