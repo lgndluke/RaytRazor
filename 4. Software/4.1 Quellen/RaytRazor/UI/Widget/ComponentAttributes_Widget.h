@@ -19,7 +19,7 @@ public:
 private:
     void populate_widget(const Base_Component &component);
     std::vector<Widget *> dynamicWidgets;
-    int FONT_SIZE = 30;
+    int FONT_SIZE = 20;
 };
 
 #endif // COMPONENT_ATTRIBUTES_WIDGET_H

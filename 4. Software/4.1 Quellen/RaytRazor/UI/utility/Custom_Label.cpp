@@ -40,11 +40,11 @@ void Custom_Label::draw(NVGcontext *ctx) {
 bool Custom_Label::mouseButtonEvent(const Vector2i &p, int button, bool down, int modifiers) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && down && contains(p)) {
         if (mCallback) {
-            mCallback();
+            mCallback(); // Callback auslösen
         }
-        return true;
+        return true; // Event verarbeitet
     }
-    return Widget::mouseButtonEvent(p, button, down, modifiers);
+    return Widget::mouseButtonEvent(p, button, down, modifiers); // An den Standard-Handler weitergeben
 }
 
 void Custom_Label::save(Serializer &s) const {
@@ -74,4 +74,3 @@ bool Custom_Label::load(Serializer &s) {
 
     return true;
 }
-
