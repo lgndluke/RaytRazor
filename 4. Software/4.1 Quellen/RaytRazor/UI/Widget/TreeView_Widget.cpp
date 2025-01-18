@@ -20,9 +20,8 @@ TreeView_Widget::TreeView_Widget(Widget* parent, ComponentAttributes_Widget* att
 }
 
 void TreeView_Widget::addNode(const std::string& nodeName, const std::string& parentName) {
-    // Prüfen, ob der Knoten bereits existiert
     if (mNodeMap.find(nodeName) != mNodeMap.end()) {
-        return; // Knoten existiert bereits, keine weiteren Aktionen nötig
+        return;
     }
 
     if (parentName.empty()) {

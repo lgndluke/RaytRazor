@@ -121,6 +121,8 @@ class Main_Scene final : public Screen
             return resources;
         }
 
+        static void setChangesOnComponent(const std::shared_ptr<Base_Component>& component);
+
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
 
     static void forceUpdate();

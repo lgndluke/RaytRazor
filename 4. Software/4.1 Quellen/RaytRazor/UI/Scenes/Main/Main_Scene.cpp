@@ -39,8 +39,10 @@ void Preview_Canvas::drawGL()
     Material_Resource MR;
     try
     {
-        OR = Object_Importer::import_Object(uuid, "Pfad angeben .obj").value();
-        MR = Material_Importer::import_Material(uuid, "Pfad angeben .mtl").value();
+        OR = Object_Importer::import_Object(uuid,
+            "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
+        MR = Material_Importer::import_Material(uuid,
+            "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
     }
     catch (const std::exception& e)
     {
@@ -273,7 +275,7 @@ void Main_Scene::initialize()
 
             //Path muss angepasst werden wenn sich wd die Struktur ändert
             //todo über explorer setzen :)
-            string path_to_json1 = "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
+            string path_to_json1 = "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
 
             string path_to_json = openFileDialog();
             if (path_to_json.empty()) return;
@@ -307,16 +309,9 @@ void Main_Scene::initialize()
                 return;
             }
 
-            // Zeige die Attribute des ersten Elements an
-            bool isFirstComponent = true;
+            attributesWidget->showAttributesOfComponent();
 
             for (const auto& [key, component] : components) {
-                if (isFirstComponent) {
-                    attributesWidget->showAttributesOfComponent(component);
-                    isFirstComponent = false;
-                }
-
-                // Füge den Knoten zum Baum hinzu
                 tree_view->addNode(component->get_name(), "3D-Szene");
             }
 
@@ -393,17 +388,24 @@ bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
 }
 
 void Main_Scene::updateTreeView() const {
-    bool isFirstComponent = true;
+    tree_view->clear();
+    tree_view->addNode("3D-Szene");
 
     for (const auto& [key, component] : components) {
-        if (isFirstComponent) {
-            attributesWidget->showAttributesOfComponent(component);
-            isFirstComponent = false;
-        }
-
-        // Füge den Knoten zum Baum hinzu
         tree_view->addNode(component->get_name(), "3D-Szene");
     }
 }
 
+void Main_Scene::setChangesOnComponent(const std::shared_ptr<Base_Component>& component)
+{
+    for (auto& pair : getComponents()) {
+        if (pair.second->get_uuid() == component->get_uuid()) {
+            components[component->get_uuid()] = component;
+            instance->attributesWidget->updateFromComponent(components[component->get_uuid()]);
+            break;
+        }
+    }
+
+    forceUpdate();
+}
 

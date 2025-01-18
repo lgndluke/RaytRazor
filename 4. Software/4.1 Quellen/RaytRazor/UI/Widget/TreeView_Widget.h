@@ -30,6 +30,7 @@ public:
      * @param isLastChild Ist das Letzte Kind des Knoten wenn die Aussage war ist.
      */
     void addNode(const std::string& nodeName, const std::string& parentName = "");
+    void cleanUpUnusedNodes();
 
     /**
      * @brief Leert die gesamte Baumstruktur.
