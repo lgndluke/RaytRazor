@@ -79,17 +79,12 @@ set(SOURCE_FILES
         Raytracer/RT_Image.cpp
         Raytracer/RT_Camera.h
         Raytracer/RT_Camera.cpp
-        Raytracer/RT_geometricTransform.h
-        Raytracer/RT_geometricTransform.cpp
         Raytracer/RT_Light.h
         Raytracer/RT_Light.cpp
-        Raytracer/RT_Matrix.h
         Raytracer/RT_Object.h
         Raytracer/RT_Object.cpp
         Raytracer/RT_Plane.h
         Raytracer/RT_Plane.cpp
-        Raytracer/RT_PointLight.h
-        Raytracer/RT_PointLight.cpp
         Raytracer/RT_Ray.h
         Raytracer/RT_Ray.cpp
         Raytracer/RT_Scene.h
@@ -113,6 +108,11 @@ set(SOURCE_FILES
         Converter/Converter.h
         Raytracer/RT_Triangle.h
         Raytracer/RT_Triangle.cpp
+        Raytracer/RT_Vector.cpp
+        Raytracer/RT_Color.h
+        Raytracer/RT_LightSource.h
+        Raytracer/RT_Color.cpp
+        Raytracer/RT_LightSource.cpp
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
