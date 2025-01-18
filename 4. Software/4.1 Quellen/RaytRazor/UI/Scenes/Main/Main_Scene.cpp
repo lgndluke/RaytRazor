@@ -34,8 +34,9 @@ void Preview_Canvas::drawGL()
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
     //C:\Users\chris\CLionProjects\RaytRazor\RaytRazor\5. Modelle\5.1 Beispielmodelle\miscellaneous\miscellaneous\teapot\Teapot.obj
-    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
-    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
+    //C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl
+    Object_Resource OR = Object_Importer::import_Object(uuid, "Pfad Eintragen in Main_Scene:38").value();
+    Material_Resource MR = Material_Importer::import_Material(uuid, "Pfad Eintragen in Main_Scene:39").value();
 
     if (!initialized)
     {
@@ -118,7 +119,7 @@ void Preview_Canvas::drawGL()
     //create projection and view matrix
     for (auto& pair  : components) {
 
-        //shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+        shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
 
         //std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
         //glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
