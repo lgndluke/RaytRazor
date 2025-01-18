@@ -49,11 +49,11 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
 
             // Reset the previous label's color if it exists
             if (mCurrentSelectedLabel) {
-                mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
+                mCurrentSelectedLabel->setColor(nanogui::Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
             }
 
             // Highlight the clicked label
-            label->setColor(Color(255, 0, 0, 255)); // Highlight-Farbe (z. B. Rot)
+            label->setColor(nanogui::Color(255, 0, 0, 255)); // Highlight-Farbe (z. B. Rot)
 
             // Update the current selected label
             mCurrentSelectedLabel = label;
