@@ -6,7 +6,7 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
 
     if(!validate_extension(path_to_file, ".obj"))
     {
-        Logger::log(MessageType::SEVERE, "Object_Importer::import_Object(): Type miss-match: " + path_to_file);
+        Logger::log(MessageType::SEVERE, "Object_Importer::import_Object(): Type miss-match -> no '.obj' file: " + path_to_file);
         return std::nullopt;
     }
 
