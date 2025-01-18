@@ -6,11 +6,19 @@
 #include "RT_Image.h"
 #include "RT_Camera.h"
 #include "RT_Sphere.h"
+#include "RT_Light.h"
 #include "RT_Plane.h"
-#include "RT_PointLight.h"
+#include "RT_LightSource.h"
+#include <vector>
 #include "../Utility/Logger/Logger.h"
 
 // TODO: Kommentare schreiben
+
+struct RGBType {
+    double r;
+    double g;
+    double b;
+};
 
 class Scene {
     public:
@@ -18,11 +26,14 @@ class Scene {
         bool render(Image& output);
         void cubeScene();
         void sphereScene();
-    private:
-        Camera camera;
+        Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
+        void savebmp (const char *filename, int w, int h, int dpi, RGBType *data);
+    Camera camera;
 
-        std::vector<std::shared_ptr<Object>> objects;
-        std::vector<std::shared_ptr<Light>> lights;
+    vector<Object*> scene_objectses;
+    vector<RT_LightSource*> scene_lightses;
+    private:
+
 };
 
 #endif //SCENE_H
