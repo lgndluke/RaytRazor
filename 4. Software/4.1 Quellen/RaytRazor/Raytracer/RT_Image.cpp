@@ -78,7 +78,7 @@ void Image::Display()
 	SDL_Rect srcRect, bounds;
 	srcRect.x = 0;
 	srcRect.y = 0;
-	srcRect.w = 1280;
+	srcRect.w = 720;
 	srcRect.h = 720;
 	bounds = srcRect;
 	SDL_RenderCopy(m_pRenderer, m_pTexture, &srcRect, &bounds);

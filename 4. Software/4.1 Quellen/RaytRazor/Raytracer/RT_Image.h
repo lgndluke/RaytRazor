@@ -9,6 +9,7 @@
 #include <vector>
 #include <SDL.h>
 #include <cstring>
+#include "../Utility/Logger/Logger.h"
 
 // TODO: Kommentare schreiben
 class Image {
