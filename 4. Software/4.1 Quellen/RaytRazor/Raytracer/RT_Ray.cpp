@@ -1,21 +1,19 @@
 #include "RT_Ray.h"
 
 Ray::Ray() {
-    ray_origin = Vector<double>{std::vector<double>{0.0, 0.0, 0.0}};
-    ray_direction = Vector<double>{std::vector<double>{0.0, 0.0, 1.0}};
-    ray_ab = ray_direction - ray_origin;
+    ray_origin = Vector(0, 0, 0);
+    ray_direction = Vector(1, 0, 0);
 }
 
-Ray::Ray(const Vector<double> &origin_, const Vector<double> &direction_) {
+Ray::Ray(Vector origin_, Vector direction_) {
     ray_origin = origin_;
     ray_direction = direction_;
-    ray_ab = ray_direction - ray_origin;
 }
 
-Vector<double> Ray::getDirection() const {
+Vector Ray::getRayDirection() {
     return ray_direction;
 }
 
-Vector<double> Ray::getOrigin() const {
+Vector Ray::getRayOrigin() {
     return ray_origin;
 }
