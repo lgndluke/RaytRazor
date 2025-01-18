@@ -130,58 +130,150 @@ void ComponentAttributes_Widget::updateFromComponent(const std::shared_ptr<Base_
         if (textBox) {
             textBox->setValue(value);
             textBox->setEditable(editable);
-            textBox->setCallback([component, textBox](const string&) -> bool {
-                component->set_name(textBox->value());
-                Main_Scene::setChangesOnComponent(component);
-                return true;
-            });
         }
     };
 
-    // UUID
-    updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[1]), boost::uuids::to_string(component->get_uuid()), false);
+    // UUID (read-only)
+    auto tBox_UUID = dynamic_cast<TextBox*>(dynamicWidgets[1]);
+    updateTextBox(tBox_UUID, boost::uuids::to_string(component->get_uuid()), false);
+    tBox_UUID->setCallback([component, this](const std::string&) -> bool {
+        // UUID sollte in der Regel nicht geändert werden
+        return true;
+    });
 
     // Name
-    updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[3]), component->get_name(), true);
+    auto tBox_Name = dynamic_cast<TextBox*>(dynamicWidgets[3]);
+    updateTextBox(tBox_Name, component->get_name(), true);
+    tBox_Name->setCallback([component, this](const std::string& value) -> bool {
+        component->set_name(value);
+        Main_Scene::setChangesOnComponent(component);
+        return true;
+    });
 
     // Position
-    updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[5]), vec3ToString(component->get_position()), true);
+    auto tBox_Position = dynamic_cast<TextBox*>(dynamicWidgets[5]);
+    updateTextBox(tBox_Position, vec3ToString(component->get_position()), true);
+    tBox_Position->setCallback([component, this](const std::string& value) -> bool {
+        glm::vec3 pos;
+        if (parseVec3(value, pos)) {
+            component->set_position(pos);
+            Main_Scene::setChangesOnComponent(component);
+            return true;
+        }
+        return false; // Eingabe ungültig
+    });
 
     // Rotation
-    updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[7]), vec3ToString(component->get_rotation()), true);
+    auto tBox_Rotation = dynamic_cast<TextBox*>(dynamicWidgets[7]);
+    updateTextBox(tBox_Rotation, vec3ToString(component->get_rotation()), true);
+    tBox_Rotation->setCallback([component, this](const std::string& value) -> bool {
+        glm::vec3 rot;
+        if (parseVec3(value, rot)) {
+            component->set_rotation(rot);
+            Main_Scene::setChangesOnComponent(component);
+            return true;
+        }
+        return false;
+    });
 
     // Scale
-    updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[9]), vec3ToString(component->get_scale()), true);
+    auto tBox_Scale = dynamic_cast<TextBox*>(dynamicWidgets[9]);
+    updateTextBox(tBox_Scale, vec3ToString(component->get_scale()), true);
+    tBox_Scale->setCallback([component, this](const std::string& value) -> bool {
+        glm::vec3 scale;
+        if (parseVec3(value, scale)) {
+            component->set_scale(scale);
+            Main_Scene::setChangesOnComponent(component);
+            return true;
+        }
+        return false;
+    });
 
     // Kamera-spezifische Felder
     if (auto camera = std::dynamic_pointer_cast<Camera_Component>(component)) {
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[11]), std::to_string(camera->get_fov()), true);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[13]), std::to_string(camera->get_aspect_ratio()), true);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[15]), std::to_string(camera->get_near_clip()), true);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[17]), std::to_string(camera->get_far_clip()), true);
-    } else {
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[11]), "-", false);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[13]), "-", false);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[15]), "-", false);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[17]), "-", false);
+        auto tBox_FOV = dynamic_cast<TextBox*>(dynamicWidgets[11]);
+        updateTextBox(tBox_FOV, std::to_string(camera->get_fov()), true);
+        tBox_FOV->setCallback([camera, this](const std::string& value) -> bool {
+            try {
+                camera->set_fov(std::stof(value));
+                Main_Scene::setChangesOnComponent(camera);
+                return true;
+            } catch (...) {
+                return false;
+            }
+        });
+
+        auto tBox_Aspect = dynamic_cast<TextBox*>(dynamicWidgets[13]);
+        updateTextBox(tBox_Aspect, std::to_string(camera->get_aspect_ratio()), true);
+        tBox_Aspect->setCallback([camera, this](const std::string& value) -> bool {
+            try {
+                camera->set_aspect_ratio(std::stof(value));
+                Main_Scene::setChangesOnComponent(camera);
+                return true;
+            } catch (...) {
+                return false;
+            }
+        });
+
+        auto tBox_NearClip = dynamic_cast<TextBox*>(dynamicWidgets[15]);
+        updateTextBox(tBox_NearClip, std::to_string(camera->get_near_clip()), true);
+        tBox_NearClip->setCallback([camera, this](const std::string& value) -> bool {
+            try {
+                camera->set_near_clip(std::stof(value));
+                Main_Scene::setChangesOnComponent(camera);
+                return true;
+            } catch (...) {
+                return false;
+            }
+        });
+
+        auto tBox_FarClip = dynamic_cast<TextBox*>(dynamicWidgets[17]);
+        updateTextBox(tBox_FarClip, std::to_string(camera->get_far_clip()), true);
+        tBox_FarClip->setCallback([camera, this](const std::string& value) -> bool {
+            try {
+                camera->set_far_clip(std::stof(value));
+                Main_Scene::setChangesOnComponent(camera);
+                return true;
+            } catch (...) {
+                return false;
+            }
+        });
     }
 
     // Licht-spezifische Felder
     if (auto light = std::dynamic_pointer_cast<Light_Component>(component)) {
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[19]), std::to_string(light->get_intensity()), true);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[21]), vec3ToString(light->get_color()), true);
-    } else {
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[19]), "-", false);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[21]), "-", false);
+        auto tBox_Intensity = dynamic_cast<TextBox*>(dynamicWidgets[19]);
+        updateTextBox(tBox_Intensity, std::to_string(light->get_intensity()), true);
+        tBox_Intensity->setCallback([light, this](const std::string& value) -> bool {
+            try {
+                light->set_intensity(std::stof(value));
+                Main_Scene::setChangesOnComponent(light);
+                return true;
+            } catch (...) {
+                return false;
+            }
+        });
+
+        auto tBox_Color = dynamic_cast<TextBox*>(dynamicWidgets[21]);
+        updateTextBox(tBox_Color, vec3ToString(light->get_color()), true);
+        tBox_Color->setCallback([light, this](const std::string& value) -> bool {
+            glm::vec3 color;
+            if (parseVec3(value, color)) {
+                light->set_color(color);
+                Main_Scene::setChangesOnComponent(light);
+                return true;
+            }
+            return false;
+        });
     }
 
     // Render-spezifische Felder
     if (auto render = std::dynamic_pointer_cast<Render_Component>(component)) {
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[23]), boost::uuids::to_string(render->get_object_UUID()), false);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[25]), boost::uuids::to_string(render->get_material_UUID()), false);
-    } else {
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[23]), "-", false);
-        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[25]), "-", false);
+        auto tBox_ObjectUUID = dynamic_cast<TextBox*>(dynamicWidgets[23]);
+        updateTextBox(tBox_ObjectUUID, boost::uuids::to_string(render->get_object_UUID()), false);
+
+        auto tBox_MaterialUUID = dynamic_cast<TextBox*>(dynamicWidgets[25]);
+        updateTextBox(tBox_MaterialUUID, boost::uuids::to_string(render->get_material_UUID()), false);
     }
 }
 
