@@ -210,57 +210,108 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 }
 
 bool Json_Parser::exportToJSON(const std::string& exportPath,
-                               const std::map<boost::uuids::uuid, shared_ptr<Base_Component>>& components,
-                               const std::map<boost::uuids::uuid, shared_ptr<Base_Resource>>& resources)
-{
+                               const std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>>& components,
+                               const std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>>& resources) {
     json root;
 
-    // Initialisieren der JSON-Struktur
     root["renderentity"] = json::array();
     root["lightentity"] = json::array();
     root["cameraentity"] = json::array();
     root["resources"] = json::array();
 
-    if (components.empty()) {
-        Logger::log(MessageType::SEVERE, "No components found.");
+    for (const auto& [uuid, resource] : resources) {
+        json resourceData;
+        resourceData["uuid"] = boost::uuids::to_string(resource->get_uuid());
+        resourceData["type"] = (resource->get_type() == MATERIAL) ? "mat" : "obj";
+        resourceData["path"] = resource->get_path();
+        root["resources"].push_back(resourceData);
     }
 
-    for (const auto& [uuid, component] : components)
-    {
-        json componentData;
-        componentData["uuid"] = boost::uuids::to_string(uuid);
+    for (const auto& [uuid, component] : components) {
+        json entityData;
 
-        if (resources.empty()) {
-            Logger::log(MessageType::SEVERE, "No resources found.");
-        }
+        // Basis-Attribute
+        entityData["name"] = component->get_name();
+        entityData["uuid"] = boost::uuids::to_string(uuid);
 
-        for (const auto& [uuid, resource] : resources) {
-            json resourceData;
-            resourceData["uuid"] = boost::uuids::to_string(resource.get()->get_uuid());
-            resourceData["type"] = (resource.get()->get_type() == MATERIAL) ? "mat" : "obj";
-            resourceData["path"] = resource.get()->get_path();
-            root["resources"].push_back(resourceData);
-        }
-
-        // Meta-Daten
-        root["metadata"] = {
-            {"backgroundColor", {0.1, 0.1, 0.1}},
-            {"globalIllumination", true},
-            {"renderMode", "pathtracing"},
-            {"maxDepth", 5},
-            {"samplesPerPixel", 100}
+        // Translation
+        entityData["Translation"]["position"] = {
+            {"x", component->get_position().x},
+            {"y", component->get_position().y},
+            {"z", component->get_position().z}
+        };
+        entityData["Translation"]["rotation"] = {
+            {"x", component->get_rotation().x},
+            {"y", component->get_rotation().y},
+            {"z", component->get_rotation().z}
         };
 
-        try {
-            std::ofstream file(exportPath);
-            file << std::setw(4) << root;
-            Logger::log(MessageType::INFO, "JSON export successful.");
-            return true;
-        } catch (const std::exception& e) {
-            Logger::log(MessageType::SEVERE, e.what());
-            return false;
+        //todo nicht bei Camera!
+        entityData["Translation"]["scale"] = {
+            {"x", component->get_scale().x},
+            {"y", component->get_scale().y},
+            {"z", component->get_scale().z}
+        };
+
+
+        json componentDetails;
+
+        if (auto renderComponent = std::dynamic_pointer_cast<Render_Component>(component)) {
+            componentDetails["RenderComponent"] = {
+                {"objUUID", boost::uuids::to_string(renderComponent->get_object_UUID())},
+                {"matUUID", boost::uuids::to_string(renderComponent->get_material_UUID())}
+            };
+            entityData["components"] = componentDetails;
+            root["renderentity"].push_back(entityData);
+        } else if (auto lightComponent = std::dynamic_pointer_cast<Light_Component>(component)) {
+            componentDetails["LightComponent"] = {
+                {"intensity", lightComponent->get_intensity()},
+                {"color", {
+                    {"r", static_cast<int>(lightComponent->get_color().x * 255)},
+                    {"g", static_cast<int>(lightComponent->get_color().y * 255)},
+                    {"b", static_cast<int>(lightComponent->get_color().z * 255)}
+                }}
+            };
+            entityData["components"] = componentDetails;
+            root["lightentity"].push_back(entityData);
+        } else if (auto cameraComponent = std::dynamic_pointer_cast<Camera_Component>(component)) {
+            componentDetails["CameraComponent"] = {
+                {"fov", cameraComponent->get_fov()},
+                {"aspectRatio", cameraComponent->get_aspect_ratio()},
+                {"nearClip", cameraComponent->get_near_clip()},
+                {"farClip", cameraComponent->get_far_clip()}
+            };
+            entityData["components"] = componentDetails;
+            root["cameraentity"].push_back(entityData);
+        } else {
+            Logger::log(MessageType::SEVERE, "Unknown component type for UUID: " + boost::uuids::to_string(uuid));
         }
     }
+
+    // Metadaten am Ende hinzufügen
+    root["metadata"] = {
+        {"backgroundColor", {0.1, 0.1, 0.1}},
+        {"globalIllumination", true},
+        {"renderMode", "pathtracing"},
+        {"maxDepth", 5},
+        {"samplesPerPixel", 100}
+    };
+
+    // JSON in eine Datei schreiben
+    try {
+        std::ofstream file(exportPath);
+        if (!file.is_open()) {
+            throw std::runtime_error("Could not open file: " + exportPath);
+        }
+        file << std::setw(4) << root;
+        file.close();
+        Logger::log(MessageType::INFO, "JSON export successful.");
+        return true;
+    } catch (const std::exception& e) {
+        Logger::log(MessageType::SEVERE, std::string("Error writing JSON file: ") + e.what());
+        return false;
+    }
 }
+
 
 
