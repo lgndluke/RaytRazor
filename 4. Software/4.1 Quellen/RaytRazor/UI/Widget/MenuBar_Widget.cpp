@@ -14,11 +14,13 @@ void MenuBar_Widget::initialize() {
                 []() {
                     std::string path_to_file = openFileDialog();
                     printf("%s\n", path_to_file.c_str());
+                    //todo scene wird getauscht
                 },
                 []() {
                     std::string path_to_DIR = openFileDialog();
                     if(isDirectory(path_to_DIR)) return;
                     //if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
+                    //todo aktuele scene speichern
                 },
                 []() {  }
             });
@@ -33,17 +35,20 @@ void MenuBar_Widget::initialize() {
                     std::string path_to_file = openFileDialog();
                     Object_Resource OR = Object_Importer::import_Object(uuid,path_to_file).value();
 
-                        auto render_comp = std::make_shared<Render_Component>(
-                            uuid,
-                            "Render_Added",
-                            glm::vec3{0, 0, 0},
-                            glm::vec3{0, 0, 0},
-                            glm::vec3{0, 0, 0},
-                            OR.get_uuid(),
-                            OR.get_uuid()
-                        );
+                    boost::uuids::uuid mat_uuid = boost::uuids::random_generator()();
+                    boost::uuids::uuid obj_uuid = boost::uuids::random_generator()();
 
-                        Main_Scene::addComponent(uuid, render_comp);
+                    auto render_comp = std::make_shared<Render_Component>(
+                        uuid,
+                        "Render_Added",
+                        glm::vec3{0, 0, 0},
+                        glm::vec3{0, 0, 0},
+                        glm::vec3{0, 0, 0},
+                        obj_uuid,
+                        mat_uuid
+                    );
+
+                    Main_Scene::addComponent(uuid, render_comp);
                 },
                 [](){
                         boost::uuids::uuid uuid = boost::uuids::random_generator()();
