@@ -32,7 +32,7 @@ struct Material {
  * @brief Abgeleitete Klasse Material_Resource repräsentiert eine Material Ressource.
  * @author Lukas Jeckle
  */
-class Material_Resource : public Base_Resource {
+class Material_Resource final : public Base_Resource {
 
 public:
 
