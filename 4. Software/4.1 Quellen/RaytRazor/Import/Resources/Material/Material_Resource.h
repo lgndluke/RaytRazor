@@ -47,6 +47,8 @@ public:
      */
     Material_Resource(const boost::uuids::uuid uuid, const string &path, const std::vector<Material> &materials);
 
+    Material_Resource() = default;
+
     /**
      * @brief Methode, um die Indices der Material_Resource zu erhalten.
      * @return std::vector<int>      Die Indices der Material_Resource, falls diese vorhanden sind. Andernfalls, einen leeren std::vector<int>() Vektor.
