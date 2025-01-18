@@ -123,6 +123,8 @@ class Main_Scene final : public Screen
 
         static void setChangesOnComponent(const std::shared_ptr<Base_Component>& component);
 
+        static void openScene();
+
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
 
     static void forceUpdate();
@@ -133,6 +135,7 @@ class Main_Scene final : public Screen
         int window_height;
         string window_title;
         bool is_resizeable;
+        string scene_path;
 
         //Widgets
         TreeView_Widget* tree_view;

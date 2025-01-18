@@ -249,6 +249,7 @@ void Main_Scene::initialize()
     preview_canvas->setSize({preview_width - 20, preview_height - 80});
 
     const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
+    raytrace_preview_button->setFixedSize({preview_width - 20, 30});
     preview_window->addChild(raytrace_preview_button);
     raytrace_preview_button->setCallback([this]
     {
@@ -262,69 +263,7 @@ void Main_Scene::initialize()
             // TODO: Error Handling.
         }
     });
-    raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
-    raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
-
-    const auto load_json_button = new Button(preview_window, "Import Scene");
-    preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this]
-    {
-        try
-        {
-            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
-
-            //Path muss angepasst werden wenn sich wd die Struktur ändert
-            //todo über explorer setzen :)
-            string path_to_json1 = "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
-
-            string path_to_json = openFileDialog();
-            if (path_to_json.empty()) return;
-            if (!isJsonFileAndFixPath(path_to_json)) return;
-            if (!exists(path_to_json)) {
-                std::cerr << "File does not exist: " << path_to_json << std::endl;
-                return;
-            }
-
-
-            path_to_json = absolute(path_to_json).string();
-
-            printf("");
-
-
-            //FileSelector file_Selector();
-            //string path_to_json = file_Selector().get_input_path();
-
-            components.clear();
-            resources.clear();
-
-            Json_Parser::parseJSON(path_to_json, components, resources);
-
-            printf("");
-
-            tree_view->clear();
-            tree_view->addNode("3D-Szene");
-
-            if (components.empty()) {
-                printf("No components to display.\n");
-                return;
-            }
-
-            attributesWidget->showAttributesOfComponent();
-
-            for (const auto& [key, component] : components) {
-                tree_view->addNode(component->get_name(), "3D-Szene");
-            }
-
-            performLayout();
-
-        }
-        catch(...)
-        {
-            // TODO: Error Handling.
-        }
-    });
-    load_json_button->setSize({(preview_width / 2) - 20, 30});
-    load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
+    raytrace_preview_button->setPosition({10, preview_height - 40});
 
     performLayout();
 }
@@ -409,3 +348,37 @@ void Main_Scene::setChangesOnComponent(const std::shared_ptr<Base_Component>& co
     forceUpdate();
 }
 
+void Main_Scene::openScene()
+{
+    Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+
+    string path_to_json = openFileDialog();
+    if (path_to_json.empty()) return;
+    if (!isJsonFileAndFixPath(path_to_json)) return;
+    if (!exists(path_to_json)) {
+        std::cerr << "File does not exist: " << path_to_json << std::endl;
+        return;
+    }
+    instance->scene_path = path_to_json;
+    path_to_json = absolute(path_to_json).string();
+    components.clear();
+    resources.clear();
+
+    Json_Parser::parseJSON(path_to_json, components, resources);
+
+    instance->tree_view->clear();
+    instance->tree_view->addNode("3D-Szene");
+
+    if (components.empty()) {
+        printf("No components to display.\n");
+        return;
+    }
+
+    instance->attributesWidget->showAttributesOfComponent();
+
+    for (const auto& [key, component] : components) {
+        instance->tree_view->addNode(component->get_name(), "3D-Szene");
+    }
+
+    instance->performLayout();
+}

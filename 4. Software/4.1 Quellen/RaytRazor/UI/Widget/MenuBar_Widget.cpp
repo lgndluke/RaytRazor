@@ -12,9 +12,7 @@ void MenuBar_Widget::initialize() {
             {"Open", "Save", "Exit"},
             {
                 []() {
-                    std::string path_to_file = openFileDialog();
-                    printf("%s\n", path_to_file.c_str());
-                    //todo scene wird getauscht
+                    Main_Scene::openScene();
                 },
                 []() {
                     std::string path_to_DIR = openFileDialog();
