@@ -3,20 +3,16 @@
 
 #include "RT_Vector.h"
 #include "RT_Ray.h"
-#include "RT_geometricTransform.h"
+#include "RT_Color.h"
 
 // TODO: Kommentare schreiben
 
 class Object {
     public:
     Object();
-    virtual ~Object();
-    virtual bool hit(const Ray& ray, Vector<double> &point, Vector<double> &normal, Vector<double> &color);
-    void setTransformMatrix(const RT::GeometricTransform& transform);
-    bool closeEnough(const double f1, const double f2);
-
-    Vector<double> obj_color {3};
-    RT::GeometricTransform obj_transform;
+    virtual Color getColor();
+    virtual Vector getNormalAt(Vector point);
+    virtual double hit(Ray ray);
 };
 
 
