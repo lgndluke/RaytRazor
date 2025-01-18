@@ -1,26 +1,23 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include <memory>
+#include "RT_LightSource.h"
 #include "RT_Vector.h"
-#include "RT_Ray.h"
-#include "RT_Object.h"
+#include "RT_Color.h"
 
 // TODO: Kommentare schreiben
 
-class Light {
+class Light : public RT_LightSource{
     public:
-    Light();
-    virtual ~Light();
+        Light();
+        Light(Vector _position, Color _color);
 
-    virtual bool computeIllum (const Vector<double> &intersect, const Vector<double> &normal,
-                               const std::vector<std::shared_ptr<Object>> &objects,
-                               const std::shared_ptr<Object> &object,
-                               Vector<double> &color, double &intensity);
+        virtual Vector getLightPosition();
+        virtual Color getLightColor();
 
-    Vector<double> lght_color {3};
-    Vector<double> lght_location {3};
-    double lght_intensity;
+    private:
+        Vector position;
+        Color color;
 };
 
 
