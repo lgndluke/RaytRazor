@@ -1,6 +1,5 @@
 #include "MenuBar_Widget.h"
 
-#include "../../Parsing/Json_Parser.h"
 
 MenuBar_Widget::MenuBar_Widget(Widget* parent) : Widget(parent) {
     setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
@@ -19,8 +18,7 @@ void MenuBar_Widget::initialize() {
                 []() {
                     std::string path_to_DIR = openFileDialog();
                     if(isDirectory(path_to_DIR)) return;
-                    if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
-
+                    //if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
                 },
                 []() {  }
             });
@@ -29,9 +27,54 @@ void MenuBar_Widget::initialize() {
     addMenu("Add",
             {"Object", "Light", "Camera"},
             {
-                []() { std::cout << "Add Object clicked!" << std::endl; },
-                []() { std::cout << "Add Light clicked!" << std::endl; },
-                []() { std::cout << "Add Camera clicked!" << std::endl; }
+                []() {
+
+                    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+                    std::string path_to_file = openFileDialog();
+                    Object_Resource OR = Object_Importer::import_Object(uuid,path_to_file).value();
+
+                        auto render_comp = std::make_shared<Render_Component>(
+                            uuid,
+                            "Render_Added",
+                            glm::vec3{0, 0, 0},
+                            glm::vec3{0, 0, 0},
+                            glm::vec3{0, 0, 0},
+                            OR.get_uuid(),
+                            OR.get_uuid()
+                        );
+
+                        Main_Scene::addComponent(uuid, render_comp);
+                },
+                [](){
+                        boost::uuids::uuid uuid = boost::uuids::random_generator()();
+                        auto light_comp = std::make_shared<Light_Component>(
+                            uuid,
+                            "Light_Added",
+                            glm::vec3{0, 0, 0},
+                            glm::vec3{0, 0, 0},
+                            glm::vec3{0, 0, 0},
+                            1.0f,
+                            glm::vec3{1, 1, 1}
+                        );
+
+                        Main_Scene::addComponent(uuid, light_comp);
+                    },
+                []() {
+                        boost::uuids::uuid uuid = boost::uuids::random_generator()();
+                        auto camera_comp = std::make_shared<Camera_Component>(
+                            uuid,
+                            "Camera_Added",
+                            glm::vec3{0, 0, 0},
+                            glm::vec3{0, 0, 0},
+                            glm::vec3{0, 0, 0},
+                            1.0f,
+                            1.0f,
+                            1.0f,
+                            1.0
+                        );
+
+                        Main_Scene::addComponent(uuid, camera_comp);
+                }
             });
 
     // Help-Menü hinzufügen
@@ -39,7 +82,7 @@ void MenuBar_Widget::initialize() {
             {"Documentation", "About"},
             {
                 []() { ShellExecuteA(nullptr, "open", "https://github.com/lgndluke/RaytRazor/wiki/", nullptr, nullptr, SW_SHOWNORMAL); },
-                []() { std::cout << "About clicked!" << std::endl; }
+                []() { ShellExecuteA(nullptr, "open", "https://github.com/lgndluke/RaytRazor/", nullptr, nullptr, SW_SHOWNORMAL); }
             });
 }
 
@@ -69,6 +112,8 @@ void MenuBar_Widget::addMenu(const string& title, const vector<string>& options,
 std::string MenuBar_Widget::openFileDialog() {
     char filePath[MAX_PATH] = {100};
 
+    path currentPath = current_path();
+
     OPENFILENAME ofn;
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
@@ -79,12 +124,16 @@ std::string MenuBar_Widget::openFileDialog() {
     ofn.nFilterIndex = 1;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    // Zeige den Dialog und prüfe, ob der Benutzer eine Datei ausgewählt hat
+    std::string result;
     if (GetOpenFileName(&ofn)) {
-        return string(filePath);
-    } else {
-        return "";
+        result = filePath;
+        std::replace(result.begin(), result.end(), '\\', '/');
     }
+
+    current_path(currentPath);
+
+    return result;
+
 }
 
 bool MenuBar_Widget::isDirectory(const std::string& path) {

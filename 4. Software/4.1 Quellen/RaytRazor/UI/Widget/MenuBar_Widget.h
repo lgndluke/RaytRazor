@@ -12,6 +12,9 @@
 #include "nanogui/layout.h"
 #include <windows.h>
 #include <filesystem>
+#include <random_generator.hpp>
+#include "../../Parsing/Json_Parser.h"
+#include "../Scenes/Main/Main_Scene.h"
 
 using namespace nanogui;
 using namespace std;

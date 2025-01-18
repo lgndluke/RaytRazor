@@ -1,8 +1,6 @@
 #include "Main_Scene.h"
 
-#include "../../../Converter/Converter.h"
-#include "../../../Import/Importers/Object/Object_Importer.h"
-#include "../../../Import/Importers/Material/Material_Importer.h"
+
 
 //TODO's:
 // -> Preview_Canvas::drawGL() implementieren.
@@ -11,6 +9,7 @@
 
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
+Main_Scene* Main_Scene::instance = nullptr;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -34,8 +33,9 @@ void Preview_Canvas::drawGL()
     //gesamte scene muss hier vorliegen
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
-    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
-    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/dwels/CLionProjects/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
+    //C:\Users\chris\CLionProjects\RaytRazor\RaytRazor\5. Modelle\5.1 Beispielmodelle\miscellaneous\miscellaneous\teapot\Teapot.obj
+    Object_Resource OR = Object_Importer::import_Object(uuid, "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
+    Material_Resource MR = Material_Importer::import_Material(uuid, "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
 
     if (!initialized)
     {
@@ -118,12 +118,12 @@ void Preview_Canvas::drawGL()
     //create projection and view matrix
     for (auto& pair  : components) {
 
-        shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+        //shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
 
-        std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
-        glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-        glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
-                                                        camera->get_near_clip(), camera->get_far_clip());
+        //std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+        //glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+        //glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
+                                                        //camera->get_near_clip(), camera->get_far_clip());
     }
 
     //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
@@ -173,12 +173,20 @@ Main_Scene::Main_Scene(const int window_width,
     this->window_height = window_height;
     this->window_title = window_title;
     this->is_resizeable = is_resizeable;
+    instance = this;
 
     this->ids = vector<int>();
     this->components = map<boost::uuids::uuid, shared_ptr<Base_Component>>();
     this->resources = map<boost::uuids::uuid, shared_ptr<Base_Resource>>();
 
     initialize();
+}
+
+void Main_Scene::forceUpdate() {
+    if (instance) {
+        instance->updateTreeView();
+        instance->update();
+    }
 }
 
 void Main_Scene::initialize()
@@ -217,9 +225,9 @@ void Main_Scene::initialize()
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
-    const auto attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget = new ComponentAttributes_Widget(component_attributes);
 
-    auto tree_view = new TreeView_Widget(component_tree, attributesWidget);
+    tree_view = new TreeView_Widget(component_tree, attributesWidget);
     tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
     tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
 
@@ -247,7 +255,7 @@ void Main_Scene::initialize()
 
     const auto load_json_button = new Button(preview_window, "Import Scene");
     preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this, tree_view, attributesWidget]
+    load_json_button->setCallback([this]
     {
         try
         {
@@ -255,7 +263,21 @@ void Main_Scene::initialize()
 
             //Path muss angepasst werden wenn sich wd die Struktur ändert
             //todo über explorer setzen :)
-            string path_to_json = "../resources/scenes/JsonParser_DummyFile.json";
+            string path_to_json1 = "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
+
+            string path_to_json = openFileDialog();
+            if (path_to_json.empty()) return;
+            if (!isJsonFileAndFixPath(path_to_json)) return;
+            if (!exists(path_to_json)) {
+                std::cerr << "File does not exist: " << path_to_json << std::endl;
+                return;
+            }
+
+
+            path_to_json = absolute(path_to_json).string();
+
+            printf("");
+
 
             //FileSelector file_Selector();
             //string path_to_json = file_Selector().get_input_path();
@@ -265,21 +287,28 @@ void Main_Scene::initialize()
 
             Json_Parser::parseJSON(path_to_json, components, resources);
 
+            printf("");
+
             tree_view->clear();
             tree_view->addNode("3D-Szene");
 
-            int i = -1;
-            for (const auto& component : components)
-            {
-                if(++i == 0) {
-                    attributesWidget->showAttributesOfComponent(component.second);
-                }
-                tree_view->addNode(component.second->get_name(), "3D-Szene");
+            if (components.empty()) {
+                printf("No components to display.\n");
+                return;
             }
-            //const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
 
+            // Zeige die Attribute des ersten Elements an
+            bool isFirstComponent = true;
 
-            printf("");
+            for (const auto& [key, component] : components) {
+                if (isFirstComponent) {
+                    attributesWidget->showAttributesOfComponent(component);
+                    isFirstComponent = false;
+                }
+
+                // Füge den Knoten zum Baum hinzu
+                tree_view->addNode(component->get_name(), "3D-Szene");
+            }
 
             performLayout();
 
@@ -304,5 +333,67 @@ void*(*Main_Scene::raytrace_preview())(void*)
 
 void Main_Scene::update()
 {
-    // Update Main_Scene?
+    performLayout();
 }
+
+std::string Main_Scene::openFileDialog() {
+    char filePath[MAX_PATH] = {0};
+
+    path currentPath = current_path();
+
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = nullptr;
+    ofn.lpstrFile = filePath;
+    ofn.nMaxFile = MAX_PATH;
+
+    ofn.lpstrFilter = "JSON Files\0*.json\0All Files\0*.*\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    std::string result;
+    if (GetOpenFileName(&ofn)) {
+        result = filePath;
+        std::replace(result.begin(), result.end(), '\\', '/');
+    }
+
+    current_path(currentPath);
+
+    return result;
+}
+
+void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
+    components[uuid] = component;
+    forceUpdate();
+}
+
+bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
+    // Check if the file has a .json extension (case insensitive)
+    const std::string extension = ".json";
+    if (path.size() >= extension.size() &&
+        std::equal(extension.rbegin(), extension.rend(), path.rbegin(), [](char a, char b) {
+            return std::tolower(a) == std::tolower(b);
+        })) {
+        // Replace all backslashes with forward slashes
+        std::replace(path.begin(), path.end(), '\\', '/');
+        return true;
+        }
+    return false;
+}
+
+void Main_Scene::updateTreeView() const {
+    bool isFirstComponent = true;
+
+    for (const auto& [key, component] : components) {
+        if (isFirstComponent) {
+            attributesWidget->showAttributesOfComponent(component);
+            isFirstComponent = false;
+        }
+
+        // Füge den Knoten zum Baum hinzu
+        tree_view->addNode(component->get_name(), "3D-Szene");
+    }
+}
+
+
