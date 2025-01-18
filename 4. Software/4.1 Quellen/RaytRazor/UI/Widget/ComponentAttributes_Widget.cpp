@@ -239,6 +239,13 @@ void ComponentAttributes_Widget::updateFromComponent(const std::shared_ptr<Base_
             }
         });
     }
+    else
+    {
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[11]), "-", false);
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[13]), "-", false);
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[15]), "-", false);
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[17]), "-", false);
+    }
 
     // Licht-spezifische Felder
     if (auto light = std::dynamic_pointer_cast<Light_Component>(component)) {
@@ -266,6 +273,11 @@ void ComponentAttributes_Widget::updateFromComponent(const std::shared_ptr<Base_
             return false;
         });
     }
+    else
+    {
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[19]), "-", false);
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[21]), "-", false);
+    }
 
     // Render-spezifische Felder
     if (auto render = std::dynamic_pointer_cast<Render_Component>(component)) {
@@ -274,6 +286,11 @@ void ComponentAttributes_Widget::updateFromComponent(const std::shared_ptr<Base_
 
         auto tBox_MaterialUUID = dynamic_cast<TextBox*>(dynamicWidgets[25]);
         updateTextBox(tBox_MaterialUUID, boost::uuids::to_string(render->get_material_UUID()), false);
+    }
+    else
+    {
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[23]), "-", false);
+        updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[25]), "-", false);
     }
 }
 
