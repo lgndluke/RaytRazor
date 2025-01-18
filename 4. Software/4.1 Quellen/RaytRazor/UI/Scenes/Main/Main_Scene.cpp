@@ -35,8 +35,17 @@ void Preview_Canvas::drawGL()
 
     //C:\Users\chris\CLionProjects\RaytRazor\RaytRazor\5. Modelle\5.1 Beispielmodelle\miscellaneous\miscellaneous\teapot\Teapot.obj
     //C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl
-    Object_Resource OR = Object_Importer::import_Object(uuid, "Pfad Eintragen in Main_Scene:38").value();
-    Material_Resource MR = Material_Importer::import_Material(uuid, "Pfad Eintragen in Main_Scene:39").value();
+    Object_Resource OR;
+    Material_Resource MR;
+    try
+    {
+        OR = Object_Importer::import_Object(uuid, "Pfad angeben .obj").value();
+        MR = Material_Importer::import_Material(uuid, "Pfad angeben .mtl").value();
+    }
+    catch (const std::exception& e)
+    {
+        Logger::log(MessageType::SEVERE, "Main_Scene::drawGL: File not found exception:\n" + std::string(e.what()));
+    }
 
     if (!initialized)
     {
@@ -58,8 +67,8 @@ void Preview_Canvas::drawGL()
         const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
         const std::vector<Indice>& indices = OR.get_indices(); // Zugriff auf Indizes
 
-    int size = indices.size();
-    int size2 = vertices.size();
+        int size = indices.size();
+        int size2 = vertices.size();
 
         /*
         // Ausgabe der Vertices
