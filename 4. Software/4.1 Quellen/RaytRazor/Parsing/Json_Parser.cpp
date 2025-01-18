@@ -210,8 +210,8 @@ void Json_Parser::parseJSON(const string& path_To_Json,
 }
 
 bool Json_Parser::exportToJSON(const std::string& exportPath,
-                             const std::map<boost::uuids::uuid, variant<Base_Component, Render_Component, Light_Component, Camera_Component>> components,
-                             const std::map<boost::uuids::uuid, Base_Resource>& resources)
+                               const std::map<boost::uuids::uuid, shared_ptr<Base_Component>>& components,
+                               const std::map<boost::uuids::uuid, shared_ptr<Base_Resource>>& resources)
 {
     json root;
 
@@ -225,93 +225,41 @@ bool Json_Parser::exportToJSON(const std::string& exportPath,
         Logger::log(MessageType::SEVERE, "No components found.");
     }
 
-    for (const auto& [uuid, component] : components) {
+    for (const auto& [uuid, component] : components)
+    {
         json componentData;
         componentData["uuid"] = boost::uuids::to_string(uuid);
 
-        std::visit([&](auto&& comp)
-            {
-                using T = std::decay_t<decltype(comp)>;
+        if (resources.empty()) {
+            Logger::log(MessageType::SEVERE, "No resources found.");
+        }
 
-                componentData["name"] = comp.get_name();
-                componentData["Translation"] = {
-                    {"position", {{"x", comp.get_position().x}, {"y", comp.get_position().y}, {"z", comp.get_position().z}}},
-                    {"rotation", {{"x", comp.get_rotation().x}, {"y", comp.get_rotation().y}, {"z", comp.get_rotation().z}}},
-                    {"scale", {{"x", comp.get_scale().x}, {"y", comp.get_scale().y}, {"z", comp.get_scale().z}}}
-                };
+        for (const auto& [uuid, resource] : resources) {
+            json resourceData;
+            resourceData["uuid"] = boost::uuids::to_string(resource.get()->get_uuid());
+            resourceData["type"] = (resource.get()->get_type() == MATERIAL) ? "mat" : "obj";
+            resourceData["path"] = resource.get()->get_path();
+            root["resources"].push_back(resourceData);
+        }
 
-                if constexpr (std::is_same_v<T, Render_Component>) {
-                    root["renderentity"].push_back({
-                        {"name", comp.get_name()},
-                        {"Translation", componentData["Translation"]},
-                        {"components", {
-                            {"RenderComponent", {
-                                {"objUUID", boost::uuids::to_string(comp.get_object_UUID())},
-                                {"matUUID", boost::uuids::to_string(comp.get_material_UUID())}
-                            }}
-                        }}
-                    });
-                } else if constexpr (std::is_same_v<T, Light_Component>) {
-                    root["lightentity"].push_back({
-                        {"name", comp.get_name()},
-                        {"Translation", componentData["Translation"]},
-                        {"components", {
-                            {"LightComponent", {
-                                {"intensity", comp.get_intensity()},
-                                {"color", {
-                                    {"r", comp.get_color().r},
-                                    {"g", comp.get_color().g},
-                                    {"b", comp.get_color().b}
-                                }}
-                            }}
-                        }}
-                    });
-                } else if constexpr (std::is_same_v<T, Camera_Component>) {
-                    root["cameraentity"].push_back({
-                        {"name", comp.get_name()},
-                        {"Translation", componentData["Translation"]},
-                        {"components", {
-                            {"CameraComponent", {
-                                {"fov", comp.get_fov()},
-                                {"aspectRatio", comp.get_aspect_ratio()},
-                                {"nearClip", comp.get_near_clip()},
-                                {"farClip", comp.get_far_clip()}
-                            }}
-                        }}
-                    });
-                }
-            }, component);
-    }
+        // Meta-Daten
+        root["metadata"] = {
+            {"backgroundColor", {0.1, 0.1, 0.1}},
+            {"globalIllumination", true},
+            {"renderMode", "pathtracing"},
+            {"maxDepth", 5},
+            {"samplesPerPixel", 100}
+        };
 
-    if (resources.empty()) {
-        Logger::log(MessageType::SEVERE, "No resources found.");
-    }
-
-    for (const auto& [uuid, resource] : resources) {
-        json resourceData;
-        resourceData["uuid"] = boost::uuids::to_string(resource.get_uuid());
-        resourceData["type"] = (resource.get_type() == MATERIAL) ? "mat" : "obj";
-        resourceData["path"] = resource.get_path();
-        root["resources"].push_back(resourceData);
-    }
-
-    // Meta-Daten
-    root["metadata"] = {
-        {"backgroundColor", {0.1, 0.1, 0.1}},
-        {"globalIllumination", true},
-        {"renderMode", "pathtracing"},
-        {"maxDepth", 5},
-        {"samplesPerPixel", 100}
-    };
-
-    try {
-        std::ofstream file(exportPath);
-        file << std::setw(4) << root;
-        Logger::log(MessageType::INFO, "JSON export successful.");
-        return true;
-    } catch (const std::exception& e) {
-        Logger::log(MessageType::SEVERE, e.what());
-        return false;
+        try {
+            std::ofstream file(exportPath);
+            file << std::setw(4) << root;
+            Logger::log(MessageType::INFO, "JSON export successful.");
+            return true;
+        } catch (const std::exception& e) {
+            Logger::log(MessageType::SEVERE, e.what());
+            return false;
+        }
     }
 }
 

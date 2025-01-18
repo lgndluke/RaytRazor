@@ -69,8 +69,8 @@ class Json_Parser
         * @author Christan Kasper, Dennis Welsch
         */
         static bool exportToJSON(const std::string& exportPath,
-                             const std::map<boost::uuids::uuid, variant<Base_Component, Render_Component, Light_Component, Camera_Component>> components,
-                             const std::map<boost::uuids::uuid, Base_Resource>& resources);
+                                 const std::map<boost::uuids::uuid, shared_ptr<Base_Component>>& components,
+                                 const std::map<boost::uuids::uuid, shared_ptr<Base_Resource>>& resources);
 
 };
 
