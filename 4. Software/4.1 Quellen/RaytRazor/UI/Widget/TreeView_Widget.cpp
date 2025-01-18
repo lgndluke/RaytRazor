@@ -1,3 +1,4 @@
+#include "../Scenes/Main/Main_Scene.h"
 #include "TreeView_Widget.h"
 
 
@@ -19,15 +20,21 @@ TreeView_Widget::TreeView_Widget(Widget* parent, ComponentAttributes_Widget* att
 }
 
 void TreeView_Widget::addNode(const std::string& nodeName, const std::string& parentName) {
+    // Prüfen, ob der Knoten bereits existiert
+    if (mNodeMap.find(nodeName) != mNodeMap.end()) {
+        return; // Knoten existiert bereits, keine weiteren Aktionen nötig
+    }
 
     if (parentName.empty()) {
+        // Erstellen eines Root-Knotens
         auto rootContainer = new Widget(mContainer);
         rootContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
 
         auto label = new Custom_Label(rootContainer, nodeName, "sans-bold");
         label->setFontSize(Basis_Root_Font);
-        mNodeMap[nodeName] = rootContainer;
+        mNodeMap[nodeName] = rootContainer; // Speichern des Knotens in der Map
     } else if (mNodeMap.find(parentName) != mNodeMap.end()) {
+        // Erstellen eines Child-Knotens unter dem angegebenen Parent
         auto parentWidget = mNodeMap[parentName];
 
         auto childContainer = new Widget(parentWidget);
@@ -59,7 +66,7 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
             }
         });
 
-        // Speichere das neue Widget in der Map
+        // Speichern des neuen Child-Knotens in der Map
         mNodeMap[nodeName] = childContainer;
     }
 }

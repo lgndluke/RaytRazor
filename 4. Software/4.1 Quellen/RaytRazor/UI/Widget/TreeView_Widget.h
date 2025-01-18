@@ -12,9 +12,7 @@
 #include <nanogui/button.h>
 #include "nanogui/layout.h"
 #include <string>
-#include "../Scenes/Main/Main_Scene.h"
 #include <vector>
-
 #include "ComponentAttributes_Widget.h"
 #include "../utility/Custom_Label.h"
 
@@ -38,11 +36,14 @@ public:
      */
     void clear();
 
+    void update();
+
 private:
     Widget* mContainer; ///< Container für die Baumstruktur
     map<std::string, Widget*> mNodeMap; ///< Map für Knoten und deren Widgets
     ComponentAttributes_Widget *mAttributes;
     Custom_Label* mCurrentSelectedLabel = nullptr;
+    std::map<boost::uuids::uuid, std::string> mTrackedObjects;
 };
 
 #endif // TREEVIEW_WIDGET_H

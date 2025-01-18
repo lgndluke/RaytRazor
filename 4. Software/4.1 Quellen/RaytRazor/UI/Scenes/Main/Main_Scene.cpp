@@ -9,6 +9,7 @@
 
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
+Main_Scene* Main_Scene::instance = nullptr;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -172,12 +173,20 @@ Main_Scene::Main_Scene(const int window_width,
     this->window_height = window_height;
     this->window_title = window_title;
     this->is_resizeable = is_resizeable;
+    instance = this;
 
     this->ids = vector<int>();
     this->components = map<boost::uuids::uuid, shared_ptr<Base_Component>>();
     this->resources = map<boost::uuids::uuid, shared_ptr<Base_Resource>>();
 
     initialize();
+}
+
+void Main_Scene::forceUpdate() {
+    if (instance) {
+        instance->updateTreeView();
+        instance->update();
+    }
 }
 
 void Main_Scene::initialize()
@@ -216,9 +225,9 @@ void Main_Scene::initialize()
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
-    const auto attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget = new ComponentAttributes_Widget(component_attributes);
 
-    auto tree_view = new TreeView_Widget(component_tree, attributesWidget);
+    tree_view = new TreeView_Widget(component_tree, attributesWidget);
     tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
     tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
 
@@ -246,7 +255,7 @@ void Main_Scene::initialize()
 
     const auto load_json_button = new Button(preview_window, "Import Scene");
     preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this, tree_view, attributesWidget]
+    load_json_button->setCallback([this]
     {
         try
         {
@@ -354,7 +363,10 @@ std::string Main_Scene::openFileDialog() {
     return result;
 }
 
-
+void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
+    components[uuid] = component;
+    forceUpdate();
+}
 
 bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
     // Check if the file has a .json extension (case insensitive)
@@ -368,6 +380,20 @@ bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
         return true;
         }
     return false;
+}
+
+void Main_Scene::updateTreeView() const {
+    bool isFirstComponent = true;
+
+    for (const auto& [key, component] : components) {
+        if (isFirstComponent) {
+            attributesWidget->showAttributesOfComponent(component);
+            isFirstComponent = false;
+        }
+
+        // Füge den Knoten zum Baum hinzu
+        tree_view->addNode(component->get_name(), "3D-Szene");
+    }
 }
 
 

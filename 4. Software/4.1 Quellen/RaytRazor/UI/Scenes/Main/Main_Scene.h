@@ -1,16 +1,17 @@
 #ifndef MAIN_SCENE_H
 #define MAIN_SCENE_H
+// muss ganz oben sein son "Object ambigious"
+#include "../../../Raytracer/RT_App.h"
 
 #include "../../../Components/Base_Component.h"
 #include "../../../Import/Resources/Base_Resource.h"
 #include "../../../Parsing/Json_Parser.h"
 #include "../../../Utility/Logger/Logger.h"
-#include "../../../Raytracer/RT_App.h"
-#include "../../../Shaders/Fragment/Fragment_Shader.h"
-#include "../../../Shaders/Vertex/Vertex_Shader.h"
-#include "../../Widget/TreeView_Widget.h"
 #include "../../Widget/MenuBar_Widget.h"
 #include "../../Widget/ComponentAttributes_Widget.h"
+#include "../../Widget/TreeView_Widget.h"
+#include "../../../Shaders/Fragment/Fragment_Shader.h"
+#include "../../../Shaders/Vertex/Vertex_Shader.h"
 #include "../../utility/Custom_Label.h"
 #include <commdlg.h>
 #include <thread>
@@ -120,6 +121,9 @@ class Main_Scene final : public Screen
             return resources;
         }
 
+        static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
+
+    static void forceUpdate();
 
     private:
 
@@ -127,6 +131,12 @@ class Main_Scene final : public Screen
         int window_height;
         string window_title;
         bool is_resizeable;
+
+        //Widgets
+        TreeView_Widget* tree_view;
+        ComponentAttributes_Widget* attributesWidget;
+
+        static Main_Scene* instance;
 
         vector<int> ids;
         static map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
@@ -146,6 +156,8 @@ class Main_Scene final : public Screen
         static std::string openFileDialog();
 
         static bool isJsonFileAndFixPath(std::string& path);
+
+        void updateTreeView() const;
 };
 
 #endif
