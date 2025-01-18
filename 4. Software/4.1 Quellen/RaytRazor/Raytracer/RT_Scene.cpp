@@ -4,8 +4,8 @@
 #include "../Import/Resources/Object/Object_Resource.h"
 
 Scene::Scene() {
-    cubeScene();
-    //sphereScene();
+    //cubeScene();
+    sphereScene();
 }
 
 bool Scene::render(Image &output) {
@@ -90,8 +90,17 @@ void Scene::cubeScene() {
     triangleMatrix.setTransform(Vector<double>{std::vector<double>{0.0, 0.0, 0.0}},
                              Vector<double>{std::vector<double>{0.0, 0.0, 0.0}},
                              Vector<double>{std::vector<double>{1.0, 1.0, 1.0}});
-    std::vector<Vertex> vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj");
 
+    std::vector<Vertex> vertices;
+    try
+    {
+        // TODO HIER WENN MÖGLICH SPÄTER AUF RELATIVEN PFAD ANPASSEN.
+        vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj");
+    }
+    catch (const std::exception &e)
+    {
+        Logger::log(MessageType::SEVERE, "RT_Scene::cubeScene: File not found exception\n" + std::string(e.what()));
+    }
 
     for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
 
