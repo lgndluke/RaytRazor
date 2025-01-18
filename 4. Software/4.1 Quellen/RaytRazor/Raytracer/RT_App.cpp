@@ -14,7 +14,7 @@ bool CApp::OnInit()
         return false;
     }
 
-    pWindow = SDL_CreateWindow("RayTraced", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
+    pWindow = SDL_CreateWindow("RayTraced", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 720, SDL_WINDOW_SHOWN);
 
     if (pWindow != NULL)
     {
@@ -22,7 +22,7 @@ bool CApp::OnInit()
         pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
 
         // Initialise the qbImage instance.
-        m_image.Initialize(1280, 720, pRenderer);
+        m_image.Initialize(720, 720, pRenderer);
 
         SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
         SDL_RenderClear(pRenderer);
