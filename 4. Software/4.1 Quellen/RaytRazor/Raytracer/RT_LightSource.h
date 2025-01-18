@@ -6,6 +6,7 @@
 
 class RT_LightSource {
 public:
+    virtual ~RT_LightSource() = default;
 
     RT_LightSource();
 

@@ -9,6 +9,8 @@
 
 class Object {
     public:
+    virtual ~Object() = default;
+
     Object();
     virtual Color getColor();
     virtual Vector getNormalAt(Vector point);

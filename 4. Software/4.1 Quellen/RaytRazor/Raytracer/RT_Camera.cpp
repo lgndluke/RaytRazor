@@ -7,7 +7,7 @@ Camera::Camera() {
     camdown = Vector(0, 0, 0);
 }
 
-Camera::Camera(Vector _campos, Vector _camdir, Vector _camright, Vector _camdown) {
+Camera::Camera(const Vector &_campos, const Vector &_camdir, const Vector &_camright, const Vector &_camdown) {
     campos = _campos;
     camdir = _camdir;
     camright = _camright;
@@ -17,10 +17,10 @@ Camera::Camera(Vector _campos, Vector _camdir, Vector _camright, Vector _camdown
 
 
 
-Vector Camera::getCamPos() { return campos; }
-Vector Camera::getCamDir() { return camdir; }
-Vector Camera::getCamRight() { return camright; }
-Vector Camera::getCamDown() { return camdown; }
+Vector Camera::getCamPos() const { return campos; }
+Vector Camera::getCamDir() const { return camdir; }
+Vector Camera::getCamRight() const { return camright; }
+Vector Camera::getCamDown() const { return camdown; }
 
 
 

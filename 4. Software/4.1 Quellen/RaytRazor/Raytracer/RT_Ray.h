@@ -8,11 +8,11 @@
 class Ray {
     public:
         Ray();
-        Ray(Vector origin_, Vector direction_);
+        Ray(const Vector &origin_, const Vector &direction_);
 
 
-        Vector getRayOrigin();
-        Vector getRayDirection();
+        [[nodiscard]] Vector getRayOrigin() const;
+        [[nodiscard]] Vector getRayDirection() const;
 
     private:
         Vector ray_origin;

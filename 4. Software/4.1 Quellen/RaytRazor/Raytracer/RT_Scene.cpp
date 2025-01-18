@@ -5,52 +5,51 @@
 
 
 
-void Scene::savebmp (const char *filename, int w, int h, int dpi, RGBType *data) {
+void Scene::savebmp (const char *filename, const int w, const int h, const int dpi, const RGBType *data) {
 	FILE *f;
-	int k = w*h;
-	int s = 4*k;
-	int filesize = 54 + s;
+	const int k = w*h;
+	const int s = 4*k;
+	const int filesize = 54 + s;
 
-	double factor = 39.375;
-	int m = static_cast<int>(factor);
+	const double factor = 39.375;
+	const int m = static_cast<int>(factor);
 
-	int ppm = dpi*m;
+	const int ppm = dpi*m;
 
 	unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0,0,0, 54,0,0,0};
 	unsigned char bmpinfoheader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0,24,0};
 
-	bmpfileheader[ 2] = (unsigned char)(filesize);
-	bmpfileheader[ 3] = (unsigned char)(filesize>>8);
-	bmpfileheader[ 4] = (unsigned char)(filesize>>16);
-	bmpfileheader[ 5] = (unsigned char)(filesize>>24);
+	bmpfileheader[ 2] = static_cast<unsigned char>(filesize);
+	bmpfileheader[ 3] = static_cast<unsigned char>(filesize>>8);
+	bmpfileheader[ 4] = static_cast<unsigned char>(filesize>>16);
+	bmpfileheader[ 5] = static_cast<unsigned char>(filesize>>24);
 
-	bmpinfoheader[ 4] = (unsigned char)(w);
-	bmpinfoheader[ 5] = (unsigned char)(w>>8);
-	bmpinfoheader[ 6] = (unsigned char)(w>>16);
-	bmpinfoheader[ 7] = (unsigned char)(w>>24);
+	bmpinfoheader[ 4] = static_cast<unsigned char>(w);
+	bmpinfoheader[ 5] = static_cast<unsigned char>(w>>8);
+	bmpinfoheader[ 6] = static_cast<unsigned char>(w>>16);
+	bmpinfoheader[ 7] = static_cast<unsigned char>(w>>24);
 
-	bmpinfoheader[ 8] = (unsigned char)(h);
-	bmpinfoheader[ 9] = (unsigned char)(h>>8);
-	bmpinfoheader[10] = (unsigned char)(h>>16);
-	bmpinfoheader[11] = (unsigned char)(h>>24);
+	bmpinfoheader[ 8] = static_cast<unsigned char>(h);
+	bmpinfoheader[ 9] = static_cast<unsigned char>(h>>8);
+	bmpinfoheader[10] = static_cast<unsigned char>(h>>16);
+	bmpinfoheader[11] = static_cast<unsigned char>(h>>24);
 
-	bmpinfoheader[21] = (unsigned char)(s);
-	bmpinfoheader[22] = (unsigned char)(s>>8);
-	bmpinfoheader[23] = (unsigned char)(s>>16);
-	bmpinfoheader[24] = (unsigned char)(s>>24);
+	bmpinfoheader[21] = static_cast<unsigned char>(s);
+	bmpinfoheader[22] = static_cast<unsigned char>(s>>8);
+	bmpinfoheader[23] = static_cast<unsigned char>(s>>16);
+	bmpinfoheader[24] = static_cast<unsigned char>(s>>24);
 
-	bmpinfoheader[25] = (unsigned char)(ppm);
-	bmpinfoheader[26] = (unsigned char)(ppm>>8);
-	bmpinfoheader[27] = (unsigned char)(ppm>>16);
-	bmpinfoheader[28] = (unsigned char)(ppm>>24);
+	bmpinfoheader[25] = static_cast<unsigned char>(ppm);
+	bmpinfoheader[26] = static_cast<unsigned char>(ppm>>8);
+	bmpinfoheader[27] = static_cast<unsigned char>(ppm>>16);
+	bmpinfoheader[28] = static_cast<unsigned char>(ppm>>24);
 
-	bmpinfoheader[29] = (unsigned char)(ppm);
-	bmpinfoheader[30] = (unsigned char)(ppm>>8);
-	bmpinfoheader[31] = (unsigned char)(ppm>>16);
-	bmpinfoheader[32] = (unsigned char)(ppm>>24);
+	bmpinfoheader[29] = static_cast<unsigned char>(ppm);
+	bmpinfoheader[30] = static_cast<unsigned char>(ppm>>8);
+	bmpinfoheader[31] = static_cast<unsigned char>(ppm>>16);
+	bmpinfoheader[32] = static_cast<unsigned char>(ppm>>24);
 
-	errno_t err = fopen_s(&f, filename,"wb");
-	if (err != 0) {
+	if (const errno_t err = fopen_s(&f, filename,"wb"); err != 0) {
 		Logger::log(MessageType::SEVERE, "Error opening bmp file!");
 	}
 
@@ -59,12 +58,12 @@ void Scene::savebmp (const char *filename, int w, int h, int dpi, RGBType *data)
 
 	for (int y = h - 1; y >= 0; y--) {
 		for (int x = 0; x < w; x++) {
-			int i = y*w + x;
-			double red = (data[i].r)*255;
-			double green = (data[i].g)*255;
-			double blue = (data[i].b)*255;
+			const int i = y*w + x;
+			const double red = (data[i].r)*255;
+			const double green = (data[i].g)*255;
+			const double blue = (data[i].b)*255;
 
-			unsigned char color[3] = {
+			const unsigned char color[3] = {
 				static_cast<unsigned char>(std::floor(blue)),
 				static_cast<unsigned char>(std::floor(green)),
 				static_cast<unsigned char>(std::floor(red))
@@ -77,83 +76,42 @@ void Scene::savebmp (const char *filename, int w, int h, int dpi, RGBType *data)
 	fclose(f);
 }
 
-int winningObjectIndex(vector<double> object_intersections) {
-	// return the index of the winning intersection
-	int index_of_minimum_value;
-
-	// prevent unnessary calculations
-	if (object_intersections.size() == 0) {
-		// if there are no intersections
+int winningObjectIndex(const vector<double> &object_intersections) {
+	// prevent unneeded calculations
+	if (object_intersections.empty()) { return -1; }
+	if (object_intersections.size() == 1) {
+		if (object_intersections.at(0) > 0) { return 0; }
 		return -1;
 	}
-	else if (object_intersections.size() == 1) {
-		if (object_intersections.at(0) > 0) {
-			// if that intersection is greater than zero then its our index of minimum value
-			return 0;
-		}
-		else {
-			// otherwise the only intersection value is negative
-			return -1;
-		}
-	}
-	else {
-		// otherwise there is more than one intersection
-		// first find the maximum value
 
 		double max = 0;
-		for (int i = 0; i < object_intersections.size(); i++) {
-			if (max < object_intersections.at(i)) {
-				max = object_intersections.at(i);
-			}
+		for (const double object_intersection : object_intersections) {
+			if (max < object_intersection) { max = object_intersection; }
 		}
 
-		// then starting from the maximum value find the minimum positive value
 		if (max > 0) {
-			// we only want positive intersections
+			int index_of_minimum_value = 0;
+			// only positive intersections
 			for (int index = 0; index < object_intersections.size(); index++) {
 				if (object_intersections.at(index) > 0 && object_intersections.at(index) <= max) {
 					max = object_intersections.at(index);
 					index_of_minimum_value = index;
 				}
 			}
-
 			return index_of_minimum_value;
 		}
-		else {
-			// all the intersections were negative
-			return -1;
-		}
+		return -1;
+
 	}
-}
 
 Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight) {
 
 	Color winning_object_color = scene_objects.at(index_of_winning_object)->getColor();
 	Vector winning_object_normal = scene_objects.at(index_of_winning_object)->getNormalAt(intersection_position);
 
-	if (winning_object_color.getAlpha() == 2) {
-		// checkered/tile floor pattern
-
-		int square = (int)floor(intersection_position.getX()) + (int)floor(intersection_position.getZ());
-
-		if ((square % 2) == 0) {
-			// black tile
-			winning_object_color.setRed(0);
-			winning_object_color.setGreen(0);
-			winning_object_color.setBlue(0);
-		}
-		else {
-			// white tile
-			winning_object_color.setRed(1);
-			winning_object_color.setGreen(1);
-			winning_object_color.setRed(1);
-		}
-	}
-
 	Color final_color = winning_object_color.colorScalar(ambientlight);
 
 	if (winning_object_color.getAlpha() > 0 && winning_object_color.getAlpha() <= 1) {
-		// reflection from objects with specular intensity
 		double dot1 = winning_object_normal.dot(intersecting_ray_direction.negative());
 		Vector scalar1 = winning_object_normal.multiply(dot1);
 		Vector add1 = scalar1.add(intersecting_ray_direction);
@@ -166,13 +124,11 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 		// determine what the ray intersects with first
 		vector<double> reflection_intersections;
 
-		for (int reflection_index = 0; reflection_index < scene_objects.size(); reflection_index++) {
-			reflection_intersections.push_back(scene_objects.at(reflection_index)->hit(reflection_ray));
+		for (auto & scene_object : scene_objects) {
+			reflection_intersections.push_back(scene_object->hit(reflection_ray));
 		}
 
-		int index_of_winning_object_with_reflection = winningObjectIndex(reflection_intersections);
-
-		if (index_of_winning_object_with_reflection != -1) {
+		if (int index_of_winning_object_with_reflection = winningObjectIndex(reflection_intersections); index_of_winning_object_with_reflection != -1) {
 			// reflection ray missed everthing else
 			if (reflection_intersections.at(index_of_winning_object_with_reflection) > accuracy) {
 				// determine the position and direction at the point of intersection with the reflection ray
@@ -187,29 +143,27 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 		}
 	}
 
-	for (int light_index = 0; light_index < light_sources.size(); light_index++) {
-		Vector light_direction = light_sources.at(light_index)->getLightPosition().add(intersection_position.negative()).normalize();
+	for (auto & light_source : light_sources) {
+		Vector light_direction = light_source->getLightPosition().add(intersection_position.negative()).normalize();
 
-		float cosine_angle = winning_object_normal.dot(light_direction);
-
-		if (cosine_angle > 0) {
+		if (float cosine_angle = winning_object_normal.dot(light_direction); cosine_angle > 0) {
 			// test for shadows
 			bool shadowed = false;
 
-			Vector distance_to_light = light_sources.at(light_index)->getLightPosition().add(intersection_position.negative()).normalize();
+			Vector distance_to_light = light_source->getLightPosition().add(intersection_position.negative()).normalize();
 			float distance_to_light_magnitude = distance_to_light.magnitude();
 
-			Ray shadow_ray (intersection_position, light_sources.at(light_index)->getLightPosition().add(intersection_position.negative()).normalize());
+			Ray shadow_ray (intersection_position, light_source->getLightPosition().add(intersection_position.negative()).normalize());
 
 			vector<double> secondary_intersections;
 
-			for (int object_index = 0; object_index < scene_objects.size() && shadowed == false; object_index++) {
-				secondary_intersections.push_back(scene_objects.at(object_index)->hit(shadow_ray));
+			for (auto & scene_object : scene_objects) {
+				secondary_intersections.push_back(scene_object->hit(shadow_ray));
 			}
 
-			for (int c = 0; c < secondary_intersections.size(); c++) {
-				if (secondary_intersections.at(c) > accuracy) {
-					if (secondary_intersections.at(c) <= distance_to_light_magnitude) {
+			for (double secondary_intersection : secondary_intersections) {
+				if (secondary_intersection > accuracy) {
+					if (secondary_intersection <= distance_to_light_magnitude) {
 						shadowed = true;
 					}
 					break;
@@ -217,10 +171,9 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 			}
 
 			if (shadowed == false) {
-				final_color = final_color.addColor(winning_object_color.multiplyColor(light_sources.at(light_index)->getLightColor()).colorScalar(cosine_angle));
+				final_color = final_color.addColor(winning_object_color.multiplyColor(light_source->getLightColor()).colorScalar(cosine_angle));
 
 				if (winning_object_color.getAlpha() > 0 && winning_object_color.getAlpha() <= 1) {
-					// special [0-1]
 					double dot1 = winning_object_normal.dot(intersecting_ray_direction.negative());
 					Vector scalar1 = winning_object_normal.multiply(dot1);
 					Vector add1 = scalar1.add(intersecting_ray_direction);
@@ -228,10 +181,9 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 					Vector add2 = intersecting_ray_direction.negative().add(scalar2);
 					Vector reflection_direction = add2.normalize();
 
-					double specular = reflection_direction.dot(light_direction);
-					if (specular > 0) {
+					if (double specular = reflection_direction.dot(light_direction); specular > 0) {
 						specular = pow(specular, 10);
-						final_color = final_color.addColor(light_sources.at(light_index)->getLightColor().colorScalar(specular*winning_object_color.getAlpha()));
+						final_color = final_color.addColor(light_source->getLightColor().colorScalar(specular*winning_object_color.getAlpha()));
 					}
 				}
 
@@ -250,7 +202,7 @@ Camera camera_rt;
 
 Scene::Scene() {
     //cubeScene();
-    sphereScene();
+	sphereScene();
 }
 
 bool Scene::render(Image &output) {
@@ -261,13 +213,9 @@ bool Scene::render(Image &output) {
 	int width = 720;
 	int height = 720;
 	int n = width*height;
-	RGBType *pixels = new RGBType[n];
+	auto *pixels = new RGBType[n];
 
-	int aadepth = 1;
-	double aathreshold = 0.1;
-	double aspectratio = (double)width/(double)height;
-	double ambientlight = 0.2;
-	double accuracy = 0.00000001;
+	double aspectratio = static_cast<double>(width)/static_cast<double>(height);
 
 	Vector O (0,0,0);
 	Vector X (1,0,0);
@@ -294,24 +242,22 @@ bool Scene::render(Image &output) {
 	#pragma omp parallel for collapse(2) private(thisone, aa_index, xamnt, yamnt, tempRed, tempGreen, tempBlue)
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
+			int aadepth = 1;
 			thisone = y*width + x;
 
 			// start with a blank pixel
-			double tempRed[1];
-			double tempGreen[1];
-			double tempBlue[1];
+			double temp_red[1];
+			double temp_green[1];
+			double temp_blue[1];
 
 			for (int aax = 0; aax < aadepth; aax++) {
 				for (int aay = 0; aay < aadepth; aay++) {
 
 					aa_index = aay*aadepth + aax;
 
-					srand(time(0));
+					srand(time(nullptr));
 
 					// create the ray from the camera to this pixel
-					if (aadepth == 1) {
-
-						// start with no anti-aliasing
 						if (width > height) {
 							// the image is wider than it is tall
 							xamnt = ((x+0.5)/width)*aspectratio - (((width-height)/(double)height)/2);
@@ -327,25 +273,7 @@ bool Scene::render(Image &output) {
 							xamnt = (x + 0.5)/width;
 							yamnt = (y + 0.5)/height;
 						}
-					}
-					else {
-						// anti-aliasing
-						if (width > height) {
-							// the image is wider than it is tall
-							xamnt = ((x + (double)aax/((double)aadepth - 1))/width)*aspectratio - (((width-height)/(double)height)/2);
-							yamnt = ((y + 0.5) + (double)aax/((double)aadepth - 1))/height;
-						}
-						else if (height > width) {
-							// the imager is taller than it is wide
-							xamnt = (x + (double)aax/((double)aadepth - 1))/ width;
-							yamnt = (((height - y) + (double)aax/((double)aadepth - 1))/height)/aspectratio - (((height - width)/(double)width)/2);
-						}
-						else {
-							// the image is square
-							xamnt = (x + (double)aax/((double)aadepth - 1))/width;
-							yamnt = ((height - y) + (double)aax/((double)aadepth - 1))/height;
-						}
-					}
+
 
 					Vector cam_ray_origin = camera_rt.getCamPos();
 					Vector cam_ray_direction = camdir.add(camright.multiply(xamnt - 0.5).add(camdown.multiply(yamnt - 0.5))).normalize();
@@ -354,21 +282,20 @@ bool Scene::render(Image &output) {
 
 					vector<double> intersections;
 
-					for (int index = 0; index < objects_scene.size(); index++) {
-						intersections.push_back(objects_scene.at(index)->hit(cam_ray));
+					for (auto & index : objects_scene) {
+						intersections.push_back(index->hit(cam_ray));
 					}
 
-					int index_of_winning_object = winningObjectIndex(intersections);
-
-					if (index_of_winning_object == -1) {
+					if (int index_of_winning_object = winningObjectIndex(intersections); index_of_winning_object == -1) {
 						// set the backgroung black
-						tempRed[aa_index] = 0;
-						tempGreen[aa_index] = 0;
-						tempBlue[aa_index] = 0;
+						temp_red[aa_index] = 0;
+						temp_green[aa_index] = 0;
+						temp_blue[aa_index] = 0;
 					}
 					else{
 						// index coresponds to an object in our scene
-						if (intersections.at(index_of_winning_object) > accuracy) {
+						if (double accuracy = 0.00000001; intersections.at(index_of_winning_object) > accuracy) {
+							double ambientlight = 0.2;
 							// determine the position and direction vectors at the point of intersection
 
 							Vector intersection_position = cam_ray_origin.add(cam_ray_direction.multiply(intersections.at(index_of_winning_object)));
@@ -376,9 +303,9 @@ bool Scene::render(Image &output) {
 
 							Color intersection_color = getColorAt(intersection_position, intersecting_ray_direction, objects_scene, index_of_winning_object, light_sources, accuracy, ambientlight);
 
-							tempRed[aa_index] = intersection_color.getRed();
-							tempGreen[aa_index] = intersection_color.getGreen();
-							tempBlue[aa_index] = intersection_color.getBlue();
+							temp_red[aa_index] = intersection_color.getRed();
+							temp_green[aa_index] = intersection_color.getGreen();
+							temp_blue[aa_index] = intersection_color.getBlue();
 						}
 					}
 				}
@@ -390,13 +317,13 @@ bool Scene::render(Image &output) {
 			double totalBlue = 0;
 
 			for (int iRed = 0; iRed < aadepth*aadepth; iRed++) {
-				totalRed = totalRed + tempRed[iRed];
+				totalRed = totalRed + temp_red[iRed];
 			}
 			for (int iGreen = 0; iGreen < aadepth*aadepth; iGreen++) {
-				totalGreen = totalGreen + tempGreen[iGreen];
+				totalGreen = totalGreen + temp_green[iGreen];
 			}
 			for (int iBlue = 0; iBlue < aadepth*aadepth; iBlue++) {
-				totalBlue = totalBlue + tempBlue[iBlue];
+				totalBlue = totalBlue + temp_blue[iBlue];
 			}
 
 			double avgRed = totalRed/(aadepth*aadepth);
@@ -416,7 +343,7 @@ bool Scene::render(Image &output) {
 
 
 	t2 = clock();
-	float diff = ((float)t2 - (float)t1)/1000;
+	float diff = (static_cast<float>(t2) - static_cast<float>(t1))/1000;
 
 	Logger::log(MessageType::INFO, "Done in: " + std::to_string(diff) + " seconds!");
 	for (Object* obj : objects_scene) { delete obj; }
@@ -427,19 +354,17 @@ bool Scene::render(Image &output) {
 
 void Scene::cubeScene() {
 	Logger::log(MessageType::INFO, "Rendering the .obj scene...!");
-	Vector Y (0,1,0);
-	Vector O (0,0,0);
+	const Vector Y (0,1,0);
 
-	Color tile_floor (1, 1, 1, 2);
-	Color white_light (1.0, 1.0, 1.0, 0);
-	Color gray (0.5, 0.5, 0.5, 0.5);
-	Color maroon (1.0, 0.0, 0.0, 0.5);
+	const Color white_light (1.0, 1.0, 1.0, 0);
+	const Color gray (0.5, 0.5, 0.5, 0.5);
+	const Color maroon (1.0, 0.0, 0.0, 0.5);
 
     //std::vector<Vertex> vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj");
-	std::vector<Vertex> vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/pyramide.obj");
+	const std::vector<Vertex> vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj");
 
     for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
-    	Triangle* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
+    	auto* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
     												Vector(vertices[(i+1)].position.x,vertices[(i+1)].position.y,vertices[(i+1)].position.z),
     												Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z), maroon);
     	objects_scene.push_back(scene_triangle);
@@ -449,45 +374,42 @@ void Scene::cubeScene() {
     Logger::log(MessageType::DEBUG, "Objects: " + std::to_string(objects_scene.size()));
 
 
-	Plane* scene_plane = new Plane(Y, -1, gray);
+	auto* scene_plane = new Plane(Y, -1, gray);
 	objects_scene.push_back(scene_plane);
 
 	//Vector light_position (3, -300, 0); // für teapot
 	Vector light_position (-7,1,0);
-	Light* scene_light = new Light(light_position, white_light);
+	auto* scene_light = new Light(light_position, white_light);
 	light_sources.push_back(scene_light);
 }
 
 void Scene::sphereScene() {
 	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
-	Vector new_sphere_location (1.75, -0.25, 0);
-	Vector new_sphere_location2 (-1.75, 0.25, 0);
+	const Vector new_sphere_location (1.75, -0.25, 0);
+	const Vector new_sphere_location2 (-1.75, 0.25, 0);
 
-	Vector O (0,0,0);
-	Vector X (1,0,0);
-	Vector Y (0,1,0);
-	Vector Z (0,0,1);
+	const Vector O (0,0,0);
+	const Vector Y (0,1,0);
 
 
-	Color white_light (1.0, 1.0, 1.0, 0);
-	Color pretty_green (0.5, 1.0, 0.5, 0.3);
-	Color maroon (0.5, 0.25, 0.25, 0.3);
-	Color orange (1.0, 0.25, 0.25, 0.3);
-	Color tile_floor (1, 1, 1, 2);
-	Color gray (0.5, 0.5, 0.5, 0.3);
-	Color black (0.0, 0.0, 0.0, 0);
+	const Color white_light (1.0, 1.0, 1.0, 0);
+	const Color pretty_green (0.5, 1.0, 0.5, 0.3);
+	const Color maroon (0.5, 0.25, 0.25, 0.3);
+	const Color orange (1.0, 0.25, 0.25, 0.3);
+	const Color tile_floor (0.5, 0.5, 0.5, 0.5);
+	const Color gray (0.5, 0.5, 0.5, 0.3);
 
-	Vector light_position (-7,10,-10);
-	Light* scene_light = new Light(light_position, white_light);
+	const Vector light_position (-7,10,-10);
+	auto* scene_light = new Light(light_position, white_light);
 	light_sources.push_back(scene_light);
 
 	// scene objects
-	Sphere* scene_sphere = new Sphere(O, 1, pretty_green);
-	Sphere* scene_sphere2 = new Sphere(new_sphere_location, 0.5, maroon);
-	Sphere* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
-	Triangle* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
+	auto* scene_sphere = new Sphere(O, 1, pretty_green);
+	auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, maroon);
+	auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
+	auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
 	//Triangle scene_triangle2 (Vect (-2,0,0), Vect(0,0,-3), Vect(4,0,0), gray);
-	Plane* scene_plane = new Plane(Y, -1, tile_floor);
+	auto* scene_plane = new Plane(Y, -1, tile_floor);
 	objects_scene.push_back(scene_sphere);
 	objects_scene.push_back(scene_sphere2);
 	objects_scene.push_back(scene_sphere3);

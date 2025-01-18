@@ -13,13 +13,13 @@ class Vector {
         [[nodiscard]] double getY() const;
         [[nodiscard]] double getZ() const;
 
-        double magnitude();
-        Vector normalize();
-        Vector negative();
-        double dot(Vector v);
-        Vector cross(Vector v);
-        Vector add(Vector v);
-        Vector multiply(double scalar);
+        [[nodiscard]] double magnitude() const;
+        [[nodiscard]] Vector normalize() const;
+        [[nodiscard]] Vector negative() const;
+        [[nodiscard]] double dot(const Vector &v) const;
+        [[nodiscard]] Vector cross(const Vector &v) const;
+        [[nodiscard]] Vector add(const Vector &v) const;
+        [[nodiscard]] Vector multiply(double scalar) const;
 
     private:
         double x;

@@ -6,36 +6,36 @@ Color::Color() {
     b = 0.5;
 }
 
-Color::Color(double _r, double _g, double _b, double _e) {
+Color::Color(const double _r, const double _g, const double _b, const double _e) {
     r = _r;
     g = _g;
     b = _b;
     extra = _e;
 }
 
-double Color::getRed() { return r; }
-double Color::getGreen() { return g; }
-double Color::getBlue() { return b; }
-double Color::getAlpha() { return extra; }
+double Color::getRed() const { return r; }
+double Color::getGreen() const { return g; }
+double Color::getBlue() const { return b; }
+double Color::getAlpha() const { return extra; }
 
-void Color::setRed(double _r) { r = _r; }
-void Color::setGreen(double _g) { g = _g; }
-void Color::setBlue(double _b) { b = _b; }
-void Color::setAlpha(double _e) { extra = _e; }
+void Color::setRed(const double _r) { r = _r; }
+void Color::setGreen(const double _g) { g = _g; }
+void Color::setBlue(const double _b) { b = _b; }
+void Color::setAlpha(const double _e) { extra = _e; }
 
-double Color::brightness() { return (r + g + b)/3; }
-Color Color::colorScalar(double scalar) {
-    return Color(r * scalar, g * scalar, b * scalar, extra);
+double Color::brightness() const { return (r + g + b)/3; }
+Color Color::colorScalar(double scalar) const {
+    return {r * scalar, g * scalar, b * scalar, extra};
 }
-Color Color::addColor(Color color) {
-    return Color(r + color.getRed(), g + color.getGreen(), b + color.getBlue(), extra);
+Color Color::addColor(const Color &color) const {
+    return {r + color.getRed(), g + color.getGreen(), b + color.getBlue(), extra};
 }
-Color Color::multiplyColor(Color color) {
-    return Color(r * color.getRed(), g * color.getGreen(), b * color.getBlue(), extra);
+Color Color::multiplyColor(const Color &color) const {
+    return {r * color.getRed(), g * color.getGreen(), b * color.getBlue(), extra};
 }
 
-Color Color::averageColor(Color color) {
-    return Color(r * color.getRed() / 2, g * color.getGreen() / 2, b * color.getBlue() / 2, extra);
+Color Color::averageColor(const Color &color) const {
+    return {r * color.getRed() / 2, g * color.getGreen() / 2, b * color.getBlue() / 2, extra};
 }
 
 Color Color::clip() {
@@ -53,7 +53,7 @@ Color Color::clip() {
     if (g < 0) { g = 0; }
     if (b < 0) { b = 0; }
 
-    return Color(r, g, b, extra);
+    return {r, g, b, extra};
 }
 
 

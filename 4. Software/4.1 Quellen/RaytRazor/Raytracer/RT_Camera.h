@@ -10,12 +10,12 @@
 class Camera {
 public:
     Camera();
-    Camera(Vector _campos, Vector _camdir, Vector _camright, Vector _camdown);
+    Camera(const Vector &_campos, const Vector &_camdir, const Vector &_camright, const Vector &_camdown);
 
-    Vector getCamPos();
-    Vector getCamDir();
-    Vector getCamRight();
-    Vector getCamDown();
+    [[nodiscard]] Vector getCamPos() const;
+    [[nodiscard]] Vector getCamDir() const;
+    [[nodiscard]] Vector getCamRight() const;
+    [[nodiscard]] Vector getCamDown() const;
 private:
     Vector campos, camdir, camright, camdown;
 };

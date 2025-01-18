@@ -10,13 +10,13 @@
 class Plane : public Object {
     public:
         Plane();
-        Plane(Vector _normal, double _distance, Color _color);
-        Vector getPlaneNormal();
-        double getPlaneDistance();
-        virtual Color getColor();
+        Plane(const Vector &_normal, double _distance, const Color &_color);
+        [[nodiscard]] Vector getPlaneNormal() const;
+        [[nodiscard]] double getPlaneDistance() const;
+        Color getColor() override;
 
-        virtual Vector getNormalAt(Vector point);
-        virtual double hit(Ray ray);
+        Vector getNormalAt(Vector point) override;
+        double hit(Ray ray) override;
     private:
         Vector normal;
         double distance;

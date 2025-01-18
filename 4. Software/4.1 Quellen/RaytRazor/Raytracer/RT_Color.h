@@ -6,25 +6,25 @@ class Color {
         Color();
         Color(double _r, double _g, double _b, double _e);
 
-        double getRed();
-        double getGreen();
-        double getBlue();
-        double getAlpha();
+        [[nodiscard]] double getRed() const;
+        [[nodiscard]] double getGreen() const;
+        [[nodiscard]] double getBlue() const;
+        [[nodiscard]] double getAlpha() const;
 
         void setRed(double _r);
         void setGreen(double _g);
         void setBlue(double _b);
         void setAlpha(double _e);
 
-        double brightness();
-        Color colorScalar(double scalar);
-        Color addColor(Color color);
-        Color multiplyColor(Color color);
-        Color averageColor(Color color);
+        [[nodiscard]] double brightness() const;
+        [[nodiscard]] Color colorScalar(double scalar) const;
+        [[nodiscard]] Color addColor(const Color &color) const;
+        [[nodiscard]] Color multiplyColor(const Color &color) const;
+        [[nodiscard]] Color averageColor(const Color &color) const;
         Color clip();
 
     private:
-        double r, g, b, extra;
+        double r, g, b, extra{};
 };
 
 #endif //RT_COLOR_H

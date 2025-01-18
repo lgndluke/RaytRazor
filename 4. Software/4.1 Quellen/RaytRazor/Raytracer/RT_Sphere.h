@@ -1,23 +1,23 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include <cmath>
 #include "RT_Object.h"
 #include "RT_Vector.h"
 #include "RT_Color.h"
+#include <cmath>
 
 // TODO: Kommentare schreiben
 
 class Sphere : public Object {
     public:
     Sphere();
-    Sphere(Vector _center, double _radius, Color _color);
+    Sphere(const Vector &_center, double _radius, const Color &_color);
 
-    Vector getCenter();
-    double getRadius();
-    virtual Color getColor();
-    virtual Vector getNormalAt(Vector point);
-    virtual double hit(Ray ray);
+    [[nodiscard]] Vector getCenter() const;
+    [[nodiscard]] double getRadius() const;
+    Color getColor() override;
+    Vector getNormalAt(Vector point) override;
+    double hit(Ray ray) override;
 
 
     private:

@@ -8,17 +8,17 @@
 class Triangle : public Object {
     public:
         Triangle();
-        Triangle(Vector v1_, Vector v2_, Vector v3_, Color color_);
+        Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const Color &color_);
         Vector getTriangleNormal();
         double getTriangleDistance();
-        virtual Color getColor();
-        virtual Vector getNormalAt(Vector point);
-        virtual double hit(Ray ray);
+        Color getColor() override;
+        Vector getNormalAt(Vector point) override;
+        double hit(Ray ray) override;
 
     private:
         Vector v1, v2, v3;
         Vector normal;
-        double distance;
+        double distance{};
         Color color;
 };
 

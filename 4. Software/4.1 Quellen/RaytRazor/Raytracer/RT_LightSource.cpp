@@ -1,11 +1,11 @@
 #include "RT_LightSource.h"
 
-RT_LightSource::RT_LightSource(){}
+RT_LightSource::RT_LightSource()= default;
 
 Vector RT_LightSource::getLightPosition() {
-    { return Vector(0, 0, 0); }
+    { return {0, 0, 0}; }
 }
 
 Color RT_LightSource::getLightColor() {
-    return Color(1, 1, 1, 0);
+    return {1, 1, 1, 0};
 }

@@ -10,6 +10,7 @@
 #include "RT_Plane.h"
 #include "RT_LightSource.h"
 #include <vector>
+#include <cmath>
 #include "../Utility/Logger/Logger.h"
 
 // TODO: Kommentare schreiben
@@ -23,17 +24,13 @@ struct RGBType {
 class Scene {
     public:
         Scene();
-        bool render(Image& output);
-        void cubeScene();
-        void sphereScene();
-        Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
-        void savebmp (const char *filename, int w, int h, int dpi, RGBType *data);
+        static bool render(Image& output);
+        static void cubeScene();
+        static void sphereScene();
+
+        static Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
+        static void savebmp (const char *filename, int w, int h, int dpi, const RGBType *data);
     Camera camera;
-
-    vector<Object*> scene_objectses;
-    vector<RT_LightSource*> scene_lightses;
-    private:
-
 };
 
 #endif //SCENE_H
