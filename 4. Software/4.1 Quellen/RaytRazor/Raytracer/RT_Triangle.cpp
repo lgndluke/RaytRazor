@@ -1,86 +1,81 @@
 #include "RT_Triangle.h"
-#include <glm/glm.hpp>
-#include <cmath>
-#include <glm/ext/scalar_constants.hpp>
-#include <glm/gtc/constants.hpp>
 
-Triangle::Triangle(const Vector<double>& _v0, const Vector<double>& _v1, const Vector<double>& _v2) {
-    v0 = _v0;
-    v1 = _v1;
-    v2 = _v2;
+Triangle::Triangle() {
+    v1 = Vector(1, 0, 0);
+    v2 = Vector(0, 1, 0);
+    v3 = Vector(0, 0, 1);
+    color = Color(0.5, 0.5, 0.5, 0);
 }
 
-Triangle::Triangle(const Vector<double>& _v0, const Vector<double>& _v1, const Vector<double>& _v2,
-                    const Vector<double>& _n0, const Vector<double>& _n1,  const Vector<double>& _n2) {
-    v0 = _v0;
-    v1 = _v1;
-    v2 = _v2;
-
-    n0 = _n0;
-    n1 = _n1;
-    n2 = _n2;
-};
-
-Triangle::~Triangle() = default;
-
-bool Triangle::hit(const Ray &ray, Vector<double> &point, Vector<double> &normal, Vector<double> &color) {
-    const double EPSILON = 1e-8;
-    Ray local_ray = obj_transform.applyTransform(ray, BWDTFORM);
-    Vector<double> origin = local_ray.ray_origin;
-    Vector<double> direction = local_ray.ray_ab;
-    direction.Normalize();
-
-    // Define the vertices of the triangle in object space
-    Vector<double> vertex0 = obj_transform.applyTransform(v0, BWDTFORM);
-    Vector<double> vertex1 = obj_transform.applyTransform(v1, BWDTFORM);
-    Vector<double> vertex2 = obj_transform.applyTransform(v2, BWDTFORM);
-
-    // Möller–Trumbore intersection algorithm
-    Vector<double> edge1 = vertex1 - vertex0;
-    Vector<double> edge2 = vertex2 - vertex0;
-    Vector<double> h = Vector<double>::cross(direction, edge2);
-    double a = Vector<double>::dot(edge1, h);
-
-    if (closeEnough(a, 0.0)) {
-        return false; // Ray is parallel to the triangle
-    }
-
-    double f = 1.0 / a;
-    Vector<double> s = origin - vertex0;
-    double u = f * Vector<double>::dot(s, h);
-
-    if (u < 0.0 || u > 1.0) {
-        return false; // Intersection point is outside of the triangle
-    }
-
-    Vector<double> q = Vector<double>::cross(s, edge1);
-    double v = f * Vector<double>::dot(direction, q);
-
-    if (v < 0.0 || u + v > 1.0) {
-        return false; // Intersection point is outside of the triangle
-    }
-
-    double t = f * Vector<double>::dot(edge2, q);
-
-    if (t > EPSILON) { // ray intersection
-        Vector<double> poi = origin + t * direction; // point of intersection
-
-        // Transform the point of intersection back to world space
-        point = obj_transform.applyTransform(poi, FWDTFORM);
-
-        // Calculate normal in object space and transform it to world space
-        if (n0.GetNumDims() != 0) normal = (1-u-v)*n0 + u*n1 + v*n2;
-        else normal = Vector<double>::cross(edge1, edge2);
-        normal.Normalize();
-
-        // Transform the normal back to world space
-        normal = obj_transform.applyTransform(normal, FWDTFORM);
-
-        color = obj_color;
-        return true;
-    }
-
-    return false;
+Triangle::Triangle(Vector v1_, Vector v2_, Vector v3_, Color color_) {
+    v1 = v1_;
+    v2 = v2_;
+    v3 = v3_;
+    color = color_;
 }
+
+Vector Triangle::getTriangleNormal() {
+    Vector v3_1 (v3.getX() - v1.getX(), v3.getY() - v1.getY(), v3.getZ() - v1.getZ());
+    Vector v2_1 (v2.getX() - v1.getX(), v2.getY() - v1.getY(), v2.getZ() - v1.getZ());
+    normal = v3_1.cross(v2_1).normalize();
+    return normal;
+}
+
+double Triangle::getTriangleDistance() {
+    normal = getTriangleNormal();
+    distance = normal.dot(v1);
+    return distance;
+}
+
+Color Triangle::getColor() { return color; }
+
+Vector Triangle::getNormalAt(Vector point) {
+    normal = getTriangleNormal();
+    return normal;
+}
+
+double Triangle::hit(Ray ray) {
+        Vector ray_direction = ray.getRayDirection();
+        Vector ray_origin = ray.getRayOrigin();
+
+        normal = getTriangleNormal();
+        distance = getTriangleDistance();
+
+        double a = ray_direction.dot(normal);
+
+        if (a == 0) {
+            // ray is parallel to the plane
+            return -1;
+        }
+        else {
+            double b = normal.dot(ray.getRayOrigin().add(normal.multiply(distance).negative()));
+            double distance_plane = -1 * b /a;
+
+            double q_x = ray_direction.multiply(distance_plane).getX() + ray_origin.getX();
+            double q_y = ray_direction.multiply(distance_plane).getY() + ray_origin.getY();
+            double q_z = ray_direction.multiply(distance_plane).getZ() + ray_origin.getZ();
+
+            Vector q(q_x, q_y, q_z);
+            //Condition 1
+            Vector v3_1 (v3.getX() - v1.getX(), v3.getY() - v1.getY(), v3.getZ() - v1.getZ());
+            Vector vq_1 (q.getX() - v1.getX(), q.getY() - v1.getY(), q.getZ() - v1.getZ());
+            double cond1 = v3_1.cross(vq_1).dot(normal);
+            //Condition 2
+            Vector v2_3 (v2.getX() - v3.getX(), v2.getY() - v3.getY(), v2.getZ() - v3.getZ());
+            Vector vq_3 (q.getX() - v3.getX(), q.getY() - v3.getY(), q.getZ() - v3.getZ());
+            double cond2 = v2_3.cross(vq_3).dot(normal);
+            //Condition 3
+            Vector v1_2 (v1.getX() - v2.getX(), v1.getY() - v2.getY(), v1.getZ() - v2.getZ());
+            Vector vq_2 (q.getX() - v2.getX(), q.getY() - v2.getY(), q.getZ() - v2.getZ());
+            double cond3 = v1_2.cross(vq_2).dot(normal);
+
+            if (cond1 >= 0 && cond2 >= 0 && cond3 >= 0) {
+                return -1 * b / a;
+            }
+            return -1;
+
+        }
+    }
+
 
 
