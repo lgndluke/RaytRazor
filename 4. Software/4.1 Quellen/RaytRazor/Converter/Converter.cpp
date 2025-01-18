@@ -27,9 +27,9 @@ void Converter::convert_to_matrix_indices(Object_Resource& source) {
 
         // Befüllung der Matrix
         for (size_t i = 0; i < input.size(); ++i) {
-            output(0, i) = static_cast<unsigned int>(input[i].vertexIndices_v[1]); //x vertex pos
-            output(1, i) = static_cast<unsigned int>(input[i].vertexIndices_v[2]); //y vertex pos
-            output(2, i) = static_cast<unsigned int>(input[i].vertexIndices_v[3]); //z vertex pos
+            output(0, i) = static_cast<unsigned int>(input[i].vertexIndices_v[0]); //x vertex pos
+            output(1, i) = static_cast<unsigned int>(input[i].vertexIndices_v[1]); //y vertex pos
+            output(2, i) = static_cast<unsigned int>(input[i].vertexIndices_v[2]); //z vertex pos
         }
 
         // Setzen der Matrix in `source`
