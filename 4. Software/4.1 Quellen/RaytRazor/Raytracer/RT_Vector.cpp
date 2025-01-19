@@ -1,6 +1,6 @@
 #include "RT_Vector.h"
 
-Vector::Vector() { x = y = z = 0; }
+Vector::Vector() { x = y = z = 0.0; }
 Vector::Vector(const double _x, const double _y, const double _z) {
     x = _x;
     y = _y;
@@ -26,7 +26,16 @@ Vector Vector::cross(const Vector &v) const { return {y * v.getZ() - z * v.getY(
 
 Vector Vector::add(const Vector &v) const { return {x + v.getX(), y + v.getY(), z + v.getZ()}; }
 
+Vector Vector::subtract(const Vector &v) const { return {x - v.getX(), y - v.getY(), z - v.getZ()}; }
+
+
 Vector Vector::multiply(const double scalar) const { return {x * scalar, y * scalar, z * scalar}; }
+
+bool Vector::isInitialized() const {
+    if (x == 0.0 && y == 0.0 && z == 0.0) return false;
+    return true;
+}
+
 
 
 

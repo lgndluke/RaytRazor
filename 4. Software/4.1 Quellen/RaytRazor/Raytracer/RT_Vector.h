@@ -19,7 +19,9 @@ class Vector {
         [[nodiscard]] double dot(const Vector &v) const;
         [[nodiscard]] Vector cross(const Vector &v) const;
         [[nodiscard]] Vector add(const Vector &v) const;
+        [[nodiscard]] Vector subtract(const Vector &v) const;
         [[nodiscard]] Vector multiply(double scalar) const;
+        [[nodiscard]] bool isInitialized() const;
 
     private:
         double x;
