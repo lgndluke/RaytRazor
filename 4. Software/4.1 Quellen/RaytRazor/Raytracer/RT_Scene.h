@@ -11,9 +11,11 @@
 #include "RT_LightSource.h"
 #include <vector>
 #include <cmath>
+#include <filesystem>
 #include "../Utility/Logger/Logger.h"
+#include "RT_Triangle.h"
+#include "RT_Object_Importer.h"
 
-// TODO: Kommentare schreiben
 
 struct RGBType {
     double r;
@@ -30,7 +32,6 @@ class Scene {
 
         static Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
         static void savebmp (const char *filename, int w, int h, int dpi, const RGBType *data);
-    Camera camera;
 };
 
 #endif //SCENE_H
