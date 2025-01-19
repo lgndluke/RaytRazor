@@ -9,18 +9,33 @@ int Basis_Child_Font = 25;
 
 TreeView_Widget::TreeView_Widget(Widget* parent, ComponentAttributes_Widget* attributesWidget)
     : Widget(parent), mAttributes(attributesWidget) {
-    auto scrollPanel = new VScrollPanel(this);
-    scrollPanel->setFixedSize({parent->width(), parent->height()});
 
-    // Container für Baumknoten
-    mContainer = new Widget(scrollPanel);
+    mScrollPanel = new VScrollPanel(this);
+    mScrollPanel->setFixedSize({parent->width(), parent->height()});
+
+    mContainer = new Widget(mScrollPanel);
     mContainer->setLayout(new BoxLayout(
         Orientation::Vertical, Alignment::Minimum, 5, 5
     ));
+
+    mScrollPanel->setScroll(0.0f);
 }
 
-void TreeView_Widget::addNode(const std::string& nodeName, const std::string& parentName) {
-    if (mNodeMap.find(nodeName) != mNodeMap.end()) {
+void TreeView_Widget::addParent(const std::string& parentName) {
+    if (mNodeMap.find(parentName) != mNodeMap.end()) {
+        return;
+    }
+    auto parentContainer = new Widget(mContainer);
+    parentContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
+
+    auto label = new Custom_Label(parentContainer, parentName, "sans-bold");
+    label->setFontSize(Basis_Root_Font);
+
+    mNodeMap[parentName] = parentContainer;
+}
+
+void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, const std::string& parentName) {
+    if (mTrackedObjects.find(nodeName->get_uuid()) != mTrackedObjects.end()) {
         return;
     }
 
@@ -29,9 +44,9 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
         auto rootContainer = new Widget(mContainer);
         rootContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
 
-        auto label = new Custom_Label(rootContainer, nodeName, "sans-bold");
+        auto label = new Custom_Label(rootContainer, nodeName->get_name(), "sans-bold");
         label->setFontSize(Basis_Root_Font);
-        mNodeMap[nodeName] = rootContainer; // Speichern des Knotens in der Map
+        mNodeMap[nodeName->get_name()] = rootContainer; // Speichern des Knotens in der Map
     } else if (mNodeMap.find(parentName) != mNodeMap.end()) {
         // Erstellen eines Child-Knotens unter dem angegebenen Parent
         auto parentWidget = mNodeMap[parentName];
@@ -39,34 +54,27 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
         auto childContainer = new Widget(parentWidget);
         childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 0));
 
-        auto label = new Custom_Label(childContainer, "|-------> " + nodeName, "sans");
+        auto label = new Custom_Label(childContainer, "|-------> " + nodeName->get_name(), "sans");
         label->setFontSize(Basis_Child_Font);
 
-        // Callback für das Hervorheben des angeklickten Labels
         label->setCallback([this, label, nodeName]() {
-            printf("Node name: %s\n", nodeName.c_str());
-
-            // Reset the previous label's color if it exists
+            printf("Node name: %s\n", nodeName->get_name().c_str());
             if (mCurrentSelectedLabel) {
                 mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
             }
+            label->setColor(Color(255, 0, 0, 255));
 
-            // Highlight the clicked label
-            label->setColor(Color(255, 0, 0, 255)); // Highlight-Farbe (z. B. Rot)
-
-            // Update the current selected label
             mCurrentSelectedLabel = label;
 
-            // Update the component attributes
-            for (auto componets : Main_Scene::getComponents()) {
-                if (nodeName == componets.second->get_name()) {
+            for (const auto& componets : Main_Scene::getComponents()) {
+                if (nodeName->get_uuid() == componets.second->get_uuid()) {
                     mAttributes->updateFromComponent(componets.second);
                 }
             }
         });
 
         // Speichern des neuen Child-Knotens in der Map
-        mNodeMap[nodeName] = childContainer;
+        mNodeMap[nodeName->get_name()] = childContainer;
     }
 }
 
