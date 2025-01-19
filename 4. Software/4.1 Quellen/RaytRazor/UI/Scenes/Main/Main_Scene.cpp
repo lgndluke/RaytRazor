@@ -238,6 +238,7 @@ void Main_Scene::initialize()
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
     attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget->showAttributesOfComponent();
 
     tree_view = new TreeView_Widget(component_tree, attributesWidget);
     tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
@@ -328,10 +329,11 @@ bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
 
 void Main_Scene::updateTreeView() const {
     tree_view->clear();
-    tree_view->addNode("3D-Szene");
+    //tree_view->addNode("3D-Szene");
+    instance->tree_view->addParent("3D-Szene");
 
     for (const auto& [key, component] : components) {
-        tree_view->addNode(component->get_name(), "3D-Szene");
+        tree_view->addNode(component, "3D-Szene");
     }
 }
 
@@ -367,7 +369,7 @@ void Main_Scene::openScene()
     Json_Parser::parseJSON(path_to_json, components, resources);
 
     instance->tree_view->clear();
-    instance->tree_view->addNode("3D-Szene");
+    instance->tree_view->addParent("3D-Szene");
 
     if (components.empty()) {
         printf("No components to display.\n");
@@ -377,7 +379,7 @@ void Main_Scene::openScene()
     instance->attributesWidget->showAttributesOfComponent();
 
     for (const auto& [key, component] : components) {
-        instance->tree_view->addNode(component->get_name(), "3D-Szene");
+        instance->tree_view->addNode(component, "3D-Szene");
     }
 
     instance->performLayout();
