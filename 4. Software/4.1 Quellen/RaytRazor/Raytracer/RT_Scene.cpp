@@ -1,9 +1,9 @@
 #include "RT_Scene.h"
-#include "RT_Triangle.h"
-#include "../Import/Importers/Object/Object_Importer.h"
-#include "../Import/Resources/Object/Object_Resource.h"
 
-
+Scene::Scene() {
+	cubeScene();
+	//sphereScene();
+}
 
 void Scene::savebmp (const char *filename, const int w, const int h, const int dpi, const RGBType *data) {
 	FILE *f;
@@ -165,8 +165,8 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 				if (secondary_intersection > accuracy) {
 					if (secondary_intersection <= distance_to_light_magnitude) {
 						shadowed = true;
+						break;
 					}
-					break;
 				}
 			}
 
@@ -199,11 +199,9 @@ int thisone;
 vector<RT_LightSource*> light_sources;
 vector<Object*> objects_scene;
 Camera camera_rt;
+Vector cam_pos;
+Vector look_at;
 
-Scene::Scene() {
-    //cubeScene();
-	sphereScene();
-}
 
 bool Scene::render(Image &output) {
 	clock_t t1, t2;
@@ -217,23 +215,15 @@ bool Scene::render(Image &output) {
 
 	double aspectratio = static_cast<double>(width)/static_cast<double>(height);
 
-	Vector O (0,0,0);
-	Vector X (1,0,0);
 	Vector Y (0,1,0);
-	Vector Z (0,0,1);
 
 
-	//Vector campos (3, 500, 0); // Für Teapot
-	Vector campos (3, 1.5, -4);
-
-	//Vector look_at (0, 0, 100); // Für Teapot
-	Vector look_at (0, 0, 0);
-	Vector diff_btw (campos.getX() - look_at.getX(), campos.getY() - look_at.getY(), campos.getZ() - look_at.getZ());
+	Vector diff_btw (cam_pos.getX() - look_at.getX(), cam_pos.getY() - look_at.getY(), cam_pos.getZ() - look_at.getZ());
 
 	Vector camdir = diff_btw.negative().normalize();
 	Vector camright = Y.cross(camdir).normalize();
 	Vector camdown = camright.cross(camdir);
-	camera_rt = Camera (campos, camdir, camright, camdown);
+	camera_rt = Camera (cam_pos, camdir, camright, camdown);
 
 
 	int thisone, aa_index;
@@ -245,7 +235,6 @@ bool Scene::render(Image &output) {
 			int aadepth = 1;
 			thisone = y*width + x;
 
-			// start with a blank pixel
 			double temp_red[1];
 			double temp_green[1];
 			double temp_blue[1];
@@ -257,24 +246,18 @@ bool Scene::render(Image &output) {
 
 					srand(time(nullptr));
 
-					// create the ray from the camera to this pixel
-						if (width > height) {
-							// the image is wider than it is tall
-							xamnt = ((x+0.5)/width)*aspectratio - (((width-height)/(double)height)/2);
-							yamnt = (y + 0.5) / height;
-						}
-						else if (height > width) {
-							// the imager is taller than it is wide
-							xamnt = (x + 0.5)/ width;
-							yamnt = (((height - y) + 0.5)/height)/aspectratio - (((height - width)/(double)width)/2);
-						}
-						else {
-							// the image is square
-							xamnt = (x + 0.5)/width;
-							yamnt = (y + 0.5)/height;
-						}
-
-
+					if (width > height) {
+						xamnt = ((x+0.5)/width)*aspectratio - (((width-height)/(double)height)/2);
+						yamnt = (y + 0.5) / height;
+					}
+					else if (height > width) {
+						xamnt = (x + 0.5)/ width;
+						yamnt = ((y + 0.5)/height)/aspectratio - (((height - width)/(double)width)/2);
+					}
+					else {
+						xamnt = (x + 0.5)/width;
+						yamnt = (y + 0.5)/height;
+					}
 					Vector cam_ray_origin = camera_rt.getCamPos();
 					Vector cam_ray_direction = camdir.add(camright.multiply(xamnt - 0.5).add(camdown.multiply(yamnt - 0.5))).normalize();
 
@@ -293,10 +276,8 @@ bool Scene::render(Image &output) {
 						temp_blue[aa_index] = 0;
 					}
 					else{
-						// index coresponds to an object in our scene
 						if (double accuracy = 0.00000001; intersections.at(index_of_winning_object) > accuracy) {
 							double ambientlight = 0.2;
-							// determine the position and direction vectors at the point of intersection
 
 							Vector intersection_position = cam_ray_origin.add(cam_ray_direction.multiply(intersections.at(index_of_winning_object)));
 							Vector intersecting_ray_direction = cam_ray_direction;
@@ -355,18 +336,36 @@ bool Scene::render(Image &output) {
 void Scene::cubeScene() {
 	Logger::log(MessageType::INFO, "Rendering the .obj scene...!");
 	const Vector Y (0,1,0);
-
 	const Color white_light (1.0, 1.0, 1.0, 0);
 	const Color gray (0.5, 0.5, 0.5, 0.5);
-	const Color maroon (1.0, 0.0, 0.0, 0.5);
+	const Color maroon (1.0, 0.0, 0.0, 0.3);
+	const Color pink (1.0, 0.0, 1.0, 0.3);
 
-    //std::vector<Vertex> vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj");
-	const std::vector<Vertex> vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj");
+	cam_pos = Vector (3, 1.5, -4);
+	look_at = Vector (0, 0, 0);
+	std::string abs_path = "";
+	std::string filename = "suzanne.obj";
+	try {
+		path relative_path = "../../../../5. Modelle/5.1 Beispielmodelle/Test/" + filename;
+		path absolute_path = absolute(relative_path);
+		path canonical_path = canonical(absolute_path);
+		if (!exists(canonical_path)) {
+			throw std::runtime_error("Path does not exist: " + canonical_path.string());
+		}
+		abs_path = canonical_path.string();
+		std::replace(abs_path.begin(), abs_path.end(), '\\', '/');
+	}catch (const filesystem_error& e) {
+		throw std::runtime_error("Filesystem error: " + std::string(e.what()));
+	} catch (const std::exception& e) {
+		throw std::runtime_error("Error: " + std::string(e.what()));
+	}
+	const std::vector<RT_Vertex> vertices = RT_Object_Importer::fetch_vertices(abs_path);
 
     for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
     	auto* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
     												Vector(vertices[(i+1)].position.x,vertices[(i+1)].position.y,vertices[(i+1)].position.z),
-    												Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z), maroon);
+    												Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z),
+    												pink);
     	objects_scene.push_back(scene_triangle);
 
     }
@@ -374,11 +373,11 @@ void Scene::cubeScene() {
     Logger::log(MessageType::DEBUG, "Objects: " + std::to_string(objects_scene.size()));
 
 
-	auto* scene_plane = new Plane(Y, -1, gray);
+	auto* scene_plane = new Plane(Y, 0, gray);
 	objects_scene.push_back(scene_plane);
 
-	//Vector light_position (3, -300, 0); // für teapot
-	Vector light_position (-7,1,0);
+	//Vector light_position (3, 300, 0); // für teapot
+	Vector light_position (10, 1, 10);
 	auto* scene_light = new Light(light_position, white_light);
 	light_sources.push_back(scene_light);
 }
@@ -387,6 +386,9 @@ void Scene::sphereScene() {
 	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
 	const Vector new_sphere_location (1.75, -0.25, 0);
 	const Vector new_sphere_location2 (-1.75, 0.25, 0);
+
+	cam_pos = Vector(3, 1.5, -4);;
+	look_at = Vector (0, 0, 0);
 
 	const Vector O (0,0,0);
 	const Vector Y (0,1,0);
@@ -405,7 +407,7 @@ void Scene::sphereScene() {
 
 	// scene objects
 	auto* scene_sphere = new Sphere(O, 1, pretty_green);
-	auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, maroon);
+	auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, orange);
 	auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
 	auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
 	//Triangle scene_triangle2 (Vect (-2,0,0), Vect(0,0,-3), Vect(4,0,0), gray);
