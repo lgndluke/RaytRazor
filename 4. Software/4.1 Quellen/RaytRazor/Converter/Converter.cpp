@@ -1,10 +1,10 @@
 #include "Converter.h"
 
-void Converter::convert_to_matrix_indices(Object_Resource& source) {
-    if (!source.matrix_indices_is_empty())
+void Converter::convert_to_matrix_indices(const shared_ptr<Object_Resource>& source) {
+    if (!source->matrix_indices_is_empty())
         return;
 
-    const std::vector<Indice>& input = source.get_indices();
+    const std::vector<Indice>& input = source->get_indices();
 
     // Überprüfen, ob der Input leer ist
     if (input.empty()) {
@@ -33,42 +33,49 @@ void Converter::convert_to_matrix_indices(Object_Resource& source) {
         }
 
         // Setzen der Matrix in `source`
-        source.set_matrix_indices(output);
+        source->set_matrix_indices(output);
     } catch (const std::exception& e) {
         Logger::log(MessageType::SEVERE,
                     "Failed to set matrix indices: " + std::string(e.what()));
     }
 }
 
-void Converter::convert_to_matrix_vertices(Object_Resource& source) {
-    if (!source.matrix_vertices_is_empty())
+void Converter::convert_to_matrix_vertices(shared_ptr<Object_Resource> source) {
+    if (!source->matrix_vertices_is_empty())
         return;
 
-    const std::vector<Vertex>& input = source.get_vertices();
+    const std::vector<Vertex>& input = source->get_vertices();
     Eigen::MatrixXf output(3, input.size());
 
-    for (size_t i = 0; i < input.size(); ++i) {
+    for (size_t i = 0; i < input.size(); i++) {
         output.col(i) << input[i].position.x, input[i].position.y, input[i].position.z;
+        /*
+        Logger::log(MessageType::DEBUG, to_string((output.col(i)).x()));
+        Logger::log(MessageType::DEBUG, to_string((output.col(i)).y()));
+        Logger::log(MessageType::DEBUG, to_string((output.col(i)).z()));
+        */
+
+
     }
 
-    source.set_matrix_vertices(output);
+    source->set_matrix_vertices(output);
 }
 
-void Converter::convert_to_matrix_colors(Material_Resource& source) {
-    if (source.get_materials().empty()) {
+void Converter::convert_to_matrix_colors(shared_ptr<Material_Resource> source) {
+    if (source->get_materials().empty()) {
         Logger::log(MessageType::SEVERE,
                     "Material_Resource has no materials attached");
         return;
     }
 
-    const std::vector<Material>& input = source.get_materials();
+    const std::vector<Material>& input = source->get_materials();
     Eigen::MatrixXf output(3, input.size());
 
     for (size_t i = 0; i < input.size(); ++i) {
         output.col(i) << input[i].diffuse.x, input[i].diffuse.y, input[i].diffuse.z;
     }
 
-    source.set_matrix_colors(output);
+    source->set_matrix_colors(output);
 }
 
 Eigen::Matrix4f Converter::convert_from_GLM_to_EigenMatrix(glm::mat4 source) {
