@@ -9,6 +9,7 @@ class Triangle : public Object {
     public:
         Triangle();
         Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const Color &color_);
+        Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const Vector &normal_, const Color &color_);
         Vector getTriangleNormal();
         double getTriangleDistance();
         Color getColor() override;
@@ -20,6 +21,7 @@ class Triangle : public Object {
         Vector normal;
         double distance{};
         Color color;
+        bool normalsSet;
 };
 
 #endif //RT_TRIANGLE_H
