@@ -21,7 +21,7 @@ void MenuBar_Widget::initialize() {
                     if(Json_Parser::exportToJSON(path_to_DIR, Main_Scene::getComponents(), Main_Scene::getResources()))
                         Logger::log(MessageType::INFO, "Successfully exported to JSON");
                 },
-                []() {  }
+                []() { exit(0); }
             });
 
     // Add-Menü hinzufügen
