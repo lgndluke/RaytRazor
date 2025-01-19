@@ -27,9 +27,9 @@ void Converter::convert_to_matrix_indices(Object_Resource& source) {
 
         // Befüllung der Matrix
         for (size_t i = 0; i < input.size(); ++i) {
-            output(0, i) = static_cast<unsigned int>(input[i].vertexIndices_v[1]); //x vertex pos
-            output(1, i) = static_cast<unsigned int>(input[i].vertexIndices_v[2]); //y vertex pos
-            output(2, i) = static_cast<unsigned int>(input[i].vertexIndices_v[3]); //z vertex pos
+            output(0, i) = static_cast<unsigned int>(input[i].vertexIndices_v[0]); //x vertex pos
+            output(1, i) = static_cast<unsigned int>(input[i].vertexIndices_v[1]); //y vertex pos
+            output(2, i) = static_cast<unsigned int>(input[i].vertexIndices_v[2]); //z vertex pos
         }
 
         // Setzen der Matrix in `source`
@@ -69,4 +69,16 @@ void Converter::convert_to_matrix_colors(Material_Resource& source) {
     }
 
     source.set_matrix_colors(output);
+}
+
+Eigen::Matrix4f Converter::convert_from_GLM_to_EigenMatrix(glm::mat4 source) {
+    Eigen::Matrix4f eigenMatrix;
+
+    for (int row = 0; row < 4; ++row) {
+        for (int col = 0; col < 4; ++col) {
+            eigenMatrix(row, col) = source[col][row]; // glm uses column-major order
+        }
+    }
+
+    return eigenMatrix;
 }

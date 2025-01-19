@@ -38,7 +38,7 @@ class Object_Importer
          * @brief Methode, um den Inhalt des Vektors vertices zu füllen.
          * @return std::vector<Vertex>    Den importieren Inhalt des Vektors vertices.
          */
-    static vector<Vertex> fetch_vertices(const string& path_to_file);
+    static std::pair<std::vector<Indice>,std::vector<Vertex>> fetch_Object(const string& path_to_file);
 
     private:
 
@@ -47,7 +47,7 @@ class Object_Importer
          * @brief Methode, um den Inhalt des Vektors indices zu füllen.
          * @return std::vector<int>         Den importierten Inhalt des Vektors indices.
          */
-        static vector<Indice> fetch_indices(const string& path_to_file);
+        static vector<Indice> create_Indices(std::vector<Vertex> vertices, const string &path_to_file, std::vector<std::tuple<int, int, int>> tupelArr);
 
 
 

@@ -38,6 +38,8 @@ public:
      */
     static void convert_to_matrix_colors(Material_Resource& source);
 
+    static Eigen::Matrix4f convert_from_GLM_to_EigenMatrix(glm::mat4 source);
+
 };
 
 #endif

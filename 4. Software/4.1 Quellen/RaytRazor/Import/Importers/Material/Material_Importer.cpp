@@ -1,6 +1,5 @@
 #include "Material_Importer.h"
-#include <fstream>
-#include <string>
+
 
 std::optional<Material_Resource> Material_Importer::import_Material(const boost::uuids::uuid& uuid,
                                                                     const string& path_to_file)
@@ -8,7 +7,7 @@ std::optional<Material_Resource> Material_Importer::import_Material(const boost:
 
     if (!validate_extension(path_to_file, ".mtl"))
     {
-        Logger::log(MessageType::SEVERE, "Material_Importer::import_Material(): Type miss-match: " + path_to_file);
+        Logger::log(MessageType::SEVERE, "Material_Importer::import_Material(): Type miss-match -> no '.mtl' file: " + path_to_file);
         return std::nullopt;
     }
 
@@ -25,17 +24,6 @@ std::optional<Material_Resource> Material_Importer::import_Material(const boost:
     return return_Resource;
 
 }
-
-/*
-std::vector<int> Material_Importer::fetch_indices(const boost::uuids::uuid& uuid,
-                                                  const string& path_to_file)
-{
-
-    // Index Daten aus .mtl Datei auslesen -> Datei ist bereits geprüft und eine valide .mtl Datei.
-    return vector<int>{};
-
-}
-*/
 
 std::vector<Material> Material_Importer::fetch_materials(const string& path_to_file)
 {
@@ -125,6 +113,10 @@ std::vector<Material> Material_Importer::fetch_materials(const string& path_to_f
         {
             ss >> word;
             materials.at(mtlNR).bump = word;
+        }
+        else if (prefix == "#")
+        {
+            continue;
         }
         else
         {
