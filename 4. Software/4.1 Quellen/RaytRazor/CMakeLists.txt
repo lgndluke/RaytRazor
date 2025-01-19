@@ -113,6 +113,8 @@ set(SOURCE_FILES
         Raytracer/RT_LightSource.h
         Raytracer/RT_Color.cpp
         Raytracer/RT_LightSource.cpp
+        Raytracer/RT_Object_Importer.h
+        Raytracer/RT_Object_Importer.cpp
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
