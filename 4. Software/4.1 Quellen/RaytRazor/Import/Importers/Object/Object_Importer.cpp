@@ -1,4 +1,5 @@
 #include "Object_Importer.h"
+#include <iostream>
 
 std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids::uuid& uuid,
                                                               const string& path_to_file)
@@ -16,15 +17,16 @@ std::optional<Object_Resource> Object_Importer::import_Object(const boost::uuids
         return std::nullopt;
     }
 
-    const vector<Indice> indices = fetch_indices(path_to_file);
-    const vector<Vertex> vertices = fetch_vertices(path_to_file);
+    std::pair<vector<Indice>,vector<Vertex>> result = fetch_Object(path_to_file);
+    std::vector<Indice> indices = result.first;
+    std::vector<Vertex> vertices = result.second;
 
     Object_Resource return_Resource(uuid, path_to_file, indices, vertices);
     return return_Resource;
 
 }
 
-std::vector<Indice> Object_Importer::fetch_indices(const string& path_to_file)
+std::vector<Indice> Object_Importer::create_Indices(std::vector<Vertex> vertices, const string &path_to_file, std::vector<std::tuple<int, int, int>> tupelArr)
 {
     // Index Daten aus .obj Datei auslesen -> Datei ist bereits geprüft und eine valide .obj Datei.
     std::stringstream ss;
@@ -33,55 +35,54 @@ std::vector<Indice> Object_Importer::fetch_indices(const string& path_to_file)
     std::string prefix;
     std::vector<Indice> indices;
     std::string currentMaterial;
+    int counter = 0;
 
-    while (std::getline(objFile, line)) {
+
+    while (std::getline(objFile, line))
+    {
         if(line.empty()) continue;
         ss.clear();
         ss.str(line);
         ss >> prefix;
+        int v,vn,vt;
 
         // extract the material and set it for the following faces
         if (prefix == "usemtl")
-            {
+        {
             std::string currentWord;
             ss >> currentWord;
             currentMaterial = currentWord;
-            }
-        if (prefix == "f") {
+        }
+        if (prefix == "f")
+        {
+            std::vector<int> vertexIndex;
+            std::vector<std::tuple<int, int, int>> indicekeys;
             std::string vertexData;
-            std::vector<int> v;    // For vertex indices
-            std::vector<int> vt;   // For texture coordinate indices
-            std::vector<int> vn;   // For normal vector indices
-            int count = 0;
-
             while (ss >> vertexData) {
                 std::istringstream vertexStream(vertexData);
                 std::string vStr, vtStr, vnStr;
 
-                // Extract V, VT, and VN as strings
                 std::getline(vertexStream, vStr, '/');
                 std::getline(vertexStream, vtStr, '/');
                 std::getline(vertexStream, vnStr, '/');
 
-                // Convert to integers and store in the vectors
-                if (!vStr.empty()) v.push_back(std::stoi(vStr));
-                if (!vtStr.empty()) vt.push_back(std::stoi(vtStr));
-                if (!vnStr.empty()) vn.push_back(std::stoi(vnStr));
+                GLint v_idx = vStr.empty() ? 0 : std::stoi(vStr);
+                GLint vt_idx = vtStr.empty() ? 0 : std::stoi(vtStr);
+                GLint vn_idx = vnStr.empty() ? 0 : std::stoi(vnStr);
 
-                count++;
-
-                if (count >= 3) {
-                    // After parsing three vertices, create the Indice object and push it to the vector
-                    indices.emplace_back(v, vt, vn, currentMaterial);
-                    v.clear();
-                    vt.clear();
-                    vn.clear(); // Clear vectors for next face
-                    count = 0;  // Reset count for the next face
-                }
+                auto key = std::make_tuple(v_idx, vt_idx, vn_idx);
+                indicekeys.push_back(key);
             }
+            for (std::tuple<int, int, int> key : indicekeys)
+            {
+                auto it = std::find(tupelArr.begin(), tupelArr.end(), key);
+                int index = (int)std::distance(tupelArr.begin(), it);
+                vertexIndex.push_back(index);
+            }
+            indices.emplace_back(vertexIndex,currentMaterial);
         }
     }
-
+    printf("hello");
     return indices;
 }
 
@@ -97,7 +98,7 @@ struct IndexHash {
 
 
 
-std::vector<Vertex> Object_Importer::fetch_vertices(const std::string& path_to_file) {
+std::pair<std::vector<Indice>,std::vector<Vertex>> Object_Importer::fetch_Object(const string &path_to_file) {
         std::vector<glm::fvec3> vertex_pos;       // v
         std::vector<glm::fvec2> vertex_texcoord; // vt
         std::vector<glm::fvec3> vertex_normal;   // vn
@@ -108,6 +109,7 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const std::string& path_to_f
 
         std::vector<Vertex> vertices;
         std::unordered_map<std::tuple<GLint, GLint, GLint>, size_t, IndexHash> unique_vertex_map;
+        std::vector<std::tuple<int, int, int>> indiceKeys;
 
         std::stringstream ss;
         std::ifstream objFile(path_to_file);
@@ -116,7 +118,9 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const std::string& path_to_f
 
         if (!objFile.is_open()) {
             //std::cerr << "Datei konnte nicht geöffnet werden: " << path_to_file << std::endl;
-            return vertices;
+            std::vector<Indice> indices;
+            std::pair<std::vector<Indice>,std::vector<Vertex>> results = std::make_pair(indices,vertices);
+            return results;
         }
 
         while (std::getline(objFile, line)) {
@@ -144,9 +148,9 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const std::string& path_to_f
                     std::istringstream vertexStream(vertexData);
                     std::string v, vt, vn;
 
-                    std::getline(vertexStream, v, '/');
-                    std::getline(vertexStream, vt, '/');
-                    std::getline(vertexStream, vn, '/');
+                        std::getline(vertexStream, v, '/');
+                        std::getline(vertexStream, vt, '/');
+                        std::getline(vertexStream, vn, '/');
 
                     GLint v_idx = v.empty() ? 0 : std::stoi(v);
                     GLint vt_idx = vt.empty() ? 0 : std::stoi(vt);
@@ -178,13 +182,16 @@ std::vector<Vertex> Object_Importer::fetch_vertices(const std::string& path_to_f
 
                         // Füge die neue Kombination in die Map ein
                         unique_vertex_map[key] = vertices.size() - 1;
+                        indiceKeys.push_back(key);
                     }
                 }
             }
         }
-
-        return vertices;
+    std::vector<Indice> indices = create_Indices(vertices, path_to_file, indiceKeys);
+    std::pair<std::vector<Indice>,std::vector<Vertex>> results = std::make_pair(indices,vertices);
+    return results;
 }
+
 
 
 
