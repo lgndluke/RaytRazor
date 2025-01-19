@@ -82,7 +82,6 @@ std::vector<Indice> Object_Importer::create_Indices(std::vector<Vertex> vertices
             indices.emplace_back(vertexIndex,currentMaterial);
         }
     }
-    printf("hello");
     return indices;
 }
 
