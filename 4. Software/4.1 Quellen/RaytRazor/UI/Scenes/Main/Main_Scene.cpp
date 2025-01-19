@@ -61,7 +61,6 @@ void Preview_Canvas::drawGL()
         {
             std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
             viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-            std::cout << camera->get_rotation().x << camera->get_rotation().y << camera->get_rotation().z << "\n";
             projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),camera->get_near_clip(), camera->get_far_clip());
         }
     }
@@ -106,6 +105,9 @@ void Preview_Canvas::drawGL()
 
             //convert mvpGLM to eigen mvpEigen
             mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
+            Converter::convert_to_matrix_indices(objRes);
+            Converter::convert_to_matrix_vertices(objRes);
+            Converter::convert_to_matrix_colors(matRes);
 
             //bind indices, colors and vertices
             mShader.uploadIndices(objRes->get_matrix_indices());
