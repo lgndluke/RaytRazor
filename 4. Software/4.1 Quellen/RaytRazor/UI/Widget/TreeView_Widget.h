@@ -15,7 +15,6 @@
 #include <vector>
 #include "ComponentAttributes_Widget.h"
 #include "../utility/Custom_Label.h"
-#include "../utility/CustomVScrollPanel.h"
 
 using namespace std;
 
