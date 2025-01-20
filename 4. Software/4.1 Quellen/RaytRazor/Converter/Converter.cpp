@@ -55,9 +55,9 @@ void Converter::convert_to_matrix_vertices(const shared_ptr<Object_Resource>& ob
             }
         }
     }
+    object_resource->set_vertices(vertices);
 
     Eigen::MatrixXf output(3, vertices.size());
-
     for (size_t i = 0; i < vertices.size(); i++)
     {
         output.col(i) << vertices[i].position.x, vertices[i].position.y, vertices[i].position.z;
