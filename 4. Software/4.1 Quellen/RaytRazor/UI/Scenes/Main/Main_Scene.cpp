@@ -10,6 +10,7 @@
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
 Main_Scene* Main_Scene::instance = nullptr;
+float Main_Scene::scaling = 0.5f;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -251,21 +252,37 @@ void Main_Scene::initialize()
     preview_canvas->setSize({preview_width - 20, preview_height - 80});
 
     const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
-    raytrace_preview_button->setFixedSize({preview_width - 20, 30});
+    raytrace_preview_button->setFixedSize({preview_width / 2 - 10, 30}); // Breite etwas reduzieren für Platz
     preview_window->addChild(raytrace_preview_button);
-    raytrace_preview_button->setCallback([this]
-    {
-        try
-        {
+    raytrace_preview_button->setCallback([this] {
+        try {
             pthread_t SDL_thread;
             pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
-        }
-        catch(...)
-        {
+        } catch (...) {
             // TODO: Error Handling.
         }
     });
     raytrace_preview_button->setPosition({10, preview_height - 40});
+
+    auto *slider = new Slider(preview_window);
+    slider->setValue(0.5f);
+    slider->setFixedSize({preview_width / 2 - 50, 30});
+    preview_window->addChild(slider);
+
+    slider->setPosition(
+        {preview_width / 2 + 50,
+         preview_height - 40});
+
+    slider->setCallback([](const float value) {
+        scaling = value;
+    });
+
+
+    auto scaling_label = new Label(preview_window, "Scaler:");
+    scaling_label->setPosition({preview_width / 2 + 10, preview_height - 35});
+    scaling_label->setFixedSize({50,20});
+    scaling_label->setFontSize(20);
+
 
     performLayout();
 }
@@ -296,8 +313,7 @@ bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers)
                 1.0f,
                 glm::vec3{1, 1, 1}
             );
-
-            Main_Scene::addComponent(uuid, light_comp);
+            addComponent(uuid, light_comp);
             return true;
         }
         if (key == GLFW_KEY_O && modifiers == GLFW_MOD_CONTROL) {
@@ -424,4 +440,9 @@ void Main_Scene::openScene()
     }
 
     instance->performLayout();
+}
+
+float Main_Scene::getScalingFactor()
+{
+    return scaling;
 }

@@ -123,6 +123,8 @@ class Main_Scene final : public Screen
             return resources;
         }
 
+        static float getScalingFactor();
+
         static void setChangesOnComponent(const std::shared_ptr<Base_Component>& component);
 
         static void openScene();
@@ -138,6 +140,7 @@ class Main_Scene final : public Screen
         string window_title;
         bool is_resizeable;
         string scene_path;
+        static float scaling;
 
         //Widgets
         TreeView_Widget* tree_view;
