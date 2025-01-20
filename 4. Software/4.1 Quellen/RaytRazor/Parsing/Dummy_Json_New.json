@@ -1,17 +1,44 @@
 {
   "renderentity": [
     {
-      "name": "Cube 1",
+      "name": "Audi 1",
       "uuid": "63c38701-2a3b-4454-a54d-0242c2d68ee3",
       "Translation": {
         "position": {
-          "x": 0,
+          "x": -40,
           "y": 0,
-          "z": 0
+          "z": -40
         },
         "rotation": {
           "x": 0,
+          "y": 60,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": "4213aa10-c3f3-4505-a257-ea52d89beb6f",
+          "matUUID": "455cb61c-7974-4484-ac7e-85a7a0a58622"
+        }
+      }
+    },
+    {
+      "name": "Audi 2",
+      "uuid": "63c45451-2a3b-4454-a54d-0242c2d68ee3",
+      "Translation": {
+        "position": {
+          "x": 20,
           "y": 0,
+          "z": 20
+        },
+        "rotation": {
+          "x": 0,
+          "y": 60,
           "z": 0
         },
         "scale": {
@@ -79,11 +106,11 @@
       "Translation": {
         "position": {
           "x": 0,
-          "y": 0,
-          "z": 8
+          "y": 65,
+          "z": 100
         },
         "rotation": {
-          "x": 0,
+          "x": -35,
           "y": 0,
           "z": 0
         }
@@ -102,12 +129,12 @@
     {
       "uuid": "4213aa10-c3f3-4505-a257-ea52d89beb6f",
       "type": "obj",
-      "path": "C:\\Users\\lukas\\OneDrive - thu.de\\5. Semester\\Software Projekt\\RaytRazor\\5. Modelle\\5.1 Beispielmodelle\\Test\\cube.obj"
+      "path": "C:\\Users\\lukas\\OneDrive - thu.de\\5. Semester\\Software Projekt\\RaytRazor\\5. Modelle\\5.1 Beispielmodelle\\Test\\resized_audi\\resizedAudi.obj"
     },
     {
       "uuid": "455cb61c-7974-4484-ac7e-85a7a0a58622",
       "type": "mat",
-      "path": "C:\\Users\\lukas\\OneDrive - thu.de\\5. Semester\\Software Projekt\\RaytRazor\\5. Modelle\\5.1 Beispielmodelle\\cars\\cars\\audi\\audi.mtl"
+      "path": "C:\\Users\\lukas\\OneDrive - thu.de\\5. Semester\\Software Projekt\\RaytRazor\\5. Modelle\\5.1 Beispielmodelle\\Test\\resized_audi\\resizedAudi.mtl"
     }
   ],
   "metadata": {
