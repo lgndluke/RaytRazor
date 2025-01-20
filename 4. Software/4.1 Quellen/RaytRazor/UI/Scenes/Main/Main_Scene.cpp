@@ -99,9 +99,6 @@ void Preview_Canvas::drawGL()
             Converter::convert_to_matrix_vertices(objRes);
             Converter::convert_to_matrix_colors(matRes);
 
-            std::cout << "Object Resource Indices:\n" << objRes->get_matrix_indices() << std::endl;
-            std::cout << "Object Resource Vertices:\n" << objRes->get_matrix_vertices() << std::endl;
-
             // Bind Indices, Colors and Vertices
             mShader.uploadIndices(objRes->get_matrix_indices());
             mShader.uploadAttrib("position", objRes->get_matrix_vertices());
