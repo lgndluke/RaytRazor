@@ -17,13 +17,11 @@ using namespace std;
  */
 struct Indice {
     std::vector<int> vertexIndices_v;       // Store vertex indices as vector
-    std::vector<int> textureCoordinates_vt; // Store texture coordinates as vector
-    std::vector<int> vertexNormalIndices_vn;// Store normal indices as vector
     std::string materialName;               // Store the material name
 
     // Constructor to initialize the struct
-    Indice(const std::vector<int>& v, const std::vector<int>& vt, const std::vector<int>& vn, const std::string& matname)
-            : vertexIndices_v(v), textureCoordinates_vt(vt), vertexNormalIndices_vn(vn), materialName(matname) {}
+    Indice(const std::vector<int>& v, const std::string& matname = "default")
+            : vertexIndices_v(v), materialName(matname) {}
 };
 
 struct Vertex {

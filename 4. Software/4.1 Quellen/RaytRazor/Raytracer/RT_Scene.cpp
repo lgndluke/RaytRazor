@@ -5,7 +5,7 @@
 
 Scene::Scene() {
     //cubeScene();
-    sphereScene();
+    //sphereScene();
 }
 
 bool Scene::render(Image &output) {
@@ -95,7 +95,8 @@ void Scene::cubeScene() {
     try
     {
         // TODO HIER WENN MÖGLICH SPÄTER AUF RELATIVEN PFAD ANPASSEN.
-        vertices = Object_Importer::fetch_vertices("C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj");
+        //vertices = Object_Importer::fetch_Object(
+          //      "C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/Test/cube.obj");
     }
     catch (const std::exception &e)
     {

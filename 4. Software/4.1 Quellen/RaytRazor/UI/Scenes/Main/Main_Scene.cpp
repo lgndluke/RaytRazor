@@ -1,12 +1,5 @@
 #include "Main_Scene.h"
 
-
-
-//TODO's:
-// -> Preview_Canvas::drawGL() implementieren.
-// -> Main_Scene::Main_Scene() implementieren.
-// -> Main_Scene::update() implementieren.
-
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
 Main_Scene* Main_Scene::instance = nullptr;
@@ -26,150 +19,137 @@ Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
 
 void Preview_Canvas::drawGL()
 {
-
     static bool initialized = false;
-
-
-    //gesamte scene muss hier vorliegen
-    boost::uuids::uuid uuid = boost::uuids::random_generator()();
-
-    //C:\Users\chris\CLionProjects\RaytRazor\RaytRazor\5. Modelle\5.1 Beispielmodelle\miscellaneous\miscellaneous\teapot\Teapot.obj
-    //C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl
-    Object_Resource OR;
-    Material_Resource MR;
-    try
-    {
-        OR = Object_Importer::import_Object(uuid, "Pfad angeben .obj").value();
-        MR = Material_Importer::import_Material(uuid, "Pfad angeben .mtl").value();
-    }
-    catch (const std::exception& e)
-    {
-        Logger::log(MessageType::SEVERE, "Main_Scene::drawGL: File not found exception:\n" + std::string(e.what()));
-    }
 
     if (!initialized)
     {
-
-        // Initialisierung des Shaders.
         mShader.init(
             "3d_Preview_Shader",
             Vertex_Shader::get_vertex_shader(),
             Fragment_Shader::get_fragment_shader()
         );
         initialized = true;
-
-        // TODO Components in 3D Preview laden.
-
-        // Dummy Daten -> TODO Delete afterwards.
-        // ==================================================================
-
-
-        const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
-        const std::vector<Indice>& indices = OR.get_indices(); // Zugriff auf Indizes
-
-        int size = indices.size();
-        int size2 = vertices.size();
-
-        /*
-        // Ausgabe der Vertices
-        for (int i = 0; i < static_cast<int>(vertices.size()); i++) {
-            const Vertex& vertex = vertices[i];
-
-            if (i >= 0) {
-                std::cout << "Vertex " << i << ": "
-                          << "Position = (" << vertex.position.x << ", "
-                                            << vertex.position.y << ", "
-                                            << vertex.position.z << "), "
-                          << "Color = (" << vertex.color.r << ", "
-                                         << vertex.color.g << ", "
-                                         << vertex.color.b << ")" << std::endl;
-            }
-        }
-
-        // Ausgabe der Indizes
-        if (!indices.empty() && indices.size() % 3 == 0) {
-            for (size_t i = 0; i < indices.size() / 3; i++) {
-                std::cout << "Face " << i << ": "
-                          << "Indices = (" << indices[i * 3] << ", "
-                                           << indices[i * 3 + 1] << ", "
-                                           << indices[i * 3 + 2] << ")" << std::endl;
-            }
-        } else {
-            std::cerr << "Warning: Indices vector is empty or not divisible by 3!" << std::endl;
-        }
-        */
-
-        Converter::convert_to_matrix_colors(MR);
-        Converter::convert_to_matrix_indices(OR);
-        Converter::convert_to_matrix_vertices(OR);
-        // ==================================================================
-
-        printf("");
-
-        // Daten in Shader laden.
-        mShader.bind();
-        mShader.uploadIndices(OR.get_matrix_indices());
-
-        printf("");
-        mShader.uploadAttrib("position", OR.get_matrix_vertices());
-        mShader.uploadAttrib("color", MR.get_matrix_colors());
     }
+
+    //clear screen and setzt hintergrund grau
+    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // Shader binden und Szene rendern
     mShader.bind();
 
-    Eigen::Matrix4f mvp;
-    mvp.setIdentity();
-    glm::mat4 mvpGLM;
-    map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
-    components = Main_Scene::getComponents();
-    map<boost::uuids::uuid, shared_ptr<Base_Resource>> resources;
-    resources = Main_Scene::getResources();
+    Eigen::Matrix4f mvpEigen;
+    mvpEigen.setIdentity();
+    glm::mat4 mvpGLM, projGLMmat, viewGLMmat;
+    auto components = Main_Scene::getComponents();
+    auto resources = Main_Scene::getResources();
     //create projection and view matrix
-    for (auto& pair  : components) {
-
+    for (auto& pair  : components)
+    {
         shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
-
-        //std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
-        //glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-        //glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
-                                                        //camera->get_near_clip(), camera->get_far_clip());
+        if(camera)
+        {
+            std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+            viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
+        }
     }
 
-    //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
+    //iterate through components and bind the new mvpEigen matrix/object -> get model matrix, calculate matrix, bind new mvpEigen, print screen
     //model matrix
+    for (auto& pair : components)
+    {
+        shared_ptr<Render_Component> render = dynamic_pointer_cast<Render_Component>(pair.second);
+        if(render)
+        {
+            // Validate Object Resource
+            auto objIt = resources.find(render->get_object_UUID());
+            if (objIt == resources.end()) {
+                std::cerr << "Object UUID not found in resources!" << std::endl;
+                continue;
+            }
 
-    //convert mvpGLM -> mvp von eigen
+            shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
+            if (!objRes) {
+                std::cerr << "Failed to cast to Object_Resource!" << std::endl;
+                continue;
+            }
 
+            // Validate Material Resource
+            auto matIt = resources.find(render->get_material_UUID());
+            if (matIt == resources.end()) {
+                std::cerr << "Material UUID not found in resources!" << std::endl;
+                continue;
+            }
 
-    mShader.setUniform("modelViewProj", mvp);
+            shared_ptr<Material_Resource> matRes = dynamic_pointer_cast<Material_Resource>(matIt->second);
+            if (!matRes) {
+                std::cerr << "Failed to cast to Material_Resource!" << std::endl;
+                continue;
+            }
+            //calculate Model Matrix in GLM
+            glm::mat4 modelGLMmat = extract_Model_Matrix(render);
 
-    glEnable(GL_DEPTH_TEST);
-    mShader.drawIndexed(GL_TRIANGLES, 0, OR.get_indices().size());
-    glDisable(GL_DEPTH_TEST);
+            //calculate the new mvpGLM matrix
+            mvpGLM = projGLMmat * viewGLMmat * modelGLMmat;
+
+            //convert mvpGLM to eigen mvpEigen
+            mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
+            Converter::convert_to_matrix_indices(objRes);
+            Converter::convert_to_matrix_vertices(objRes, matRes);
+            Converter::convert_to_matrix_colors(objRes, matRes);
+
+            std::cout << "Colors: \n" << matRes->get_matrix_colors() << std::endl;
+
+            // Bind Indices, Colors and Vertices
+            mShader.uploadIndices(objRes->get_matrix_indices());
+            mShader.uploadAttrib("position", objRes->get_matrix_vertices());
+            mShader.uploadAttrib("color", matRes->get_matrix_colors());
+
+            //bind mvpEigen and draw the component
+            mShader.setUniform("modelViewProj", mvpEigen);
+            glEnable(GL_DEPTH_TEST);
+            mShader.drawIndexed(GL_TRIANGLES, 0, objRes->get_matrix_indices().size());
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
 }
 
-glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
 {
-    float rotX = glm::radians(rotation.x);
-    float rotY = glm::radians(rotation.y);
+    const glm::mat4 directions = calculateViewDir(rotation);
 
-    glm::vec3 result;
+    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
+    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
 
-    result.x = cos(rotX) * cos(rotY);
-    result.y = sin(rotX);
-    result.z = cos(rotX) * sin(rotY);
+    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
+    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
 
-    return glm::normalize(result);
+    return { position + forward, up };
 }
 
-std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(glm::vec3 position, glm::vec3 rotation)
+glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
 {
-    glm::vec3 viewDirection = calculateViewDir(rotation);
-    glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
-    glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
+    const float pitch = glm::radians(rotation.x);
+    const float yaw   = glm::radians(rotation.y);
+    const float roll  = glm::radians(rotation.z);
 
-    std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
+    const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+    const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
+    const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
+
+    const glm::mat4 result = rotation_x * rotation_y * rotation_z;
+
+    return result;
+}
+
+glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
+    auto result = glm::mat4(1.0f);
+    result = glm::translate(result, input->get_position());
+    result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
+    result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
+    result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
+    result = glm::scale(result, input->get_scale());
     return result;
 }
 
@@ -273,9 +253,9 @@ void Main_Scene::initialize()
 
             //Path muss angepasst werden wenn sich wd die Struktur ändert
             //todo über explorer setzen :)
-            string path_to_json1 = "C:/Users/chris/CLionProjects/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/JsonParser_DummyFile.json";
+            string path_to_json = "C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/Parsing/Dummy_Json_New.json";
 
-            string path_to_json = openFileDialog();
+            //string path_to_json1 = openFileDialog();
             if (path_to_json.empty()) return;
             if (!isJsonFileAndFixPath(path_to_json)) return;
             if (!exists(path_to_json)) {

@@ -5,25 +5,16 @@
 #include <thread>
 #include <unordered_map>
 
-//TODO
-// - Add: Implement thread safety measures.
-// - Add: Make logger fetch static variables 'logDirectory' and 'logFileName' from program 'config.json' file.
-// - Improve: Error Handling.
-
 using namespace std;
 using namespace std::filesystem;
 
-// Attributes.
+// Attributes:
 
-string Logger::configFileDirectory = "./config/"; //For now.
-string Logger::configFileName = "config.json"; //For now.
-string Logger::configFile = configFileDirectory + configFileName; //For now.
-bool Logger::initialized = false; //For now.
-int Logger::logFileSize = 25 * 1024; //25 KB for now.
-int Logger::logFilesToSave = 3; //For now.
-string Logger::logDirectory = "./logs/"; //For now.
-string Logger::logFileName = "log_0.log"; //For now.
-string Logger::logFile = logDirectory + logFileName; //For now.
+int Logger::logFileSize = 5000 * 1024;
+int Logger::logFilesToSave = 5;
+string Logger::logDirectory = "./logs/";
+string Logger::logFileName = "log_0.log";
+string Logger::logFile = logDirectory + logFileName;
 ofstream Logger::logFileStream;
 
 // Private Methods:
@@ -82,13 +73,6 @@ string Logger::getThreadID()
   stringstream result = {};
   result << this_thread::get_id();
   return result.str();
-
-}
-
-void Logger::loadConfigValues()
-{
-
-    //TODO
 
 }
 
@@ -187,22 +171,6 @@ void Logger::writeLog(const string& logEntry)
 }
 
 // Public Methods:
-
-void Logger::initialize()
-{
-  //TODO implement reading values from config.json file.
-  if (!initialized)
-  {
-    loadConfigValues();
-    initialized = true;
-  }
-
-}
-
-bool Logger::isInitialized()
-{
-  return initialized;
-}
 
 void Logger::log(const MessageType msgType, const string& logMessage)
 {

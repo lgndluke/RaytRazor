@@ -39,17 +39,6 @@ class Logger
         ~Logger() { logFileStream.close(); }
 
         /**
-         * @brief Methode um den Logger zu initialisieren.
-         */
-        static void initialize();
-
-        /**
-         * @brief Methode zur Überprüfung, ob der Logger initialisiert ist.
-         * @returns @code true@endcode, wenn Logger initialisiert ist. Anderenfalls, @code false@endcode.
-         */
-        static bool isInitialized();
-
-        /**
          * @brief Methode um Nachrichten zu loggen.
          * @param msgType Art der Nachricht die geloggt werden soll.
          * @param logMessage Nachricht die geloggt werden soll.
@@ -58,10 +47,6 @@ class Logger
 
     private:
 
-        static string configFileDirectory;
-        static string configFileName;
-        static string configFile;
-        static bool initialized;
         static int logFileSize;
         static int logFilesToSave;
         static string logDirectory;
@@ -70,17 +55,17 @@ class Logger
         static ofstream logFileStream;
 
         /**
-         * //TODO Write method comment.
+         * @brief Methode, welche die älteste log-Datei löscht.
          */
         static void deleteOldestLogFile(const unordered_map<string, file_time_type>& oldLogFiles);
 
         /**
-         * //TODO Write method comment.
+         * @brief Methode um eine einzige Log-Datei zu rotieren.
          */
         static void rotateLogFile(const path& fileToRename, int counter);
 
         /**
-         * //TODO Write method comment.
+         * @brief Methode um die erstellen Log-Dateien zu rotieren.
          */
         static void rotateLogs();
 
@@ -96,11 +81,6 @@ class Logger
          * @returns Thread-ID als String-Wert.
          */
         static string getThreadID();
-
-        /**
-         * @brief Methode um Werte aus der Config-Datei zu laden.
-         */
-        static void loadConfigValues();
 
         /**
          * @brief Methode um Einträge in das Log zu schreiben.

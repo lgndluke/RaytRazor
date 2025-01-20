@@ -71,14 +71,20 @@ class Preview_Canvas final : public GLCanvas
         * @brief zum berechnen der richtung in die das objekt (normalerweise kamera) zeigt
         * @param rotation                Rotations vektor des objektes.
         */
-        glm::vec3 calculateViewDir(glm::vec3 rotation);
+        static glm::mat4 calculateViewDir(glm::vec3 rotation);
 
         /**
         * @brief zum berechnung des punktes auf die die kamera zeigt und den UP vector
         * @param rotation                Rotations vektor des objektes.
         * @param rotation                Position des objektes.
         */
-        std::pair<glm::vec3,glm::vec3> calculateCameraVectors(glm::vec3 position, glm::vec3 rotation);
+        static std::pair<glm::vec3,glm::vec3> calculateCameraVectors(glm::vec3 position, glm::vec3 rotation);
+
+        /**
+        * @brief
+        * @param input                Render_Component dessen Model matrix man braucht.
+        */
+        static glm::mat4 extract_Model_Matrix(const shared_ptr<Render_Component>& input);
 
     private:
         GLShader mShader;
