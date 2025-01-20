@@ -71,7 +71,7 @@ class Preview_Canvas final : public GLCanvas
         * @brief zum berechnen der richtung in die das objekt (normalerweise kamera) zeigt
         * @param rotation                Rotations vektor des objektes.
         */
-        static glm::vec3 calculateViewDir(glm::vec3 rotation);
+        static glm::mat4 calculateViewDir(glm::vec3 rotation);
 
         /**
         * @brief zum berechnung des punktes auf die die kamera zeigt und den UP vector

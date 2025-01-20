@@ -109,6 +109,9 @@ void Preview_Canvas::drawGL()
             Converter::convert_to_matrix_vertices(objRes);
             Converter::convert_to_matrix_colors(matRes);
 
+            std::cout << "Object Resource Indices:\n" << objRes->get_matrix_indices() << std::endl;
+            std::cout << "Object Resource Vertices:\n" << objRes->get_matrix_vertices() << std::endl;
+
             //bind indices, colors and vertices
             mShader.uploadIndices(objRes->get_matrix_indices());
             mShader.uploadAttrib("position", objRes->get_matrix_vertices());
@@ -123,8 +126,21 @@ void Preview_Canvas::drawGL()
     }
 }
 
-glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
+glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
 {
+    const float pitch = glm::radians(rotation.x);
+    const float yaw   = glm::radians(rotation.y);
+    const float roll  = glm::radians(rotation.z);
+
+    const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+    const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
+    const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
+
+    const glm::mat4 result = rotation_x * rotation_y * rotation_z;
+
+    return result;
+
+    /*
     float rotX = glm::radians(rotation.x);
     float rotY = glm::radians(rotation.y);
 
@@ -135,16 +151,29 @@ glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
     result.z = cos(rotX) * sin(rotY);
 
     return glm::normalize(result);
+    */
 }
 
-std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(glm::vec3 position, glm::vec3 rotation)
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
 {
+    const glm::mat4 directions = calculateViewDir(rotation);
+
+    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
+    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
+
+    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
+    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
+
+    return { position + forward, up };
+
+    /*
     glm::vec3 viewDirection = calculateViewDir(rotation);
     glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
     glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
 
     std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
     return result;
+    */
 }
 
 glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
@@ -257,7 +286,7 @@ void Main_Scene::initialize()
 
             //Path muss angepasst werden wenn sich wd die Struktur ändert
             //todo über explorer setzen :)
-            string path_to_json = "C:/Users/dwels/CLionProjects/RaytRazor/4. Software/4.1 Quellen/RaytRazor/Parsing/JsonParser_DummyFile.json";
+            string path_to_json = "C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/Parsing/Dummy_Json_New.json";
 
             //string path_to_json1 = openFileDialog();
             if (path_to_json.empty()) return;
