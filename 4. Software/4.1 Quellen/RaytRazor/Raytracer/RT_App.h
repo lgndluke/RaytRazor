@@ -42,7 +42,7 @@ public:
 
 private:
     Image m_image;
-    Scene m_scene;
+    RT_Scene m_scene;
     bool isRunning;
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;

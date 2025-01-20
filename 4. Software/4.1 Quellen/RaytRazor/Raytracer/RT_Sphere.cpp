@@ -3,9 +3,9 @@
 Sphere::Sphere() {
     center = Vector(0, 0, 0);
     radius = 1.0;
-    color = Color(0.5, 0.5, 0.5, 0);
+    color = RT_Color(0.5, 0.5, 0.5, 0);
 }
-Sphere::Sphere(const Vector &_center, const double _radius, const Color &_color) {
+Sphere::Sphere(const Vector &_center, const double _radius, const RT_Color &_color) {
     center = _center;
     radius = _radius;
     color = _color;
@@ -13,7 +13,7 @@ Sphere::Sphere(const Vector &_center, const double _radius, const Color &_color)
 
 Vector Sphere::getCenter() const {return center;}
 double Sphere::getRadius() const {return radius;}
-Color Sphere::getColor() {return color;}
+RT_Color Sphere::getColor() {return color;}
 
 Vector Sphere::getNormalAt(Vector point) {
     const Vector normal_Vect = point.add(center.negative()).normalize();

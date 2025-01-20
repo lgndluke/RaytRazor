@@ -7,20 +7,20 @@
 
 // TODO: Kommentare schreiben
 
-class Plane : public Object {
+class Plane : public RT_Object {
     public:
         Plane();
-        Plane(const Vector &_normal, double _distance, const Color &_color);
+        Plane(const Vector &_normal, double _distance, const RT_Color &_color);
         [[nodiscard]] Vector getPlaneNormal() const;
         [[nodiscard]] double getPlaneDistance() const;
-        Color getColor() override;
+        RT_Color getColor() override;
 
         Vector getNormalAt(Vector point) override;
         double hit(Ray ray) override;
     private:
         Vector normal;
         double distance;
-        Color color;
+        RT_Color color;
 };
 
 #endif //PLANE_H

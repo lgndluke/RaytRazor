@@ -23,14 +23,15 @@ struct RGBType {
     double b;
 };
 
-class Scene {
+class RT_Scene {
     public:
-        Scene();
+        RT_Scene();
         static bool render(Image& output);
         static void cubeScene();
         static void sphereScene();
+        static void previewScene();
 
-        static Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
+        static RT_Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<RT_Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
         static void savebmp (const char *filename, int w, int h, int dpi, const RGBType *data);
 };
 

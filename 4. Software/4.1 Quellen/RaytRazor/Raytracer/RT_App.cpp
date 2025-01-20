@@ -14,18 +14,19 @@ bool CApp::OnInit()
         return false;
     }
 
-    pWindow = SDL_CreateWindow("RayTraced", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 720, 720, SDL_WINDOW_SHOWN);
+    pWindow = SDL_CreateWindow("RayTraced", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 
     if (pWindow != nullptr)
     {
+        double downSizeFactor = 0.5;
         // Initialise the renderer.
         pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
-        m_image.Initialize(720, 720, pRenderer);
+        m_image.Initialize(1280*downSizeFactor, 720*downSizeFactor, pRenderer);
 
         SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
         SDL_RenderClear(pRenderer);
 
-        Scene::render(m_image);
+        RT_Scene::render(m_image);
 
         m_image.Display();
 

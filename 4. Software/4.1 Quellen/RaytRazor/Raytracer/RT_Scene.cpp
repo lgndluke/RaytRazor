@@ -1,11 +1,13 @@
+#include "../UI/Scenes/Main/Main_Scene.h"
 #include "RT_Scene.h"
 
-Scene::Scene() {
-	cubeScene();
+RT_Scene::RT_Scene() {
+	//cubeScene();
 	//sphereScene();
+	previewScene();
 }
 
-void Scene::savebmp (const char *filename, const int w, const int h, const int dpi, const RGBType *data) {
+void RT_Scene::savebmp (const char *filename, const int w, const int h, const int dpi, const RGBType *data) {
 	FILE *f;
 	const int k = w*h;
 	const int s = 4*k;
@@ -104,12 +106,12 @@ int winningObjectIndex(const vector<double> &object_intersections) {
 
 	}
 
-Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight) {
+RT_Color RT_Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<RT_Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight) {
 
-	Color winning_object_color = scene_objects.at(index_of_winning_object)->getColor();
+	RT_Color winning_object_color = scene_objects.at(index_of_winning_object)->getColor();
 	Vector winning_object_normal = scene_objects.at(index_of_winning_object)->getNormalAt(intersection_position);
 
-	Color final_color = winning_object_color.colorScalar(ambientlight);
+	RT_Color final_color = winning_object_color.colorScalar(ambientlight);
 
 	if (winning_object_color.getAlpha() > 0 && winning_object_color.getAlpha() <= 1) {
 		double dot1 = winning_object_normal.dot(intersecting_ray_direction.negative());
@@ -137,7 +139,7 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 				Vector reflection_intersection_position = intersection_position.add(reflection_direction.multiply(reflection_intersections.at(index_of_winning_object_with_reflection)));
 				Vector reflection_intersection_ray_direction = reflection_direction;
 
-				Color reflection_intersection_color = getColorAt(reflection_intersection_position, reflection_intersection_ray_direction, scene_objects, index_of_winning_object_with_reflection, light_sources, accuracy, ambientlight);
+				RT_Color reflection_intersection_color = getColorAt(reflection_intersection_position, reflection_intersection_ray_direction, scene_objects, index_of_winning_object_with_reflection, light_sources, accuracy, ambientlight);
 				final_color = final_color.addColor(reflection_intersection_color.colorScalar(winning_object_color.getAlpha()));
 			}
 		}
@@ -197,19 +199,19 @@ Color Scene::getColorAt(Vector intersection_position, Vector intersecting_ray_di
 
 int thisone;
 vector<RT_LightSource*> light_sources;
-vector<Object*> objects_scene;
+vector<RT_Object*> objects_scene;
 Camera camera_rt;
 Vector cam_pos;
 Vector look_at;
 
 
-bool Scene::render(Image &output) {
+bool RT_Scene::render(Image &output) {
 	clock_t t1, t2;
 	t1 = clock();
 
 	int dpi = 72;
-	int width = 720;
-	int height = 720;
+	int width = output.getXSize();
+	int height = output.getYSize();
 	int n = width*height;
 	auto *pixels = new RGBType[n];
 
@@ -282,7 +284,7 @@ bool Scene::render(Image &output) {
 							Vector intersection_position = cam_ray_origin.add(cam_ray_direction.multiply(intersections.at(index_of_winning_object)));
 							Vector intersecting_ray_direction = cam_ray_direction;
 
-							Color intersection_color = getColorAt(intersection_position, intersecting_ray_direction, objects_scene, index_of_winning_object, light_sources, accuracy, ambientlight);
+							RT_Color intersection_color = getColorAt(intersection_position, intersecting_ray_direction, objects_scene, index_of_winning_object, light_sources, accuracy, ambientlight);
 
 							temp_red[aa_index] = intersection_color.getRed();
 							temp_green[aa_index] = intersection_color.getGreen();
@@ -327,24 +329,24 @@ bool Scene::render(Image &output) {
 	float diff = (static_cast<float>(t2) - static_cast<float>(t1))/1000;
 
 	Logger::log(MessageType::INFO, "Done in: " + std::to_string(diff) + " seconds!");
-	for (Object* obj : objects_scene) { delete obj; }
+	for (RT_Object* obj : objects_scene) { delete obj; }
 	objects_scene.clear();
 
 	return true;
 }
 
-void Scene::cubeScene() {
+void RT_Scene::cubeScene() {
 	Logger::log(MessageType::INFO, "Rendering the .obj scene...!");
 	const Vector Y (0,1,0);
-	const Color white_light (1.0, 1.0, 1.0, 0);
-	const Color gray (0.5, 0.5, 0.5, 0.5);
-	const Color maroon (1.0, 0.0, 0.0, 0.3);
-	const Color pink (1.0, 0.0, 1.0, 0.3);
+	const RT_Color white_light (1.0, 1.0, 1.0, 0);
+	const RT_Color gray (0.5, 0.5, 0.5, 0.5);
+	const RT_Color maroon (1.0, 0.0, 0.0, 0.3);
+	const RT_Color pink (1.0, 0.0, 1.0, 0.3);
 
 	cam_pos = Vector (3, 1.5, -4);
 	look_at = Vector (0, 0, 0);
 	std::string abs_path = "";
-	std::string filename = "suzanne.obj";
+	std::string filename = "resizedTeapot.obj";
 	try {
 		path relative_path = "../../../../5. Modelle/5.1 Beispielmodelle/Test/" + filename;
 		path absolute_path = absolute(relative_path);
@@ -382,7 +384,7 @@ void Scene::cubeScene() {
 	light_sources.push_back(scene_light);
 }
 
-void Scene::sphereScene() {
+void RT_Scene::sphereScene() {
 	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
 	const Vector new_sphere_location (1.75, -0.25, 0);
 	const Vector new_sphere_location2 (-1.75, 0.25, 0);
@@ -394,12 +396,12 @@ void Scene::sphereScene() {
 	const Vector Y (0,1,0);
 
 
-	const Color white_light (1.0, 1.0, 1.0, 0);
-	const Color pretty_green (0.5, 1.0, 0.5, 0.3);
-	const Color maroon (0.5, 0.25, 0.25, 0.3);
-	const Color orange (1.0, 0.25, 0.25, 0.3);
-	const Color tile_floor (0.5, 0.5, 0.5, 0.5);
-	const Color gray (0.5, 0.5, 0.5, 0.3);
+	const RT_Color white_light (1.0, 1.0, 1.0, 0);
+	const RT_Color pretty_green (0.5, 1.0, 0.5, 0.3);
+	const RT_Color maroon (0.5, 0.25, 0.25, 0.3);
+	const RT_Color orange (1.0, 0.25, 0.25, 0.3);
+	const RT_Color tile_floor (0.5, 0.5, 0.5, 0.5);
+	const RT_Color gray (0.5, 0.5, 0.5, 0.3);
 
 	const Vector light_position (-7,10,-10);
 	auto* scene_light = new Light(light_position, white_light);
@@ -420,4 +422,42 @@ void Scene::sphereScene() {
 	//scene_objects.push_back(dynamic_cast<Object*>(&scene_triangle2));
 }
 
+void RT_Scene::previewScene() {
+	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
+	const Vector new_sphere_location (1.75, -0.25, 0);
+	const Vector new_sphere_location2 (-1.75, 0.25, 0);
+
+	auto components = Main_Scene::getComponents();
+
+	cam_pos = Vector(3, 1.5, -4);;
+	look_at = Vector (0, 0, 0);
+
+	const Vector O (0,0,0);
+	const Vector Y (0,1,0);
+
+
+	const RT_Color white_light (1.0, 1.0, 1.0, 0);
+	const RT_Color pretty_green (0.5, 1.0, 0.5, 0.3);
+	const RT_Color maroon (0.5, 0.25, 0.25, 0.3);
+	const RT_Color orange (1.0, 0.25, 0.25, 0.3);
+	const RT_Color tile_floor (0.5, 0.5, 0.5, 0.5);
+	const RT_Color gray (0.5, 0.5, 0.5, 0.3);
+
+	const Vector light_position (-7,10,-10);
+	auto* scene_light = new Light(light_position, white_light);
+	light_sources.push_back(scene_light);
+
+	// scene objects
+	auto* scene_sphere = new Sphere(O, 1, pretty_green);
+	auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, orange);
+	auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
+	auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
+	//Triangle scene_triangle2 (Vect (-2,0,0), Vect(0,0,-3), Vect(4,0,0), gray);
+	auto* scene_plane = new Plane(Y, -1, tile_floor);
+	objects_scene.push_back(scene_sphere);
+	objects_scene.push_back(scene_sphere2);
+	objects_scene.push_back(scene_sphere3);
+	objects_scene.push_back(scene_plane);
+	objects_scene.push_back(scene_triangle);
+}
 

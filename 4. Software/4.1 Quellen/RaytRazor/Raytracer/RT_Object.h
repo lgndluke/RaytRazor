@@ -7,12 +7,12 @@
 
 // TODO: Kommentare schreiben
 
-class Object {
+class RT_Object {
     public:
-    virtual ~Object() = default;
+    virtual ~RT_Object() = default;
 
-    Object();
-    virtual Color getColor();
+    RT_Object();
+    virtual RT_Color getColor();
     virtual Vector getNormalAt(Vector point);
     virtual double hit(Ray ray);
 };

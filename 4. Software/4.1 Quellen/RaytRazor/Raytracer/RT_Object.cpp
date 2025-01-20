@@ -1,13 +1,13 @@
 #include "RT_Object.h"
 
 
-Object::Object()= default;
+RT_Object::RT_Object()= default;
 
-Color Object::getColor(){return {0.0, 0.0, 0.0, 0};}
+RT_Color RT_Object::getColor(){return {0.0, 0.0, 0.0, 0};}
 
-Vector Object::getNormalAt(Vector point) { return {0, 0, 0}; }
+Vector RT_Object::getNormalAt(Vector point) { return {0, 0, 0}; }
 
-double Object::hit(Ray ray) { return 0; }
+double RT_Object::hit(Ray ray) { return 0; }
 
 
 

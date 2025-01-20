@@ -11,7 +11,7 @@ public:
     RT_LightSource();
 
     virtual Vector getLightPosition();
-    virtual Color getLightColor();
+    virtual RT_Color getLightColor();
 };
 
 #endif //RT_SOURCE_H

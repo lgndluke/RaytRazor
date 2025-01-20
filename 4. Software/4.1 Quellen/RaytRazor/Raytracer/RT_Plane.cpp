@@ -3,10 +3,10 @@
 Plane::Plane() {
     normal = Vector(1, 0, 0);
     distance = 0;
-    color = Color(0.5, 0.5, 0.5, 0);
+    color = RT_Color(0.5, 0.5, 0.5, 0);
 }
 
-Plane::Plane(const Vector &_normal, const double _distance, const Color &_color) {
+Plane::Plane(const Vector &_normal, const double _distance, const RT_Color &_color) {
     normal = _normal;
     distance = _distance;
     color = _color;
@@ -14,7 +14,7 @@ Plane::Plane(const Vector &_normal, const double _distance, const Color &_color)
 
 Vector Plane::getPlaneNormal() const {return normal;}
 double Plane::getPlaneDistance() const {return distance;}
-Color Plane::getColor() {return color;}
+RT_Color Plane::getColor() {return color;}
 
 Vector Plane::getNormalAt(Vector point) {return normal;}
 

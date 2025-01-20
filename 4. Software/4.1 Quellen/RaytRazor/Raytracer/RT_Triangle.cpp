@@ -4,12 +4,12 @@ Triangle::Triangle() {
     v1 = Vector(1, 0, 0);
     v2 = Vector(0, 1, 0);
     v3 = Vector(0, 0, 1);
-    color = Color(0.5, 0.5, 0.5, 0);
+    color = RT_Color(0.5, 0.5, 0.5, 0);
     normal = Vector(0.0, 0.0, 0.0);
     normalsSet = false;
 }
 
-Triangle::Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const Color &color_) {
+Triangle::Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const RT_Color &color_) {
     v1 = v1_;
     v2 = v2_;
     v3 = v3_;
@@ -18,7 +18,7 @@ Triangle::Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, cons
     normalsSet = false;
 }
 
-Triangle::Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const Vector &normal_, const Color &color_) {
+Triangle::Triangle(const Vector &v1_, const Vector &v2_, const Vector &v3_, const Vector &normal_, const RT_Color &color_) {
     v1 = v1_;
     v2 = v2_;
     v3 = v3_;
@@ -44,7 +44,7 @@ double Triangle::getTriangleDistance() {
     return distance;
 }
 
-Color Triangle::getColor() { return color; }
+RT_Color Triangle::getColor() { return color; }
 
 Vector Triangle::getNormalAt(Vector point) {
     normal = getTriangleNormal();

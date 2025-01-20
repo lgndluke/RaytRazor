@@ -10,14 +10,14 @@
 class Light : public RT_LightSource{
     public:
         Light();
-        Light(const Vector &_position, const Color &_color);
+        Light(const Vector &_position, const RT_Color &_color);
 
         Vector getLightPosition() override;
-        Color getLightColor() override;
+        RT_Color getLightColor() override;
 
     private:
         Vector position;
-        Color color;
+        RT_Color color;
 };
 
 

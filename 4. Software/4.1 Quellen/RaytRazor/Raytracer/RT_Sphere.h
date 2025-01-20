@@ -8,14 +8,14 @@
 
 // TODO: Kommentare schreiben
 
-class Sphere : public Object {
+class Sphere : public RT_Object {
     public:
     Sphere();
-    Sphere(const Vector &_center, double _radius, const Color &_color);
+    Sphere(const Vector &_center, double _radius, const RT_Color &_color);
 
     [[nodiscard]] Vector getCenter() const;
     [[nodiscard]] double getRadius() const;
-    Color getColor() override;
+    RT_Color getColor() override;
     Vector getNormalAt(Vector point) override;
     double hit(Ray ray) override;
 
@@ -23,7 +23,7 @@ class Sphere : public Object {
     private:
         Vector center;
         double radius;
-        Color color;
+        RT_Color color;
 };
 
 
