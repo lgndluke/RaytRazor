@@ -28,15 +28,17 @@ public:
 
     /**
      * @brief Methode, um die Vertices-Matrix einer Object_Resource zu füllen.
-     * @param source                Die betreffende Object_Resource.
+     * @param object_resource       Die betreffende Object_Resource.
+     * @param material_resource     Die betreffende Material_Resource.
      */
-    static void convert_to_matrix_vertices(shared_ptr<Object_Resource> source);
+    static void convert_to_matrix_vertices(const shared_ptr<Object_Resource>& object_resource, const shared_ptr<Material_Resource>& material_resource);
 
     /**
      * @brief Methode, um die Colors-Matrix einer Object_Resource zu füllen.
-     * @param source                Die betreffende Object_Resource.
+     * @param object_resource       Die betreffende Object_Resource.
+     * @param material_resource     Die betreffende Material_Resource.
      */
-    static void convert_to_matrix_colors(shared_ptr<Material_Resource> source);
+    static void convert_to_matrix_colors(const shared_ptr<Object_Resource>& object_resource, const shared_ptr<Material_Resource>& material_resource);
 
     static Eigen::Matrix4f convert_from_GLM_to_EigenMatrix(glm::mat4 source);
 
