@@ -96,8 +96,10 @@ void Preview_Canvas::drawGL()
             //convert mvpGLM to eigen mvpEigen
             mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
             Converter::convert_to_matrix_indices(objRes);
-            Converter::convert_to_matrix_vertices(objRes);
-            Converter::convert_to_matrix_colors(matRes);
+            Converter::convert_to_matrix_vertices(objRes, matRes);
+            Converter::convert_to_matrix_colors(objRes, matRes);
+
+            //std::cout << "Colors: \n" << matRes->get_matrix_colors() << std::endl;
 
             // Bind Indices, Colors and Vertices
             mShader.uploadIndices(objRes->get_matrix_indices());
