@@ -102,9 +102,9 @@ void Preview_Canvas::drawGL()
         }
         */
 
-        Converter::convert_to_matrix_colors(MR);
-        Converter::convert_to_matrix_indices(OR);
-        Converter::convert_to_matrix_vertices(OR);
+        //Converter::convert_to_matrix_colors(MR);
+        //Converter::convert_to_matrix_indices(OR);
+        //Converter::convert_to_matrix_vertices(OR);
         // ==================================================================
 
         printf("");
@@ -152,27 +152,41 @@ void Preview_Canvas::drawGL()
     glDisable(GL_DEPTH_TEST);
 }
 
-glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
+glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
 {
-    float rotX = glm::radians(rotation.x);
-    float rotY = glm::radians(rotation.y);
+    const float pitch = glm::radians(rotation.x);
+    const float yaw   = glm::radians(rotation.y);
+    const float roll  = glm::radians(rotation.z);
 
-    glm::vec3 result;
+    const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+    const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
+    const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
 
-    result.x = cos(rotX) * cos(rotY);
-    result.y = sin(rotX);
-    result.z = cos(rotX) * sin(rotY);
+    const glm::mat4 result = rotation_x * rotation_y * rotation_z;
 
-    return glm::normalize(result);
+    return result;
 }
 
-std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(glm::vec3 position, glm::vec3 rotation)
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
 {
-    glm::vec3 viewDirection = calculateViewDir(rotation);
-    glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
-    glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
+    const glm::mat4 directions = calculateViewDir(rotation);
 
-    std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
+    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
+    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
+
+    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
+    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
+
+    return { position + forward, up };
+}
+
+glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
+    auto result = glm::mat4(1.0f);
+    result = glm::translate(result, input->get_position());
+    result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
+    result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
+    result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
+    result = glm::scale(result, input->get_scale());
     return result;
 }
 
