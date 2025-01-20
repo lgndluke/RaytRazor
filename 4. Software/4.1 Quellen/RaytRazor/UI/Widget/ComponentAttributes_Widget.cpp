@@ -106,6 +106,14 @@ void ComponentAttributes_Widget::populate_widget() {
     auto *materialValue = new TextBox(this, "-");
     materialValue->setEditable(false); // UUID bleibt unveränderlich
     dynamicWidgets.push_back(materialValue);
+
+    for(Widget* widget : dynamicWidgets)
+    {
+        if(auto txtBox = dynamic_cast<TextBox*>(widget))
+        {
+            txtBox->setEditable(false);
+        }
+    }
 }
 
 
