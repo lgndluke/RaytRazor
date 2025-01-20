@@ -157,7 +157,6 @@ std::pair<std::vector<Indice>,std::vector<Vertex>> Object_Importer::fetch_Object
                 vertex_idx.push_back(index);
             }
 
-            printf("");
             indices.emplace_back(vertex_idx, current_material);
 
         }
@@ -165,7 +164,6 @@ std::pair<std::vector<Indice>,std::vector<Vertex>> Object_Importer::fetch_Object
 
     std::pair<std::vector<Indice>,std::vector<Vertex>> results = std::make_pair(indices,vertices);
 
-    printf("");
     return results;
 
 }
