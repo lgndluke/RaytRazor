@@ -54,8 +54,6 @@ void Converter::convert_to_matrix_vertices(shared_ptr<Object_Resource> source) {
         Logger::log(MessageType::DEBUG, to_string((output.col(i)).y()));
         Logger::log(MessageType::DEBUG, to_string((output.col(i)).z()));
         */
-
-
     }
 
     source->set_matrix_vertices(output);
