@@ -5,13 +5,13 @@ Image::Image()
 {
 	m_xSize = 0;
 	m_ySize = 0;
-	m_pTexture = NULL;
+	m_pTexture = nullptr;
 }
 
 // The destructor.
 Image::~Image()
 {
-	if (m_pTexture != NULL)
+	if (m_pTexture != nullptr)
 		SDL_DestroyTexture(m_pTexture);
 }
 
@@ -42,11 +42,11 @@ void Image::SetPixel(const int x, const int y, const double red, const double gr
 	m_bChannel.at(x).at(y) = blue;
 }
 
-int Image::getXSize() {
+int Image::getXSize() const {
 	return m_xSize;
 }
 
-int Image::getYSize() {
+int Image::getYSize() const {
 	return m_ySize;
 }
 
@@ -55,7 +55,7 @@ void Image::Display()
 {
 	computeMaxValues();
 	// Allocate memory for a pixel buffer.
-	Uint32 *tempPixels = new Uint32[m_xSize * m_ySize];
+	auto *tempPixels = new Uint32[m_xSize * m_ySize];
 
 	// Clear the pixel buffer.
 	memset(tempPixels, 0, m_xSize * m_ySize * sizeof(Uint32));
@@ -69,7 +69,7 @@ void Image::Display()
 	}
 
 	// Update the texture with the pixel buffer.
-	SDL_UpdateTexture(m_pTexture, NULL, tempPixels, m_xSize * sizeof(Uint32));
+	SDL_UpdateTexture(m_pTexture, nullptr, tempPixels, m_xSize * sizeof(Uint32));
 
 	// Destroy the pixel buffer.
 	delete[] tempPixels;
@@ -103,7 +103,7 @@ void Image::InitTexture()
 	#endif
 
 	// Delete any previously created texture before we create a new one.
-	if (m_pTexture != NULL)
+	if (m_pTexture != nullptr)
 		SDL_DestroyTexture(m_pTexture);
 
 	// Create the texture that will store the image.
@@ -113,12 +113,12 @@ void Image::InitTexture()
 }
 
 // Function to convert color to Uint32
-Uint32 Image::ConvertColor(const double red, const double green, const double blue)
+Uint32 Image::ConvertColor(const double red, const double green, const double blue) const
 {
 	// Convert colours to unsigned char.
-	unsigned char r = static_cast<unsigned char>((red/m_overallMax) * 255.0);
-	unsigned char g = static_cast<unsigned char>((green/m_overallMax) * 255.0);
-	unsigned char b = static_cast<unsigned char>((blue/m_overallMax) * 255.0);
+	auto r = static_cast<unsigned char>((red/m_overallMax) * 255.0);
+	auto g = static_cast<unsigned char>((green/m_overallMax) * 255.0);
+	auto b = static_cast<unsigned char>((blue/m_overallMax) * 255.0);
 
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		Uint32 pixelColor = (r << 24) + (g << 16) + (b << 8) + 255;

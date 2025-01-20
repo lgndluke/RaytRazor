@@ -3,6 +3,7 @@
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
 Main_Scene* Main_Scene::instance = nullptr;
+float Main_Scene::scaling = 0.5f;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -99,8 +100,6 @@ void Preview_Canvas::drawGL()
             Converter::convert_to_matrix_vertices(objRes, matRes);
             Converter::convert_to_matrix_colors(objRes, matRes);
 
-            std::cout << "Colors: \n" << matRes->get_matrix_colors() << std::endl;
-
             // Bind Indices, Colors and Vertices
             mShader.uploadIndices(objRes->get_matrix_indices());
             mShader.uploadAttrib("position", objRes->get_matrix_vertices());
@@ -188,7 +187,7 @@ void Main_Scene::initialize()
 
     const int component_tree_position_x     = preview_width;
     constexpr int component_tree_position_y = 0;
-    const int component_tree_width          = this->window_width * 0.33f;
+    const int component_tree_width          = this->window_width * 0.32f;
     const int component_tree_height         = this->window_height * 0.4f;
 
     const int component_attributes_position_x = preview_width;
@@ -205,6 +204,7 @@ void Main_Scene::initialize()
 
     const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
+    component_tree->setSize(Vector2i(component_tree_width, component_tree_height));
 
     // Setze ein Layout für das Fenster
     component_tree->setLayout(new BoxLayout(
@@ -216,6 +216,7 @@ void Main_Scene::initialize()
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
     attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget->showAttributesOfComponent();
 
     tree_view = new TreeView_Widget(component_tree, attributesWidget);
     tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
@@ -227,89 +228,37 @@ void Main_Scene::initialize()
     preview_canvas->setSize({preview_width - 20, preview_height - 80});
 
     const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
+    raytrace_preview_button->setFixedSize({preview_width / 2 - 10, 30}); // Breite etwas reduzieren für Platz
     preview_window->addChild(raytrace_preview_button);
-    raytrace_preview_button->setCallback([this]
-    {
-        try
-        {
+    raytrace_preview_button->setCallback([this] {
+        try {
             pthread_t SDL_thread;
             pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
-        }
-        catch(...)
-        {
+        } catch (...) {
             // TODO: Error Handling.
         }
     });
-    raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
-    raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
+    raytrace_preview_button->setPosition({10, preview_height - 40});
 
-    const auto load_json_button = new Button(preview_window, "Import Scene");
-    preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this]
-    {
-        try
-        {
-            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+    auto *slider = new Slider(preview_window);
+    slider->setValue(0.5f);
+    slider->setFixedSize({preview_width / 2 - 50, 30});
+    preview_window->addChild(slider);
 
-            //Path muss angepasst werden wenn sich wd die Struktur ändert
-            //todo über explorer setzen :)
-            string path_to_json = "C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/Parsing/Dummy_Json_New.json";
+    slider->setPosition(
+        {preview_width / 2 + 50,
+         preview_height - 40});
 
-            //string path_to_json1 = openFileDialog();
-            if (path_to_json.empty()) return;
-            if (!isJsonFileAndFixPath(path_to_json)) return;
-            if (!exists(path_to_json)) {
-                std::cerr << "File does not exist: " << path_to_json << std::endl;
-                return;
-            }
-
-
-            path_to_json = absolute(path_to_json).string();
-
-            printf("");
-
-
-            //FileSelector file_Selector();
-            //string path_to_json = file_Selector().get_input_path();
-
-            components.clear();
-            resources.clear();
-
-            Json_Parser::parseJSON(path_to_json, components, resources);
-
-            printf("");
-
-            tree_view->clear();
-            tree_view->addNode("3D-Szene");
-
-            if (components.empty()) {
-                printf("No components to display.\n");
-                return;
-            }
-
-            // Zeige die Attribute des ersten Elements an
-            bool isFirstComponent = true;
-
-            for (const auto& [key, component] : components) {
-                if (isFirstComponent) {
-                    attributesWidget->showAttributesOfComponent(component);
-                    isFirstComponent = false;
-                }
-
-                // Füge den Knoten zum Baum hinzu
-                tree_view->addNode(component->get_name(), "3D-Szene");
-            }
-
-            performLayout();
-
-        }
-        catch(...)
-        {
-            // TODO: Error Handling.
-        }
+    slider->setCallback([](const float value) {
+        scaling = value;
     });
-    load_json_button->setSize({(preview_width / 2) - 20, 30});
-    load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
+
+
+    auto scaling_label = new Label(preview_window, "Scaler:");
+    scaling_label->setPosition({preview_width / 2 + 10, preview_height - 35});
+    scaling_label->setFixedSize({50,20});
+    scaling_label->setFontSize(20);
+
 
     performLayout();
 }
@@ -325,6 +274,45 @@ void Main_Scene::update()
 {
     performLayout();
 }
+
+bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        if (key == GLFW_KEY_L && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Save (Ctrl+S)");
+            boost::uuids::uuid uuid = boost::uuids::random_generator()();
+            auto light_comp = std::make_shared<Light_Component>(
+                uuid,
+                "Light_Added",
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                1.0f,
+                glm::vec3{1, 1, 1}
+            );
+            addComponent(uuid, light_comp);
+            return true;
+        }
+        if (key == GLFW_KEY_O && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Open (Ctrl+O)");
+            openScene();
+            return true;
+        }
+        if (key == GLFW_KEY_Q && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            return true;
+        }
+        if (key == GLFW_KEY_R && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            pthread_t SDL_thread;
+            pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
+            return true;
+        }
+    }
+    return Screen::keyboardEvent(key, scancode, action, modifiers);
+}
+
 
 std::string Main_Scene::openFileDialog() {
     char filePath[MAX_PATH] = {0};
@@ -373,17 +361,64 @@ bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
 }
 
 void Main_Scene::updateTreeView() const {
-    bool isFirstComponent = true;
+    tree_view->clear();
+    //tree_view->addNode("3D-Szene");
+    instance->tree_view->addParent("3D-Szene");
 
     for (const auto& [key, component] : components) {
-        if (isFirstComponent) {
-            attributesWidget->showAttributesOfComponent(component);
-            isFirstComponent = false;
-        }
-
-        // Füge den Knoten zum Baum hinzu
-        tree_view->addNode(component->get_name(), "3D-Szene");
+        tree_view->addNode(component, "3D-Szene");
     }
 }
 
+void Main_Scene::setChangesOnComponent(const std::shared_ptr<Base_Component>& component)
+{
+    for (auto& pair : getComponents()) {
+        if (pair.second->get_uuid() == component->get_uuid()) {
+            components[component->get_uuid()] = component;
+            instance->attributesWidget->updateFromComponent(components[component->get_uuid()]);
+            break;
+        }
+    }
 
+    forceUpdate();
+}
+
+void Main_Scene::openScene()
+{
+    Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+
+    string path_to_json = openFileDialog();
+    if (path_to_json.empty()) return;
+    if (!isJsonFileAndFixPath(path_to_json)) return;
+    if (!exists(path_to_json)) {
+        std::cerr << "File does not exist: " << path_to_json << std::endl;
+        return;
+    }
+    instance->scene_path = path_to_json;
+    path_to_json = absolute(path_to_json).string();
+    components.clear();
+    resources.clear();
+
+    Json_Parser::parseJSON(path_to_json, components, resources);
+
+    instance->tree_view->clear();
+    instance->tree_view->addParent("3D-Szene");
+
+    if (components.empty()) {
+        printf("No components to display.\n");
+        return;
+    }
+
+    instance->attributesWidget->showAttributesOfComponent();
+
+    for (const auto& [key, component] : components) {
+        instance->tree_view->addNode(component, "3D-Szene");
+    }
+
+    instance->performLayout();
+}
+
+float Main_Scene::getScalingFactor()
+{
+    return scaling;
+}

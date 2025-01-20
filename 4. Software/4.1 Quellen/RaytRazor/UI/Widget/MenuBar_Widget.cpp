@@ -1,3 +1,4 @@
+#include <shlobj.h>
 #include "MenuBar_Widget.h"
 
 
@@ -12,17 +13,15 @@ void MenuBar_Widget::initialize() {
             {"Open", "Save", "Exit"},
             {
                 []() {
-                    std::string path_to_file = openFileDialog();
-                    printf("%s\n", path_to_file.c_str());
-                    //todo scene wird getauscht
+                    Main_Scene::openScene();
                 },
                 []() {
-                    std::string path_to_DIR = openFileDialog();
-                    if(isDirectory(path_to_DIR)) return;
-                    //if(Json_Parser::exportToJSON(path_to_DIR)) Logger::log(MessageType::INFO, "Successfully exported to JSON");
-                    //todo aktuele scene speichern
+                    std::string path_to_DIR = openDirectoryDialog();
+                    if(!isDirectory(path_to_DIR)) return;
+                    if(Json_Parser::exportToJSON(path_to_DIR, Main_Scene::getComponents(), Main_Scene::getResources()))
+                        Logger::log(MessageType::INFO, "Successfully exported to JSON");
                 },
-                []() {  }
+                []() { exit(0); }
             });
 
     // Add-Menü hinzufügen
@@ -139,6 +138,32 @@ std::string MenuBar_Widget::openFileDialog() {
 
     return result;
 
+}
+
+std::string MenuBar_Widget::openDirectoryDialog() {
+    BROWSEINFO bi = {0};
+
+    path currentPath = current_path();
+
+    bi.lpszTitle = "Select a Directory";
+    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+
+    LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+    if (pidl != nullptr) {
+        char path[MAX_PATH];
+        if (SHGetPathFromIDList(pidl, path)) {
+            std::string directoryPath = path;
+            std::replace(directoryPath.begin(), directoryPath.end(), '\\', '/'); // Ersetze Backslashes
+            CoTaskMemFree(pidl); // Speicher freigeben
+
+            current_path(currentPath);
+            return directoryPath;
+        }
+        CoTaskMemFree(pidl); // Speicher freigeben
+    }
+
+    current_path(currentPath);
+    return ""; // Rückgabe eines leeren Strings, wenn kein Verzeichnis ausgewählt wurde
 }
 
 bool MenuBar_Widget::isDirectory(const std::string& path) {

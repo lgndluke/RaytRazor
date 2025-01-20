@@ -1,20 +1,14 @@
 #include "RT_Object.h"
-#include <math.h>
 
-#define EPSILON 1e-21f;
 
-Object::Object(){}
+RT_Object::RT_Object()= default;
 
-Object::~Object(){}
+RT_Color RT_Object::getColor(){return {0.0, 0.0, 0.0, 0};}
 
-bool Object::hit(const Ray &ray, Vector<double> &point, Vector<double> &normal, Vector<double> &color) {
-    return false;
-}
+Vector RT_Object::getNormalAt(Vector point) { return {0, 0, 0}; }
 
-void Object::setTransformMatrix(const RT::GeometricTransform &transform) {
-    obj_transform = transform;
-}
+double RT_Object::hit(Ray ray) { return 0; }
 
-bool Object::closeEnough(const double f1, const double f2) {
-    return fabs(f1 - f2) < EPSILON;
-}
+
+
+

@@ -32,17 +32,17 @@ public:
      * @brief Handled die Events die während der Ausführung passieren können. Wird in der Mainloop aufgerufen.
      * @param event Der momentane Event welcher gefangen wurde.
      */
-    void OnEvent(SDL_Event *event);
+    void OnEvent(const SDL_Event *event);
     /** @brief Beinhaltet Logik, was während der Ausführung passiert. Ist hier jedoch leer, da nur das Bild angezeigt wird.*/
-    void OnLoop();
+    static void OnLoop();
     /** @brief Beinhaltet Logik, was beim Rendern passiert.*/
-    void OnRender();
+    static void OnRender();
     /** @brief Schließt das SDL2 Fenster.*/
     void OnExit();
 
 private:
     Image m_image;
-    Scene m_scene;
+    RT_Scene m_scene;
     bool isRunning;
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;

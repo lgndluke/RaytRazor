@@ -297,9 +297,14 @@ bool Json_Parser::exportToJSON(const std::string& exportPath,
         {"samplesPerPixel", 100}
     };
 
+
+    auto exports = exportPath;
+
+    printf("");
+
     // JSON in eine Datei schreiben
     try {
-        std::ofstream file(exportPath);
+        std::ofstream file(exportPath + "/scene1" + ".json");
         if (!file.is_open()) {
             throw std::runtime_error("Could not open file: " + exportPath);
         }
@@ -312,6 +317,5 @@ bool Json_Parser::exportToJSON(const std::string& exportPath,
         return false;
     }
 }
-
 
 

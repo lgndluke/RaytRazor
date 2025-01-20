@@ -2,23 +2,23 @@
 
 Custom_Label::Custom_Label(Widget *parent, const std::string &caption,
                            const std::string &font, int fontSize)
-    : Widget(parent), mCaption(caption), mFont(font), mColor(Color(255, 255, 255, 255)) {
+    : Widget(parent), mCaption(caption), mFont(font), mColor(nanogui::Color(255, 255, 255, 255)) {
     if (fontSize >= 0) {
         setFontSize(fontSize);
     }
 }
 
-void Custom_Label::setTheme(Theme *theme) {
+void Custom_Label::setTheme(nanogui::Theme *theme) {
     Widget::setTheme(theme);
     if (mTheme) {
         mColor = mTheme->mTextColor;
     }
 }
 
-Vector2i Custom_Label::preferredSize(NVGcontext *ctx) const {
+nanogui::Vector2i Custom_Label::preferredSize(NVGcontext *ctx) const {
     nvgFontSize(ctx, fontSize());
     nvgFontFace(ctx, mFont.c_str());
-    return Vector2i(nvgTextBounds(ctx, 0, 0, mCaption.c_str(), nullptr, nullptr), fontSize());
+    return nanogui::Vector2i(nvgTextBounds(ctx, 0, 0, mCaption.c_str(), nullptr, nullptr), fontSize());
 }
 
 void Custom_Label::draw(NVGcontext *ctx) {
@@ -37,7 +37,7 @@ void Custom_Label::draw(NVGcontext *ctx) {
     }
 }
 
-bool Custom_Label::mouseButtonEvent(const Vector2i &p, int button, bool down, int modifiers) {
+bool Custom_Label::mouseButtonEvent(const nanogui::Vector2i &p, int button, bool down, int modifiers) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && down && contains(p)) {
         if (mCallback) {
             mCallback(); // Callback auslösen
@@ -47,14 +47,14 @@ bool Custom_Label::mouseButtonEvent(const Vector2i &p, int button, bool down, in
     return Widget::mouseButtonEvent(p, button, down, modifiers); // An den Standard-Handler weitergeben
 }
 
-void Custom_Label::save(Serializer &s) const {
+void Custom_Label::save(nanogui::Serializer &s) const {
     Widget::save(s);
     s.set("caption", mCaption);
     s.set("font", mFont);
     s.set("color", mColor);
 }
 
-bool Custom_Label::load(Serializer &s) {
+bool Custom_Label::load(nanogui::Serializer &s) {
     if (!Widget::load(s)) {
         return false;
     }
@@ -69,7 +69,7 @@ bool Custom_Label::load(Serializer &s) {
     }
 
     if (!s.get("color", mColor)) {
-        mColor = Color(255, 255, 255, 255); // Standardwert: Weiß
+        mColor = nanogui::Color(255, 255, 255, 255); // Standardwert: Weiß
     }
 
     return true;

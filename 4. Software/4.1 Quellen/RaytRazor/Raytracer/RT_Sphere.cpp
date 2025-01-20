@@ -1,40 +1,51 @@
 #include "RT_Sphere.h"
-#include <cmath>
 
 Sphere::Sphere() {
-
+    center = Vector(0, 0, 0);
+    radius = 1.0;
+    color = RT_Color(0.5, 0.5, 0.5, 0);
+}
+Sphere::Sphere(const Vector &_center, const double _radius, const RT_Color &_color) {
+    center = _center;
+    radius = _radius;
+    color = _color;
 }
 
-Sphere::~Sphere() {
+Vector Sphere::getCenter() const {return center;}
+double Sphere::getRadius() const {return radius;}
+RT_Color Sphere::getColor() {return color;}
 
+Vector Sphere::getNormalAt(Vector point) {
+    const Vector normal_Vect = point.add(center.negative()).normalize();
+    return normal_Vect;
 }
 
-bool Sphere::hit(const Ray &ray, Vector<double> &point, Vector<double> &normal, Vector<double> &color) {
-    Ray local_ray = obj_transform.applyTransform(ray, BWDTFORM);
+double Sphere::hit(const Ray ray) {
+    const Vector ray_origin = ray.getRayOrigin();
+    const double ray_origin_x = ray_origin.getX();
+    const double ray_origin_y = ray_origin.getY();
+    const double ray_origin_z = ray_origin.getZ();
 
-    Vector<double> vhat = local_ray.ray_ab;
-    vhat.Normalize();
-    double b = 2.0 * Vector<double>::dot(local_ray.ray_origin, vhat);
-    double c = Vector<double>::dot(local_ray.ray_origin, local_ray.ray_origin) - 1.0;
-    double intersectTest = (b * b) - 4.0 * c;
-    Vector<double> poi; //Point of Intersect
-    if (intersectTest > 0.0) {
-        double t1 = (-b + sqrt(intersectTest)) / 2.0;
-        double t2 = (-b - sqrt(intersectTest)) / 2.0;
+    const Vector ray_direction = ray.getRayDirection();
+    const double ray_direction_x = ray_direction.getX();
+    const double ray_direction_y = ray_direction.getY();
+    const double ray_direction_z = ray_direction.getZ();
 
-        if (t1 < 0.0 || t2 < 0.0) return false;
-        if (t1 < t2) poi = local_ray.ray_origin + (vhat * t1);
-        else poi = local_ray.ray_origin + (vhat * t2);
+    const Vector sphere_center = center;
+    const double sphere_center_x = sphere_center.getX();
+    const double sphere_center_y = sphere_center.getY();
+    const double sphere_center_z = sphere_center.getZ();
 
-        point = obj_transform.applyTransform(poi, FWDTFORM);
-        Vector<double> objOrigin = Vector<double> {std::vector<double>{0.0, 0.0, 0.0}};
-        Vector<double> newObjOrigin = obj_transform.applyTransform(objOrigin, FWDTFORM);
+    const double b = (2 * (ray_origin_x - sphere_center_x) * ray_direction_x) + (2 * (ray_origin_y - sphere_center_y) * ray_direction_y) + (2 * (ray_origin_z - sphere_center_z) * ray_direction_z);
+    const double c = pow(ray_origin_x - sphere_center_x, 2) + pow(ray_origin_y - sphere_center_y, 2) + pow(ray_origin_z - sphere_center_z, 2) - (radius * radius);
 
-        normal = point - newObjOrigin;
-        normal.Normalize();
-        color = obj_color;
+    if (const double discriminant = b * b - 4 * c; discriminant > 0) {
 
-        return true;
+        if (double root_1 = ((-1 * b - sqrt(discriminant)) / 2) - 0.000001; root_1 > 0) {
+            return root_1;
+        }
+        double root_2 = ((sqrt(discriminant) - b) / 2) - 0.000001;
+        return root_2;
     }
-    return false;
+        return -1;
 }

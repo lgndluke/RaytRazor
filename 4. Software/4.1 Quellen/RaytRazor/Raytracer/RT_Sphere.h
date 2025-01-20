@@ -2,18 +2,28 @@
 #define SPHERE_H
 
 #include "RT_Object.h"
-#include "RT_geometricTransform.h"
+#include "RT_Vector.h"
+#include "RT_Color.h"
+#include <cmath>
 
 // TODO: Kommentare schreiben
 
-class Sphere : public Object {
+class Sphere : public RT_Object {
     public:
     Sphere();
-    virtual ~Sphere() override;
+    Sphere(const Vector &_center, double _radius, const RT_Color &_color);
 
-    virtual bool hit(const Ray &ray, Vector<double> &point, Vector<double> &normal, Vector<double> &color) override;
+    [[nodiscard]] Vector getCenter() const;
+    [[nodiscard]] double getRadius() const;
+    RT_Color getColor() override;
+    Vector getNormalAt(Vector point) override;
+    double hit(Ray ray) override;
+
 
     private:
+        Vector center;
+        double radius;
+        RT_Color color;
 };
 
 

@@ -14,10 +14,9 @@
 #include "nanogui/serializer/core.h"
 
 
-using namespace nanogui;
 using namespace std;
 
-class Custom_Label : public Widget {
+class Custom_Label : public nanogui::Widget {
 public:
     Custom_Label(Widget *parent, const std::string &caption,
           const std::string &font = "sans", int fontSize = -1);
@@ -33,15 +32,15 @@ public:
     const std::string &font() const { return mFont; }
 
     /// Get the label color
-    Color color() const { return mColor; }
+    nanogui::Color color() const { return mColor; }
     /// Set the label color
-    void setColor(const Color &color) { mColor = color; }
+    void setColor(const nanogui::Color &color) { mColor = color; }
 
     /// Set the \ref Theme used to draw this widget
-    virtual void setTheme(Theme *theme) override;
+    virtual void setTheme(nanogui::Theme *theme) override;
 
     /// Compute the size needed to fully display the label
-    virtual Vector2i preferredSize(NVGcontext *ctx) const override;
+    virtual nanogui::Vector2i preferredSize(NVGcontext *ctx) const override;
 
     /// Draw the label
     virtual void draw(NVGcontext *ctx) override;
@@ -50,15 +49,15 @@ public:
     void setCallback(const std::function<void()> &callback) { mCallback = callback; }
 
     /// Handle mouse button events
-    virtual bool mouseButtonEvent(const Vector2i &p, int button, bool down, int modifiers) override;
+    virtual bool mouseButtonEvent(const nanogui::Vector2i &p, int button, bool down, int modifiers) override;
 
-    virtual void save(Serializer &s) const override;
-    virtual bool load(Serializer &s) override;
+    virtual void save(nanogui::Serializer &s) const override;
+    virtual bool load(nanogui::Serializer &s) override;
 
 protected:
     std::string mCaption;
     std::string mFont;
-    Color mColor;
+    nanogui::Color mColor;
 
     /// Callback to be triggered on click
     std::function<void()> mCallback;
