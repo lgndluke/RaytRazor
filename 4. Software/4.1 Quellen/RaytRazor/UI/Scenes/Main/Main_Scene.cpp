@@ -210,7 +210,7 @@ void Main_Scene::initialize()
 
     const int component_tree_position_x     = preview_width;
     constexpr int component_tree_position_y = 0;
-    const int component_tree_width          = this->window_width * 0.33f;
+    const int component_tree_width          = this->window_width * 0.32f;
     const int component_tree_height         = this->window_height * 0.4f;
 
     const int component_attributes_position_x = preview_width;
@@ -227,6 +227,7 @@ void Main_Scene::initialize()
 
     const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
+    component_tree->setSize(Vector2i(component_tree_width, component_tree_height));
 
     // Setze ein Layout für das Fenster
     component_tree->setLayout(new BoxLayout(

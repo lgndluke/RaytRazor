@@ -10,19 +10,21 @@ int Basis_Child_Font = 25;
 TreeView_Widget::TreeView_Widget(Widget* parent, ComponentAttributes_Widget* attributesWidget)
     : Widget(parent), mAttributes(attributesWidget) {
 
-    // ScrollPanel erstellen und Größe setzen
+    int scrollPanelHeight = std::max(100, parent->height() - (Basis_Child_Font * 2));
     mScrollPanel = new VScrollPanel(this);
-    mScrollPanel->setFixedSize(Eigen::Vector2i(parent->width(), parent->height())); // Größe vom Parent übernehmen
+    mScrollPanel->setFixedSize(Eigen::Vector2i(parent->width(), scrollPanelHeight));
 
-    // Container erstellen und Layout festlegen
     mContainer = new Widget(mScrollPanel);
-    mContainer->setLayout(new BoxLayout(
-        Orientation::Vertical, Alignment::Minimum, 5, 5
-    ));
+    mContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 5, 5));
+    mContainer->setFixedSize(Vector2i(parent->width(), scrollPanelHeight * 2));
 
-    // Initiale Scrollposition setzen
-    mScrollPanel->setScroll(0.0f);
+    mScrollPanel->performLayout(screen()->nvgContext());
     mContainer->performLayout(screen()->nvgContext());
+
+    // Debugging
+    std::cout << "TreeView_Widget initialized." << std::endl;
+    std::cout << "ScrollPanel size: " << mScrollPanel->size().x() << ", " << mScrollPanel->size().y() << std::endl;
+    std::cout << "Container size: " << mContainer->size().x() << ", " << mContainer->size().y() << std::endl;
 }
 
 void TreeView_Widget::addParent(const std::string& parentName) {
@@ -80,7 +82,10 @@ void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, c
 
         // Speichern des neuen Child-Knotens in der Map
         mNodeMap[nodeName->get_name()] = childContainer;
+        mContainer->setSize(Vector2i(mScrollPanel->width(), mContainer->children().size() * label->height()));
         mContainer->performLayout(screen()->nvgContext());
+        mScrollPanel->performLayout(screen()->nvgContext());
+        printf("");
     }
 }
 
