@@ -1,3 +1,4 @@
+#include "../UI/Scenes/Main/Main_Scene.h"
 #include "RT_App.h"
 
 CApp::CApp()
@@ -18,7 +19,7 @@ bool CApp::OnInit()
 
     if (pWindow != nullptr)
     {
-        double downSizeFactor = 0.5;
+        double downSizeFactor = Main_Scene::getScalingFactor();
         // Initialise the renderer.
         pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
         m_image.Initialize(1280*downSizeFactor, 720*downSizeFactor, pRenderer);
