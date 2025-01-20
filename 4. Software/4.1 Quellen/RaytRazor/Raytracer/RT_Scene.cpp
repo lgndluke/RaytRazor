@@ -1,10 +1,12 @@
 #include "../UI/Scenes/Main/Main_Scene.h"
 #include "RT_Scene.h"
 
+#include "../UI/Widget/ComponentAttributes_Widget.h"
+
 RT_Scene::RT_Scene() {
-	//cubeScene();
-	//sphereScene();
-	previewScene();
+	auto components = Main_Scene::getComponents();
+	if (components.empty()) {sphereScene();}
+	else {previewScene();}
 }
 
 void RT_Scene::savebmp (const char *filename, const int w, const int h, const int dpi, const RGBType *data) {
@@ -278,7 +280,7 @@ bool RT_Scene::render(Image &output) {
 						temp_blue[aa_index] = 0;
 					}
 					else{
-						if (double accuracy = 0.00000001; intersections.at(index_of_winning_object) > accuracy) {
+						if (double accuracy = 1e-8; intersections.at(index_of_winning_object) > accuracy) {
 							double ambientlight = 0.2;
 
 							Vector intersection_position = cam_ray_origin.add(cam_ray_direction.multiply(intersections.at(index_of_winning_object)));
@@ -331,6 +333,9 @@ bool RT_Scene::render(Image &output) {
 	Logger::log(MessageType::INFO, "Done in: " + std::to_string(diff) + " seconds!");
 	for (RT_Object* obj : objects_scene) { delete obj; }
 	objects_scene.clear();
+
+	for (RT_LightSource* lght : light_sources) { delete lght; }
+	light_sources.clear();
 
 	return true;
 }
@@ -386,50 +391,79 @@ void RT_Scene::cubeScene() {
 
 void RT_Scene::sphereScene() {
 	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
-	const Vector new_sphere_location (1.75, -0.25, 0);
-	const Vector new_sphere_location2 (-1.75, 0.25, 0);
+	const Vector new_sphere_location (1.75, 0.5, 0);
+	const Vector new_sphere_location2 (-1.75, 1, 0);
+	const Vector new_sphere_location3 (0, 1, 0);
 
-	cam_pos = Vector(3, 1.5, -4);;
-	look_at = Vector (0, 0, 0);
+	cam_pos = Vector(5, 3, -1.75);
+	look_at = Vector (0, 1, 0);
 
-	const Vector O (0,0,0);
 	const Vector Y (0,1,0);
-
-
 	const RT_Color white_light (1.0, 1.0, 1.0, 0);
 	const RT_Color pretty_green (0.5, 1.0, 0.5, 0.3);
-	const RT_Color maroon (0.5, 0.25, 0.25, 0.3);
-	const RT_Color orange (1.0, 0.25, 0.25, 0.3);
+	const RT_Color blue (0.1, 0.1, 0.8, 0.3);
+	const RT_Color orange (0.7, 0.25, 0.25, 0.3);
 	const RT_Color tile_floor (0.5, 0.5, 0.5, 0.5);
 	const RT_Color gray (0.5, 0.5, 0.5, 0.3);
 
-	const Vector light_position (-7,10,-10);
+	std::string abs_path = "";
+	std::string filename = "sceneWalls.obj";
+	try {
+		path relative_path = "../../../../5. Modelle/5.1 Beispielmodelle/Test/" + filename;
+		path absolute_path = absolute(relative_path);
+		path canonical_path = canonical(absolute_path);
+		if (!exists(canonical_path)) {
+			throw std::runtime_error("Path does not exist: " + canonical_path.string());
+		}
+		abs_path = canonical_path.string();
+		std::replace(abs_path.begin(), abs_path.end(), '\\', '/');
+	}catch (const filesystem_error& e) {
+		throw std::runtime_error("Filesystem error: " + std::string(e.what()));
+	} catch (const std::exception& e) {
+		throw std::runtime_error("Error: " + std::string(e.what()));
+	}
+	const std::vector<RT_Vertex> vertices = RT_Object_Importer::fetch_vertices(abs_path);
+
+	int iter = 0;
+	RT_Color selectedColor = orange;
+	for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
+		auto* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
+													Vector(vertices[(i+1)].position.x,vertices[(i+1)].position.y,vertices[(i+1)].position.z),
+													Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z),
+													selectedColor);
+		objects_scene.push_back(scene_triangle);
+		iter++;
+		if (iter >= 2 ) selectedColor = blue;
+		if (iter >= 4 ) selectedColor = gray;
+	}
+
+
+	const Vector light_position (0,4,0);
 	auto* scene_light = new Light(light_position, white_light);
 	light_sources.push_back(scene_light);
 
 	// scene objects
-	auto* scene_sphere = new Sphere(O, 1, pretty_green);
+	auto* scene_sphere = new Sphere(new_sphere_location3, 1, pretty_green);
 	auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, orange);
 	auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
-	auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
 	//Triangle scene_triangle2 (Vect (-2,0,0), Vect(0,0,-3), Vect(4,0,0), gray);
-	auto* scene_plane = new Plane(Y, -1, tile_floor);
+	auto* scene_plane = new Plane(Y, 0, tile_floor);
 	objects_scene.push_back(scene_sphere);
 	objects_scene.push_back(scene_sphere2);
 	objects_scene.push_back(scene_sphere3);
 	objects_scene.push_back(scene_plane);
-	objects_scene.push_back(scene_triangle);
 	//scene_objects.push_back(dynamic_cast<Object*>(&scene_triangle2));
 }
 
 void RT_Scene::previewScene() {
-	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
+	Logger::log(MessageType::INFO, "Rendering the previewed scene...!");
 	const Vector new_sphere_location (1.75, -0.25, 0);
 	const Vector new_sphere_location2 (-1.75, 0.25, 0);
 
+	auto resources = Main_Scene::getResources();
 	auto components = Main_Scene::getComponents();
 
-	cam_pos = Vector(3, 1.5, -4);;
+	cam_pos = Vector(3, 1.5, -4);
 	look_at = Vector (0, 0, 0);
 
 	const Vector O (0,0,0);
@@ -446,6 +480,10 @@ void RT_Scene::previewScene() {
 	const Vector light_position (-7,10,-10);
 	auto* scene_light = new Light(light_position, white_light);
 	light_sources.push_back(scene_light);
+
+	const Vector light_position2 (7,-10,10);
+	auto* scene_light2 = new Light(light_position2, white_light);
+	light_sources.push_back(scene_light2);
 
 	// scene objects
 	auto* scene_sphere = new Sphere(O, 1, pretty_green);
