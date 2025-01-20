@@ -29,8 +29,8 @@ Ks 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 9
-map_d C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSBEAM.png
-map_Bump C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSBEAM.png
+map_d AVUSBEAM.png
+bump AVUSBEAM.png
 
 newmtl AVUSBEBE
 Ns 0.000000
@@ -131,7 +131,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Bump C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSLOGO.png
+bump AVUSLOGO.png
 
 newmtl AVUSFUSE
 Ns 10.000005
@@ -201,8 +201,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSPLAT.png
-map_Bump C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSPLAT.png
+map_Kd AVUSPLAT.png
+bump AVUSPLAT.png
 
 newmtl AVUSSTEE
 Ns 8.100006
@@ -233,7 +233,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 0.900000
 illum 9
-map_Bump -s 20 20 1 C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSRECT.png
+bump -s 20 20 1 AVUSRECT.png
 
 newmtl AVUSTLBK
 Ns 10.000005
@@ -264,7 +264,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Bump C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSWHB2.png
+bump AVUSWHB2.png
 
 newmtl Material__3553
 Ns 6.000004
@@ -275,7 +275,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Bump C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSWHEB.png
+bump AVUSWHEB.png
 
 newmtl Material__3554
 Ns 7.500005
@@ -286,7 +286,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Bump -s 50 50 1 C:/Uni/S5/SOPR/RaytRazor/5. Modelle/5.1 Beispielmodelle/cars/cars/audi/AVUSDASB.png
+bump -s 50 50 1 AVUSDASB.png
 
 newmtl Material__3555
 Ns 7.500005
