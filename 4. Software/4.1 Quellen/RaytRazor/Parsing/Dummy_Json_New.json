@@ -1,0 +1,147 @@
+{
+  "renderentity": [
+    {
+      "name": "Audi 1",
+      "uuid": "63c38701-2a3b-4454-a54d-0242c2d68ee3",
+      "Translation": {
+        "position": {
+          "x": -40,
+          "y": 0,
+          "z": -40
+        },
+        "rotation": {
+          "x": 0,
+          "y": 60,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": "4213aa10-c3f3-4505-a257-ea52d89beb6f",
+          "matUUID": "455cb61c-7974-4484-ac7e-85a7a0a58622"
+        }
+      }
+    },
+    {
+      "name": "Audi 2",
+      "uuid": "63c45451-2a3b-4454-a54d-0242c2d68ee3",
+      "Translation": {
+        "position": {
+          "x": 20,
+          "y": 0,
+          "z": 20
+        },
+        "rotation": {
+          "x": 0,
+          "y": 60,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "components": {
+        "RenderComponent": {
+          "objUUID": "4213aa10-c3f3-4505-a257-ea52d89beb6f",
+          "matUUID": "455cb61c-7974-4484-ac7e-85a7a0a58622"
+        }
+      }
+    }
+  ],
+  "lightentity": [
+    {
+      "name": "Light1",
+      "uuid": "b7d03d91-52ad-49b2-8c48-cd6a7e9ae822",
+      "Translation": {
+        "position": {
+          "x": -5,
+          "y": 5,
+          "z": 0
+        }
+      },
+      "components": {
+        "LightComponent": {
+          "intensity": 1.0,
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "Light2",
+      "uuid": "abbea383-81e9-4f72-a351-a40a4cce4de8",
+      "Translation": {
+        "position": {
+          "x": -5,
+          "y": 5,
+          "z": 0
+        }
+      },
+      "components": {
+        "LightComponent": {
+          "intensity": 1,
+          "color": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+          }
+        }
+      }
+    }
+  ],
+  "cameraentity": [
+    {
+      "name": "Camera",
+      "uuid": "163fe421-7c52-41f4-a2b8-7cb77f88566f",
+      "Translation": {
+        "position": {
+          "x": 0,
+          "y": 65,
+          "z": 100
+        },
+        "rotation": {
+          "x": -35,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "components": {
+        "CameraComponent": {
+          "fov": 60,
+          "aspectRatio": 1.77,
+          "nearClip": 0.1,
+          "farClip": 1000
+        }
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uuid": "4213aa10-c3f3-4505-a257-ea52d89beb6f",
+      "type": "obj",
+      "path": "C:\\Users\\lukas\\OneDrive - thu.de\\5. Semester\\Software Projekt\\RaytRazor\\5. Modelle\\5.1 Beispielmodelle\\Test\\resized_audi\\resizedAudi.obj"
+    },
+    {
+      "uuid": "455cb61c-7974-4484-ac7e-85a7a0a58622",
+      "type": "mat",
+      "path": "C:\\Users\\lukas\\OneDrive - thu.de\\5. Semester\\Software Projekt\\RaytRazor\\5. Modelle\\5.1 Beispielmodelle\\Test\\resized_audi\\resizedAudi.mtl"
+    }
+  ],
+  "metadata": {
+    "backgroundColor": [0.1, 0.1, 0.1],
+    "globalIllumination": true,
+    "renderMode": "pathtracing",
+    "maxDepth": 5,
+    "samplesPerPixel": 100
+  }
+}

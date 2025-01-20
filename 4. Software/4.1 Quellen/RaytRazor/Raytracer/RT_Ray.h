@@ -1,24 +1,22 @@
-//
-// Created by leonm on 11/28/2024.
-//
-
 #ifndef RAY_H
 #define RAY_H
 
 #include "RT_Vector.h"
 
-// TODO: Kommentare schreiben
+
 
 class Ray {
     public:
         Ray();
-        Ray(const Vector<double>& origin, const Vector<double>& direction);
-        Vector<double> getOrigin() const;
-        Vector<double> getDirection() const;
+        Ray(const Vector &origin_, const Vector &direction_);
 
-        Vector<double> ray_origin {3};
-        Vector<double> ray_direction {3};
-        Vector<double> ray_ab {3};
+
+        [[nodiscard]] Vector getRayOrigin() const;
+        [[nodiscard]] Vector getRayDirection() const;
+
+    private:
+        Vector ray_origin;
+        Vector ray_direction;
 };
 
 #endif //RAY_H

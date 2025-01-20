@@ -1,10 +1,11 @@
+#include "../UI/Scenes/Main/Main_Scene.h"
 #include "RT_App.h"
 
 CApp::CApp()
 {
     isRunning = true;
-    pWindow = NULL;
-    pRenderer = NULL;
+    pWindow = nullptr;
+    pRenderer = nullptr;
 }
 
 bool CApp::OnInit()
@@ -16,18 +17,17 @@ bool CApp::OnInit()
 
     pWindow = SDL_CreateWindow("RayTraced", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 
-    if (pWindow != NULL)
+    if (pWindow != nullptr)
     {
+        double downSizeFactor = Main_Scene::getScalingFactor();
         // Initialise the renderer.
         pRenderer = SDL_CreateRenderer(pWindow, -1, 0);
-
-        // Initialise the qbImage instance.
-        m_image.Initialize(1280, 720, pRenderer);
+        m_image.Initialize(1280*downSizeFactor, 720*downSizeFactor, pRenderer);
 
         SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
         SDL_RenderClear(pRenderer);
 
-        m_scene.render(m_image);
+        RT_Scene::render(m_image);
 
         m_image.Display();
 
@@ -66,7 +66,7 @@ int CApp::OnExecute()
     return 0;
 }
 
-void CApp::OnEvent(SDL_Event *event)
+void CApp::OnEvent(const SDL_Event *event)
 {
     if (event->type == SDL_QUIT)
     {
@@ -81,24 +81,12 @@ void CApp::OnLoop()
 
 void CApp::OnRender()
 {
-    // Set the background colour to white.
-    //SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
-    //SDL_RenderClear(pRenderer);
-
-    //m_scene.render(m_image);
-
-    // Display the image.
-    //m_image.Display();
-
-    // Show the result.
-    //SDL_RenderPresent(pRenderer);
 }
 
 void CApp::OnExit()
 {
-    // Tidy up SDL2 stuff.
     SDL_DestroyRenderer(pRenderer);
     SDL_DestroyWindow(pWindow);
-    pWindow = NULL;
+    pWindow = nullptr;
     SDL_Quit();
 }

@@ -57,8 +57,6 @@ set(SOURCE_FILES
         Parsing/Json_Parser.h
         UI/Scenes/Main/Main_Scene.cpp
         UI/Scenes/Main/Main_Scene.h
-        UI/Scenes/Settings/Settings_Scene.cpp
-        UI/Scenes/Settings/Settings_Scene.h
         Import/Importers/Material/Material_Importer.cpp
         Import/Importers/Material/Material_Importer.h
         Components/Base_Component.cpp
@@ -81,17 +79,12 @@ set(SOURCE_FILES
         Raytracer/RT_Image.cpp
         Raytracer/RT_Camera.h
         Raytracer/RT_Camera.cpp
-        Raytracer/RT_geometricTransform.h
-        Raytracer/RT_geometricTransform.cpp
         Raytracer/RT_Light.h
         Raytracer/RT_Light.cpp
-        Raytracer/RT_Matrix.h
         Raytracer/RT_Object.h
         Raytracer/RT_Object.cpp
         Raytracer/RT_Plane.h
         Raytracer/RT_Plane.cpp
-        Raytracer/RT_PointLight.h
-        Raytracer/RT_PointLight.cpp
         Raytracer/RT_Ray.h
         Raytracer/RT_Ray.cpp
         Raytracer/RT_Scene.h
@@ -111,6 +104,17 @@ set(SOURCE_FILES
         UI/Widget/ComponentAttributes_Widget.h
         UI/utility/Custom_Label.cpp
         UI/utility/Custom_Label.h
+        Converter/Converter.cpp
+        Converter/Converter.h
+        Raytracer/RT_Triangle.h
+        Raytracer/RT_Triangle.cpp
+        Raytracer/RT_Vector.cpp
+        Raytracer/RT_Color.h
+        Raytracer/RT_LightSource.h
+        Raytracer/RT_Color.cpp
+        Raytracer/RT_LightSource.cpp
+        Raytracer/RT_Object_Importer.h
+        Raytracer/RT_Object_Importer.cpp
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})

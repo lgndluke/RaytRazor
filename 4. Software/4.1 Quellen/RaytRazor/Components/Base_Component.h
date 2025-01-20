@@ -5,6 +5,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <boost/uuid/uuid.hpp>
+#include <nlohmann/json.hpp>
 
 using namespace std;
 
@@ -33,6 +34,14 @@ class Base_Component
 
    public:
 
+       virtual ~Base_Component() = default;
+
+    template<class c> inline bool instanceOf(const Base_Component* base)
+    {
+        return dynamic_cast <const c*> (base);
+    }
+
+       //[[nodiscard]] virtual ComponentType get_type() const = 0;
        /**
         * @brief Konstruktor zum Erstellen eines Base_Component Objekts.
         *
@@ -49,6 +58,8 @@ class Base_Component
                       const optional<glm::vec3> position,
                       const optional<glm::vec3> rotation,
                       const optional<glm::vec3> scale);
+
+       Base_Component() = default;
 
        /**
         * @brief Methode, um die UUID des Components zu erhalten.
@@ -81,7 +92,7 @@ class Base_Component
        [[nodiscard]] glm::vec3 get_position() const;
 
 
-       /**
+     /**
         * @brief Methode, um die Position des Components zu ändern.
         * @param new_Position              Neue Position des Components.
         */
@@ -93,7 +104,7 @@ class Base_Component
         */
        [[nodiscard]] glm::vec3 get_rotation() const;
 
-       /**
+        /**
         * @brief Methode, um die Rotation des Components zu ändern.
         * @param new_Rotation               Neue Rotation des Components.
         */
@@ -105,7 +116,7 @@ class Base_Component
         */
        [[nodiscard]] glm::vec3 get_scale() const;
 
-        /**
+         /**
          * @brief Methode, um die Skalierung des Components zu ändern.
          * @param new_Scale                Neue Skalierung des Components.
          */

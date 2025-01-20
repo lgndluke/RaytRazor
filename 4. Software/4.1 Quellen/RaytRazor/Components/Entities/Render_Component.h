@@ -14,6 +14,12 @@ class Render_Component : public Base_Component
 
     public:
 
+        ~Render_Component() override = default;
+
+        [[nodiscard]] ComponentType get_type() const {
+           return RENDER;
+        }
+
         /**
          * @brief Konstruktor zum Erstellen eines Render_Component Objekts.
          *

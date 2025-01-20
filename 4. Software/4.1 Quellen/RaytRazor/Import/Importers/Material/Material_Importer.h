@@ -3,6 +3,7 @@
 
 #include "../../Resources/Material/Material_Resource.h"
 #include "../../Logger/Logger.h"
+#include <fstream>
 #include <optional>
 #include <string>
 #include <vector>
@@ -35,12 +36,6 @@ class Material_Importer
                                                                 const string& path_to_file);
 
     private:
-        /**
-         * @brief Methode, um den Inhalt des Vektors indices zu füllen.
-         * @return std::vector<int>         Den importierten Inhalt des Vektors indices.
-         */
-        static std::vector<int> fetch_indices(const boost::uuids::uuid& uuid,
-                                              const string& path_to_file);
 
         /**
          * @brief Methode, um den Inhalt des Vektors materials zu füllen.

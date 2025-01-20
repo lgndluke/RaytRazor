@@ -10,9 +10,16 @@
 #include <nanogui/label.h>
 #include <iostream>
 #include "nanogui/layout.h"
+#include <windows.h>
+#include <filesystem>
+#include <random_generator.hpp>
+#include "../../Parsing/Json_Parser.h"
+#include "../Scenes/Main/Main_Scene.h"
 
 using namespace nanogui;
 using namespace std;
+
+namespace fs = std::filesystem;
 
 class MenuBar_Widget : public Widget {
 public:
@@ -31,6 +38,13 @@ private:
      * @param callbacks Die Callbacks, die für jede Option ausgeführt werden sollen.
      */
     void addMenu(const string& title, const vector<string>& options, const vector<function<void()>>& callbacks);
+    void performLayout(NVGcontext* ctx);
+
+    static string openFileDialog();
+
+    static std::string openDirectoryDialog();
+
+    static bool isDirectory(const string& path);
 };
 
 #endif // MENUBAR_WIDGET_H

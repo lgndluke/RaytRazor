@@ -12,32 +12,12 @@ Material_Resource::Material_Resource(const boost::uuids::uuid uuid, const string
     this->materials = materials;
 }
 
-/*
-std::vector<int> Material_Resource::get_indices() const
-{
-    if (indices.size() != 0)
-        return this->indices;
-
-    return std::vector<int>();
-}
-
-void Material_Resource::set_indices(const std::vector<int>& new_Indices)
-{
-    if (new_Indices.size() != this->materials.size())
-    {
-        Logger::log(MessageType::SEVERE, "Material_Resource::set_indices(): Size of new_Indices does not match size of this->materials!");
-        return;
-    }
-
-    this->indices = new_Indices;
-}
-*/
 std::vector<Material> Material_Resource::get_materials() const
 {
-    if (materials.size() != 0)
+    if (!materials.empty())
         return this->materials;
 
-    return std::vector<Material>();
+    return {};
 }
 
 void Material_Resource::set_materials(const std::vector<Material>& new_Materials)
@@ -51,4 +31,21 @@ void Material_Resource::set_materials(const std::vector<Material>& new_Materials
      */
 
     this->materials = new_Materials;
+}
+
+const nanogui::MatrixXf &Material_Resource::get_matrix_colors() const {
+    return this->matrix_colors; // Direkte Rückgabe
+}
+
+void Material_Resource::set_matrix_colors(const nanogui::MatrixXf &new_matrix_colors) {
+    if (new_matrix_colors.rows() != 3) {
+        Logger::log(MessageType::SEVERE, "Object_Resource::set_matrix_colors(): Matrix must have 3 rows for valid colors!");
+        return;
+    }
+
+    this->matrix_colors = new_matrix_colors;
+}
+
+bool Material_Resource::matrix_colors_is_empty() const {
+    return this->matrix_colors.cols() == 0; // Direkte Prüfung auf leere Matrix
 }

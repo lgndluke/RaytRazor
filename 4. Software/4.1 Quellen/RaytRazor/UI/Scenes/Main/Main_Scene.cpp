@@ -1,9 +1,9 @@
 #include "Main_Scene.h"
 
-//TODO's:
-// -> Preview_Canvas::drawGL() implementieren.
-// -> Main_Scene::Main_Scene() implementieren.
-// -> Main_Scene::update() implementieren.
+std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
+std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
+Main_Scene* Main_Scene::instance = nullptr;
+float Main_Scene::scaling = 0.5f;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -20,86 +20,136 @@ Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
 
 void Preview_Canvas::drawGL()
 {
-
     static bool initialized = false;
 
     if (!initialized)
     {
-
-        // Initialisierung des Shaders.
         mShader.init(
             "3d_Preview_Shader",
             Vertex_Shader::get_vertex_shader(),
             Fragment_Shader::get_fragment_shader()
         );
         initialized = true;
-
-        // TODO Components in 3D Preview laden.
-
-        // Dummy Daten -> TODO Delete afterwards.
-        // ==================================================================
-
-        MatrixXu indices(3, 12);
-        indices.col( 0) << 0, 1, 3;
-        indices.col( 1) << 3, 2, 1;
-        indices.col( 2) << 3, 2, 6;
-        indices.col( 3) << 6, 7, 3;
-        indices.col( 4) << 7, 6, 5;
-        indices.col( 5) << 5, 4, 7;
-        indices.col( 6) << 4, 5, 1;
-        indices.col( 7) << 1, 0, 4;
-        indices.col( 8) << 4, 0, 3;
-        indices.col( 9) << 3, 7, 4;
-        indices.col(10) << 5, 6, 2;
-        indices.col(11) << 2, 1, 5;
-
-        MatrixXf positions(3, 8);
-        positions.col(0) << -1,  1,  1;
-        positions.col(1) << -1,  1, -1;
-        positions.col(2) <<  1,  1, -1;
-        positions.col(3) <<  1,  1,  1;
-        positions.col(4) << -1, -1,  1;
-        positions.col(5) << -1, -1, -1;
-        positions.col(6) <<  1, -1, -1;
-        positions.col(7) <<  1, -1,  1;
-
-        MatrixXf colors(3, 8);
-        colors.col(0) << 1, 0, 0;
-        colors.col(1) << 0, 1, 0;
-        colors.col(2) << 1, 1, 0;
-        colors.col(3) << 0, 0, 1;
-        colors.col(4) << 1, 0, 1;
-        colors.col(5) << 0, 1, 1;
-        colors.col(6) << 1, 1, 1;
-        colors.col(7) << 0.5, 0.5, 0.5;
-
-        // ==================================================================
-
-        // Daten in Shader laden.
-        mShader.bind();
-        mShader.uploadIndices(indices);
-        mShader.uploadAttrib("position", positions);
-        mShader.uploadAttrib("color", colors);
-
     }
+
+    //clear screen and setzt hintergrund grau
+    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // Shader binden und Szene rendern
     mShader.bind();
 
-    Eigen::Matrix4f mvp;
-    mvp.setIdentity();
-    float time = (float)glfwGetTime();
-    mvp.topLeftCorner<3, 3>() = Eigen::Matrix3f(
-        Eigen::AngleAxisf(mRotation[0] * time, Eigen::Vector3f::UnitX()) *
-        Eigen::AngleAxisf(mRotation[1] * time, Eigen::Vector3f::UnitY()) *
-        Eigen::AngleAxisf(mRotation[2] * time, Eigen::Vector3f::UnitZ())
-    ) * 0.25f;
+    Eigen::Matrix4f mvpEigen;
+    mvpEigen.setIdentity();
+    glm::mat4 mvpGLM, projGLMmat, viewGLMmat;
+    auto components = Main_Scene::getComponents();
+    auto resources = Main_Scene::getResources();
+    //create projection and view matrix
+    for (auto& pair  : components)
+    {
+        shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+        if(camera)
+        {
+            std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+            viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
+        }
+    }
 
-    mShader.setUniform("modelViewProj", mvp);
+    //iterate through components and bind the new mvpEigen matrix/object -> get model matrix, calculate matrix, bind new mvpEigen, print screen
+    //model matrix
+    for (auto& pair : components)
+    {
+        shared_ptr<Render_Component> render = dynamic_pointer_cast<Render_Component>(pair.second);
+        if(render)
+        {
+            // Validate Object Resource
+            auto objIt = resources.find(render->get_object_UUID());
+            if (objIt == resources.end()) {
+                std::cerr << "Object UUID not found in resources!" << std::endl;
+                continue;
+            }
 
-    glEnable(GL_DEPTH_TEST);
-    mShader.drawIndexed(GL_TRIANGLES, 0, 12);
-    glDisable(GL_DEPTH_TEST);
+            shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
+            if (!objRes) {
+                std::cerr << "Failed to cast to Object_Resource!" << std::endl;
+                continue;
+            }
+
+            // Validate Material Resource
+            auto matIt = resources.find(render->get_material_UUID());
+            if (matIt == resources.end()) {
+                std::cerr << "Material UUID not found in resources!" << std::endl;
+                continue;
+            }
+
+            shared_ptr<Material_Resource> matRes = dynamic_pointer_cast<Material_Resource>(matIt->second);
+            if (!matRes) {
+                std::cerr << "Failed to cast to Material_Resource!" << std::endl;
+                continue;
+            }
+            //calculate Model Matrix in GLM
+            glm::mat4 modelGLMmat = extract_Model_Matrix(render);
+
+            //calculate the new mvpGLM matrix
+            mvpGLM = projGLMmat * viewGLMmat * modelGLMmat;
+
+            //convert mvpGLM to eigen mvpEigen
+            mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
+            Converter::convert_to_matrix_indices(objRes);
+            Converter::convert_to_matrix_vertices(objRes, matRes);
+            Converter::convert_to_matrix_colors(objRes, matRes);
+
+            // Bind Indices, Colors and Vertices
+            mShader.uploadIndices(objRes->get_matrix_indices());
+            mShader.uploadAttrib("position", objRes->get_matrix_vertices());
+            mShader.uploadAttrib("color", matRes->get_matrix_colors());
+
+            //bind mvpEigen and draw the component
+            mShader.setUniform("modelViewProj", mvpEigen);
+            glEnable(GL_DEPTH_TEST);
+            mShader.drawIndexed(GL_TRIANGLES, 0, objRes->get_matrix_indices().size());
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+}
+
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
+{
+    const glm::mat4 directions = calculateViewDir(rotation);
+
+    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
+    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
+
+    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
+    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
+
+    return { position + forward, up };
+}
+
+glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
+{
+    const float pitch = glm::radians(rotation.x);
+    const float yaw   = glm::radians(rotation.y);
+    const float roll  = glm::radians(rotation.z);
+
+    const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+    const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
+    const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
+
+    const glm::mat4 result = rotation_x * rotation_y * rotation_z;
+
+    return result;
+}
+
+glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
+    auto result = glm::mat4(1.0f);
+    result = glm::translate(result, input->get_position());
+    result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
+    result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
+    result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
+    result = glm::scale(result, input->get_scale());
+    return result;
 }
 
 Main_Scene::Main_Scene(const int window_width,
@@ -112,12 +162,20 @@ Main_Scene::Main_Scene(const int window_width,
     this->window_height = window_height;
     this->window_title = window_title;
     this->is_resizeable = is_resizeable;
+    instance = this;
 
     this->ids = vector<int>();
-    this->components = map<boost::uuids::uuid, Base_Component>();
-    this->resources = map<boost::uuids::uuid, Base_Resource>();
+    this->components = map<boost::uuids::uuid, shared_ptr<Base_Component>>();
+    this->resources = map<boost::uuids::uuid, shared_ptr<Base_Resource>>();
 
     initialize();
+}
+
+void Main_Scene::forceUpdate() {
+    if (instance) {
+        instance->updateTreeView();
+        instance->update();
+    }
 }
 
 void Main_Scene::initialize()
@@ -129,7 +187,7 @@ void Main_Scene::initialize()
 
     const int component_tree_position_x     = preview_width;
     constexpr int component_tree_position_y = 0;
-    const int component_tree_width          = this->window_width * 0.33f;
+    const int component_tree_width          = this->window_width * 0.32f;
     const int component_tree_height         = this->window_height * 0.4f;
 
     const int component_attributes_position_x = preview_width;
@@ -146,21 +204,23 @@ void Main_Scene::initialize()
 
     const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
+    component_tree->setSize(Vector2i(component_tree_width, component_tree_height));
 
     // Setze ein Layout für das Fenster
     component_tree->setLayout(new BoxLayout(
         Orientation::Vertical, Alignment::Fill, 10, 10
     ));
 
-    auto tree_view = new TreeView_Widget(component_tree);
-    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
-    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
-
     const auto component_attributes = new Fixed_Window(this, "Component Attributes");
     component_attributes->setPosition(Eigen::Vector2i(component_attributes_position_x, component_attributes_position_y));
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
-    const auto attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget->showAttributesOfComponent();
+
+    tree_view = new TreeView_Widget(component_tree, attributesWidget);
+    tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
+    tree_view->setSize(Eigen::Vector2i(component_tree_width, component_tree_height - 50));
 
     const auto preview_canvas = new Preview_Canvas(preview_window);
     preview_window->addChild(preview_canvas);
@@ -168,66 +228,37 @@ void Main_Scene::initialize()
     preview_canvas->setSize({preview_width - 20, preview_height - 80});
 
     const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
+    raytrace_preview_button->setFixedSize({preview_width / 2 - 10, 30}); // Breite etwas reduzieren für Platz
     preview_window->addChild(raytrace_preview_button);
-    raytrace_preview_button->setCallback([this]
-    {
-        try
-        {
+    raytrace_preview_button->setCallback([this] {
+        try {
             pthread_t SDL_thread;
             pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
-        }
-        catch(...)
-        {
+        } catch (...) {
             // TODO: Error Handling.
         }
     });
-    raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
-    raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
+    raytrace_preview_button->setPosition({10, preview_height - 40});
 
-    const auto load_json_button = new Button(preview_window, "Import Scene");
-    preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this, tree_view, attributesWidget]
-    {
-        try
-        {
-            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+    auto *slider = new Slider(preview_window);
+    slider->setValue(0.5f);
+    slider->setFixedSize({preview_width / 2 - 50, 30});
+    preview_window->addChild(slider);
 
-            string path_to_json = ".\\scenes\\JsonParser_DummyFile.json";
+    slider->setPosition(
+        {preview_width / 2 + 50,
+         preview_height - 40});
 
-            //FileSelector file_Selector();
-            //string path_to_json = file_Selector().get_input_path();
-
-            this->components.clear();
-            this->resources.clear();
-
-            Json_Parser::parseJSON(path_to_json, this->components, this->resources);
-
-            tree_view->clear();
-            tree_view->addNode("3D-Szene");
-
-            int i = -1;
-            for (const auto& component : this->components)
-            {
-                if(++i == 0) {
-                    attributesWidget->showAttributesOfComponent(component.second);
-                }
-                tree_view->addNode(component.second.get_name(), "3D-Szene");
-            }
-            //const auto VectorOfTreeViewLabel = tree_view->getLabelRef();
-
-
-            printf("");
-
-            performLayout();
-
-        }
-        catch(...)
-        {
-            // TODO: Error Handling.
-        }
+    slider->setCallback([](const float value) {
+        scaling = value;
     });
-    load_json_button->setSize({(preview_width / 2) - 20, 30});
-    load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
+
+
+    auto scaling_label = new Label(preview_window, "Scaler:");
+    scaling_label->setPosition({preview_width / 2 + 10, preview_height - 35});
+    scaling_label->setFixedSize({50,20});
+    scaling_label->setFontSize(20);
+
 
     performLayout();
 }
@@ -241,5 +272,153 @@ void*(*Main_Scene::raytrace_preview())(void*)
 
 void Main_Scene::update()
 {
-    // Update Main_Scene?
+    performLayout();
+}
+
+bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        if (key == GLFW_KEY_L && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Save (Ctrl+S)");
+            boost::uuids::uuid uuid = boost::uuids::random_generator()();
+            auto light_comp = std::make_shared<Light_Component>(
+                uuid,
+                "Light_Added",
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                1.0f,
+                glm::vec3{1, 1, 1}
+            );
+            addComponent(uuid, light_comp);
+            return true;
+        }
+        if (key == GLFW_KEY_O && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Open (Ctrl+O)");
+            openScene();
+            return true;
+        }
+        if (key == GLFW_KEY_Q && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            return true;
+        }
+        if (key == GLFW_KEY_R && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            pthread_t SDL_thread;
+            pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
+            return true;
+        }
+    }
+    return Screen::keyboardEvent(key, scancode, action, modifiers);
+}
+
+
+std::string Main_Scene::openFileDialog() {
+    char filePath[MAX_PATH] = {0};
+
+    path currentPath = current_path();
+
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = nullptr;
+    ofn.lpstrFile = filePath;
+    ofn.nMaxFile = MAX_PATH;
+
+    ofn.lpstrFilter = "JSON Files\0*.json\0All Files\0*.*\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    std::string result;
+    if (GetOpenFileName(&ofn)) {
+        result = filePath;
+        std::replace(result.begin(), result.end(), '\\', '/');
+    }
+
+    current_path(currentPath);
+
+    return result;
+}
+
+void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
+    components[uuid] = component;
+    forceUpdate();
+}
+
+bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
+    // Check if the file has a .json extension (case insensitive)
+    const std::string extension = ".json";
+    if (path.size() >= extension.size() &&
+        std::equal(extension.rbegin(), extension.rend(), path.rbegin(), [](char a, char b) {
+            return std::tolower(a) == std::tolower(b);
+        })) {
+        // Replace all backslashes with forward slashes
+        std::replace(path.begin(), path.end(), '\\', '/');
+        return true;
+        }
+    return false;
+}
+
+void Main_Scene::updateTreeView() const {
+    tree_view->clear();
+    //tree_view->addNode("3D-Szene");
+    instance->tree_view->addParent("3D-Szene");
+
+    for (const auto& [key, component] : components) {
+        tree_view->addNode(component, "3D-Szene");
+    }
+}
+
+void Main_Scene::setChangesOnComponent(const std::shared_ptr<Base_Component>& component)
+{
+    for (auto& pair : getComponents()) {
+        if (pair.second->get_uuid() == component->get_uuid()) {
+            components[component->get_uuid()] = component;
+            instance->attributesWidget->updateFromComponent(components[component->get_uuid()]);
+            break;
+        }
+    }
+
+    forceUpdate();
+}
+
+void Main_Scene::openScene()
+{
+    Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+
+    string path_to_json = openFileDialog();
+    if (path_to_json.empty()) return;
+    if (!isJsonFileAndFixPath(path_to_json)) return;
+    if (!exists(path_to_json)) {
+        std::cerr << "File does not exist: " << path_to_json << std::endl;
+        return;
+    }
+    instance->scene_path = path_to_json;
+    path_to_json = absolute(path_to_json).string();
+    components.clear();
+    resources.clear();
+
+    Json_Parser::parseJSON(path_to_json, components, resources);
+
+    instance->tree_view->clear();
+    instance->tree_view->addParent("3D-Szene");
+
+    if (components.empty()) {
+        printf("No components to display.\n");
+        return;
+    }
+
+    instance->attributesWidget->showAttributesOfComponent();
+
+    for (const auto& [key, component] : components) {
+        instance->tree_view->addNode(component, "3D-Szene");
+    }
+
+    instance->performLayout();
+}
+
+float Main_Scene::getScalingFactor()
+{
+    return scaling;
 }
