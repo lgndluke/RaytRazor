@@ -1,12 +1,5 @@
 #include "Main_Scene.h"
 
-
-
-//TODO's:
-// -> Preview_Canvas::drawGL() implementieren.
-// -> Main_Scene::Main_Scene() implementieren.
-// -> Main_Scene::update() implementieren.
-
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
 Main_Scene* Main_Scene::instance = nullptr;
@@ -26,13 +19,10 @@ Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
 
 void Preview_Canvas::drawGL()
 {
-
     static bool initialized = false;
 
     if (!initialized)
     {
-
-        // Initialisierung des Shaders.
         mShader.init(
             "3d_Preview_Shader",
             Vertex_Shader::get_vertex_shader(),
@@ -61,7 +51,7 @@ void Preview_Canvas::drawGL()
         {
             std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
             viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),camera->get_near_clip(), camera->get_far_clip());
+            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
         }
     }
 
@@ -112,7 +102,7 @@ void Preview_Canvas::drawGL()
             std::cout << "Object Resource Indices:\n" << objRes->get_matrix_indices() << std::endl;
             std::cout << "Object Resource Vertices:\n" << objRes->get_matrix_vertices() << std::endl;
 
-            //bind indices, colors and vertices
+            // Bind Indices, Colors and Vertices
             mShader.uploadIndices(objRes->get_matrix_indices());
             mShader.uploadAttrib("position", objRes->get_matrix_vertices());
             mShader.uploadAttrib("color", matRes->get_matrix_colors());
@@ -120,10 +110,23 @@ void Preview_Canvas::drawGL()
             //bind mvpEigen and draw the component
             mShader.setUniform("modelViewProj", mvpEigen);
             glEnable(GL_DEPTH_TEST);
-            mShader.drawIndexed(GL_TRIANGLES, 0, objRes->get_indices().size());
+            mShader.drawIndexed(GL_TRIANGLES, 0, objRes->get_matrix_indices().size());
             glDisable(GL_DEPTH_TEST);
         }
     }
+}
+
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
+{
+    const glm::mat4 directions = calculateViewDir(rotation);
+
+    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
+    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
+
+    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
+    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
+
+    return { position + forward, up };
 }
 
 glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
@@ -139,41 +142,6 @@ glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
     const glm::mat4 result = rotation_x * rotation_y * rotation_z;
 
     return result;
-
-    /*
-    float rotX = glm::radians(rotation.x);
-    float rotY = glm::radians(rotation.y);
-
-    glm::vec3 result;
-
-    result.x = cos(rotX) * cos(rotY);
-    result.y = sin(rotX);
-    result.z = cos(rotX) * sin(rotY);
-
-    return glm::normalize(result);
-    */
-}
-
-std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
-{
-    const glm::mat4 directions = calculateViewDir(rotation);
-
-    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
-    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
-
-    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
-    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
-
-    return { position + forward, up };
-
-    /*
-    glm::vec3 viewDirection = calculateViewDir(rotation);
-    glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
-    glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
-
-    std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
-    return result;
-    */
 }
 
 glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
