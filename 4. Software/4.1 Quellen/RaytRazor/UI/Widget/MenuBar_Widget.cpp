@@ -97,9 +97,15 @@ void MenuBar_Widget::addMenu(const string& title, const vector<string>& options,
 
     Popup* popup = menuButton->popup();
     popup->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Fill, 5, 5));
+    popup->setAnchorPos(menuButton->position() + Eigen::Vector2i(0, menuButton->size().y() + 27));
+    popup->setVisible(false);
 
-    menuButton->setCallback([menuButton, popup]() {
+    auto updatePopupPosition = [menuButton, popup]() {
         popup->setAnchorPos(menuButton->position() + Eigen::Vector2i(0, menuButton->size().y() + 27));
+    };
+
+    menuButton->setCallback([popup, updatePopupPosition]() {
+        updatePopupPosition();
         popup->setVisible(!popup->visible());
     });
 
@@ -111,6 +117,19 @@ void MenuBar_Widget::addMenu(const string& title, const vector<string>& options,
         }
     }
 }
+
+void MenuBar_Widget::performLayout(NVGcontext* ctx) {
+    Widget::performLayout(ctx);
+
+    for (auto& child : children()) {
+        if (auto menuButton = dynamic_cast<PopupButton*>(child)) {
+            if (auto popup = menuButton->popup()) {
+                popup->setAnchorPos(menuButton->position() + Eigen::Vector2i(0, menuButton->size().y() + 27));
+            }
+        }
+    }
+}
+
 
 
 std::string MenuBar_Widget::openFileDialog() {
