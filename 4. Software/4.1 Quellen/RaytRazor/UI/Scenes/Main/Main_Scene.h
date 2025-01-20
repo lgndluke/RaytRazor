@@ -112,6 +112,8 @@ class Main_Scene final : public Screen
          */
         void update();
 
+        bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
+
         static map<boost::uuids::uuid, shared_ptr<Base_Component>> getComponents()
         {
             return components;

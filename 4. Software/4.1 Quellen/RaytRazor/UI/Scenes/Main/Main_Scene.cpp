@@ -281,6 +281,46 @@ void Main_Scene::update()
     performLayout();
 }
 
+bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        if (key == GLFW_KEY_L && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Save (Ctrl+S)");
+            boost::uuids::uuid uuid = boost::uuids::random_generator()();
+            auto light_comp = std::make_shared<Light_Component>(
+                uuid,
+                "Light_Added",
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                1.0f,
+                glm::vec3{1, 1, 1}
+            );
+
+            Main_Scene::addComponent(uuid, light_comp);
+            return true;
+        }
+        if (key == GLFW_KEY_O && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Open (Ctrl+O)");
+            openScene();
+            return true;
+        }
+        if (key == GLFW_KEY_Q && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            return true;
+        }
+        if (key == GLFW_KEY_R && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            pthread_t SDL_thread;
+            pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
+            return true;
+        }
+    }
+    return Screen::keyboardEvent(key, scancode, action, modifiers);
+}
+
+
 std::string Main_Scene::openFileDialog() {
     char filePath[MAX_PATH] = {0};
 
