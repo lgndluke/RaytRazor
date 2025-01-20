@@ -38,6 +38,7 @@ private:
      * @param callbacks Die Callbacks, die für jede Option ausgeführt werden sollen.
      */
     void addMenu(const string& title, const vector<string>& options, const vector<function<void()>>& callbacks);
+    void performLayout(NVGcontext* ctx);
 
     static string openFileDialog();
 
