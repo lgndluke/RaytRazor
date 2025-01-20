@@ -16,6 +16,7 @@ struct Material {
     string name;
     glm::vec3 ambient;
     glm::vec3 diffuse;
+    glm::vec3 emissive;
     glm::vec3 specular;
     GLfloat illumination;
     GLfloat transparency;
