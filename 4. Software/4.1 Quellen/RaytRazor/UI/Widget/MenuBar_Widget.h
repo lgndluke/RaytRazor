@@ -41,6 +41,8 @@ private:
 
     static string openFileDialog();
 
+    static std::string openDirectoryDialog();
+
     static bool isDirectory(const string& path);
 };
 

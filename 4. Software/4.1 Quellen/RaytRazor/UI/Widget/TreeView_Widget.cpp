@@ -9,20 +9,41 @@ int Basis_Child_Font = 25;
 
 TreeView_Widget::TreeView_Widget(Widget* parent, ComponentAttributes_Widget* attributesWidget)
     : Widget(parent), mAttributes(attributesWidget) {
-    auto scrollPanel = new VScrollPanel(this);
-    scrollPanel->setFixedSize({parent->width(), parent->height()});
 
-    // Container für Baumknoten
-    mContainer = new Widget(scrollPanel);
-    mContainer->setLayout(new BoxLayout(
-        Orientation::Vertical, Alignment::Minimum, 5, 5
-    ));
+    int scrollPanelHeight = std::max(100, parent->height() - (Basis_Child_Font * 2));
+    mScrollPanel = new VScrollPanel(this);
+    mScrollPanel->setFixedSize(Eigen::Vector2i(parent->width(), scrollPanelHeight));
+
+    mContainer = new Widget(mScrollPanel);
+    mContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 5, 5));
+    mContainer->setFixedSize(Vector2i(parent->width(), scrollPanelHeight * 2));
+
+    mScrollPanel->performLayout(screen()->nvgContext());
+    mContainer->performLayout(screen()->nvgContext());
+
+    // Debugging
+    std::cout << "TreeView_Widget initialized." << std::endl;
+    std::cout << "ScrollPanel size: " << mScrollPanel->size().x() << ", " << mScrollPanel->size().y() << std::endl;
+    std::cout << "Container size: " << mContainer->size().x() << ", " << mContainer->size().y() << std::endl;
 }
 
-void TreeView_Widget::addNode(const std::string& nodeName, const std::string& parentName) {
-    // Prüfen, ob der Knoten bereits existiert
-    if (mNodeMap.find(nodeName) != mNodeMap.end()) {
-        return; // Knoten existiert bereits, keine weiteren Aktionen nötig
+void TreeView_Widget::addParent(const std::string& parentName) {
+    if (mNodeMap.find(parentName) != mNodeMap.end()) {
+        return;
+    }
+    auto parentContainer = new Widget(mContainer);
+    parentContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
+
+    auto label = new Custom_Label(parentContainer, parentName, "sans-bold");
+    label->setFontSize(Basis_Root_Font);
+
+    mNodeMap[parentName] = parentContainer;
+    mContainer->performLayout(screen()->nvgContext());
+}
+
+void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, const std::string& parentName) {
+    if (mTrackedObjects.find(nodeName->get_uuid()) != mTrackedObjects.end()) {
+        return;
     }
 
     if (parentName.empty()) {
@@ -30,9 +51,9 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
         auto rootContainer = new Widget(mContainer);
         rootContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
 
-        auto label = new Custom_Label(rootContainer, nodeName, "sans-bold");
+        auto label = new Custom_Label(rootContainer, nodeName->get_name(), "sans-bold");
         label->setFontSize(Basis_Root_Font);
-        mNodeMap[nodeName] = rootContainer; // Speichern des Knotens in der Map
+        mNodeMap[nodeName->get_name()] = rootContainer; // Speichern des Knotens in der Map
     } else if (mNodeMap.find(parentName) != mNodeMap.end()) {
         // Erstellen eines Child-Knotens unter dem angegebenen Parent
         auto parentWidget = mNodeMap[parentName];
@@ -40,34 +61,31 @@ void TreeView_Widget::addNode(const std::string& nodeName, const std::string& pa
         auto childContainer = new Widget(parentWidget);
         childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 0));
 
-        auto label = new Custom_Label(childContainer, "|-------> " + nodeName, "sans");
+        auto label = new Custom_Label(childContainer, "|-------> " + nodeName->get_name(), "sans");
         label->setFontSize(Basis_Child_Font);
 
-        // Callback für das Hervorheben des angeklickten Labels
         label->setCallback([this, label, nodeName]() {
-            printf("Node name: %s\n", nodeName.c_str());
-
-            // Reset the previous label's color if it exists
+            printf("Node name: %s\n", nodeName->get_name().c_str());
             if (mCurrentSelectedLabel) {
-                mCurrentSelectedLabel->setColor(nanogui::Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
+                mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
             }
+            label->setColor(Color(255, 0, 0, 255));
 
-            // Highlight the clicked label
-            label->setColor(nanogui::Color(255, 0, 0, 255)); // Highlight-Farbe (z. B. Rot)
-
-            // Update the current selected label
             mCurrentSelectedLabel = label;
 
-            // Update the component attributes
-            for (auto componets : Main_Scene::getComponents()) {
-                if (nodeName == componets.second->get_name()) {
+            for (const auto& componets : Main_Scene::getComponents()) {
+                if (nodeName->get_uuid() == componets.second->get_uuid()) {
                     mAttributes->updateFromComponent(componets.second);
                 }
             }
         });
 
         // Speichern des neuen Child-Knotens in der Map
-        mNodeMap[nodeName] = childContainer;
+        mNodeMap[nodeName->get_name()] = childContainer;
+        mContainer->setSize(Vector2i(mScrollPanel->width(), mContainer->children().size() * label->height()));
+        mContainer->performLayout(screen()->nvgContext());
+        mScrollPanel->performLayout(screen()->nvgContext());
+        printf("");
     }
 }
 

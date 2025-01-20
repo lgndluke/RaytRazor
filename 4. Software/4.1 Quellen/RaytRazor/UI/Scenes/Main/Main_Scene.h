@@ -118,6 +118,8 @@ class Main_Scene final : public Screen
          */
         void update();
 
+        bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
+
         static map<boost::uuids::uuid, shared_ptr<Base_Component>> getComponents()
         {
             return components;
@@ -126,6 +128,12 @@ class Main_Scene final : public Screen
         {
             return resources;
         }
+
+        static float getScalingFactor();
+
+        static void setChangesOnComponent(const std::shared_ptr<Base_Component>& component);
+
+        static void openScene();
 
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
 
@@ -137,6 +145,8 @@ class Main_Scene final : public Screen
         int window_height;
         string window_title;
         bool is_resizeable;
+        string scene_path;
+        static float scaling;
 
         //Widgets
         TreeView_Widget* tree_view;

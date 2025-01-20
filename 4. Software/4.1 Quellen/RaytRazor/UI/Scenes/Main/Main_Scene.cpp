@@ -10,6 +10,7 @@
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Component>> Main_Scene::components;
 std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resources;
 Main_Scene* Main_Scene::instance = nullptr;
+float Main_Scene::scaling = 0.5f;
 
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
@@ -29,6 +30,26 @@ void Preview_Canvas::drawGL()
 
     static bool initialized = false;
 
+
+    //gesamte scene muss hier vorliegen
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+
+    //C:\Users\chris\CLionProjects\RaytRazor\RaytRazor\5. Modelle\5.1 Beispielmodelle\miscellaneous\miscellaneous\teapot\Teapot.obj
+    //C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl
+    Object_Resource OR;
+    Material_Resource MR;
+    try
+    {
+        OR = Object_Importer::import_Object(uuid,
+            "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.obj").value();
+        MR = Material_Importer::import_Material(uuid,
+            "C:/Users/blau08/OneDrive - thu.de/Semester 5/Software Projekt/RaytRazor/RaytRazor5. Modelle/5.1 Beispielmodelle/miscellaneous/miscellaneous/teapot/Teapot.mtl").value();
+    }
+    catch (const std::exception& e)
+    {
+        Logger::log(MessageType::SEVERE, "Main_Scene::drawGL: File not found exception:\n" + std::string(e.what()));
+    }
+
     if (!initialized)
     {
 
@@ -39,108 +60,100 @@ void Preview_Canvas::drawGL()
             Fragment_Shader::get_fragment_shader()
         );
         initialized = true;
-    }
 
-    //clear screen and setzt hintergrund grau
-    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        // TODO Components in 3D Preview laden.
+
+        // Dummy Daten -> TODO Delete afterwards.
+        // ==================================================================
+
+
+        const std::vector<Vertex>& vertices = OR.get_vertices(); // Optimierter Zugriff durch Referenz
+        const std::vector<Indice>& indices = OR.get_indices(); // Zugriff auf Indizes
+
+        int size = indices.size();
+        int size2 = vertices.size();
+
+        /*
+        // Ausgabe der Vertices
+        for (int i = 0; i < static_cast<int>(vertices.size()); i++) {
+            const Vertex& vertex = vertices[i];
+
+            if (i >= 0) {
+                std::cout << "Vertex " << i << ": "
+                          << "Position = (" << vertex.position.x << ", "
+                                            << vertex.position.y << ", "
+                                            << vertex.position.z << "), "
+                          << "Color = (" << vertex.color.r << ", "
+                                         << vertex.color.g << ", "
+                                         << vertex.color.b << ")" << std::endl;
+            }
+        }
+
+        // Ausgabe der Indizes
+        if (!indices.empty() && indices.size() % 3 == 0) {
+            for (size_t i = 0; i < indices.size() / 3; i++) {
+                std::cout << "Face " << i << ": "
+                          << "Indices = (" << indices[i * 3] << ", "
+                                           << indices[i * 3 + 1] << ", "
+                                           << indices[i * 3 + 2] << ")" << std::endl;
+            }
+        } else {
+            std::cerr << "Warning: Indices vector is empty or not divisible by 3!" << std::endl;
+        }
+        */
+
+        Converter::convert_to_matrix_colors(MR);
+        Converter::convert_to_matrix_indices(OR);
+        Converter::convert_to_matrix_vertices(OR);
+        // ==================================================================
+
+        printf("");
+
+        // Daten in Shader laden.
+        mShader.bind();
+        mShader.uploadIndices(OR.get_matrix_indices());
+
+        printf("");
+        mShader.uploadAttrib("position", OR.get_matrix_vertices());
+        mShader.uploadAttrib("color", MR.get_matrix_colors());
+    }
 
     // Shader binden und Szene rendern
     mShader.bind();
 
-    Eigen::Matrix4f mvpEigen;
-    mvpEigen.setIdentity();
-    glm::mat4 mvpGLM, projGLMmat, viewGLMmat;
-    auto components = Main_Scene::getComponents();
-    auto resources = Main_Scene::getResources();
+    Eigen::Matrix4f mvp;
+    mvp.setIdentity();
+    glm::mat4 mvpGLM;
+    map<boost::uuids::uuid, shared_ptr<Base_Component>> components;
+    components = Main_Scene::getComponents();
+    map<boost::uuids::uuid, shared_ptr<Base_Resource>> resources;
+    resources = Main_Scene::getResources();
     //create projection and view matrix
-    for (auto& pair  : components)
-    {
+    for (auto& pair  : components) {
+
         shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
-        if(camera)
-        {
-            std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
-            viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),camera->get_near_clip(), camera->get_far_clip());
-        }
+
+        //std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+        //glm::mat4 ViewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+        //glm::mat4 ProjGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
+                                                        //camera->get_near_clip(), camera->get_far_clip());
     }
 
-    //iterate through components and bind the new mvpEigen matrix/object -> get model matrix, calculate matrix, bind new mvpEigen, print screen
+    //iterate through components and bind the new mvp matrix/object -> get model matrix, calculate matrix, bind new mvp, print screen
     //model matrix
-    for (auto& pair : components)
-    {
-        shared_ptr<Render_Component> render = dynamic_pointer_cast<Render_Component>(pair.second);
-        if(render)
-        {
-            // Validate Object Resource
-            auto objIt = resources.find(render->get_object_UUID());
-            if (objIt == resources.end()) {
-                std::cerr << "Object UUID not found in resources!" << std::endl;
-                continue;
-            }
 
-            shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
-            if (!objRes) {
-                std::cerr << "Failed to cast to Object_Resource!" << std::endl;
-                continue;
-            }
+    //convert mvpGLM -> mvp von eigen
 
-            // Validate Material Resource
-            auto matIt = resources.find(render->get_material_UUID());
-            if (matIt == resources.end()) {
-                std::cerr << "Material UUID not found in resources!" << std::endl;
-                continue;
-            }
 
-            shared_ptr<Material_Resource> matRes = dynamic_pointer_cast<Material_Resource>(matIt->second);
-            if (!matRes) {
-                std::cerr << "Failed to cast to Material_Resource!" << std::endl;
-                continue;
-            }
-            //calculate Model Matrix in GLM
-            glm::mat4 modelGLMmat = extract_Model_Matrix(render);
+    mShader.setUniform("modelViewProj", mvp);
 
-            //calculate the new mvpGLM matrix
-            mvpGLM = projGLMmat * viewGLMmat * modelGLMmat;
-
-            //convert mvpGLM to eigen mvpEigen
-            mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
-            Converter::convert_to_matrix_indices(objRes);
-            Converter::convert_to_matrix_vertices(objRes);
-            Converter::convert_to_matrix_colors(matRes);
-
-            std::cout << "Object Resource Indices:\n" << objRes->get_matrix_indices() << std::endl;
-            std::cout << "Object Resource Vertices:\n" << objRes->get_matrix_vertices() << std::endl;
-
-            //bind indices, colors and vertices
-            mShader.uploadIndices(objRes->get_matrix_indices());
-            mShader.uploadAttrib("position", objRes->get_matrix_vertices());
-            mShader.uploadAttrib("color", matRes->get_matrix_colors());
-
-            //bind mvpEigen and draw the component
-            mShader.setUniform("modelViewProj", mvpEigen);
-            glEnable(GL_DEPTH_TEST);
-            mShader.drawIndexed(GL_TRIANGLES, 0, objRes->get_indices().size());
-            glDisable(GL_DEPTH_TEST);
-        }
-    }
+    glEnable(GL_DEPTH_TEST);
+    mShader.drawIndexed(GL_TRIANGLES, 0, OR.get_indices().size());
+    glDisable(GL_DEPTH_TEST);
 }
 
-glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
+glm::vec3 Preview_Canvas::calculateViewDir(glm::vec3 rotation)
 {
-    const float pitch = glm::radians(rotation.x);
-    const float yaw   = glm::radians(rotation.y);
-    const float roll  = glm::radians(rotation.z);
-
-    const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
-    const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
-    const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
-
-    const glm::mat4 result = rotation_x * rotation_y * rotation_z;
-
-    return result;
-
-    /*
     float rotX = glm::radians(rotation.x);
     float rotY = glm::radians(rotation.y);
 
@@ -151,38 +164,15 @@ glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
     result.z = cos(rotX) * sin(rotY);
 
     return glm::normalize(result);
-    */
 }
 
-std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
+std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(glm::vec3 position, glm::vec3 rotation)
 {
-    const glm::mat4 directions = calculateViewDir(rotation);
-
-    constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
-    constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
-
-    const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
-    glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
-
-    return { position + forward, up };
-
-    /*
     glm::vec3 viewDirection = calculateViewDir(rotation);
     glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), viewDirection));
     glm::vec3 upVec = glm::normalize(glm::cross(viewDirection, right));
 
     std::pair<glm::vec3, glm::vec3> result = {position + viewDirection, upVec};
-    return result;
-    */
-}
-
-glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
-    auto result = glm::mat4(1.0f);
-    result = glm::translate(result, input->get_position());
-    result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
-    result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
-    result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
-    result = glm::scale(result, input->get_scale());
     return result;
 }
 
@@ -221,7 +211,7 @@ void Main_Scene::initialize()
 
     const int component_tree_position_x     = preview_width;
     constexpr int component_tree_position_y = 0;
-    const int component_tree_width          = this->window_width * 0.33f;
+    const int component_tree_width          = this->window_width * 0.32f;
     const int component_tree_height         = this->window_height * 0.4f;
 
     const int component_attributes_position_x = preview_width;
@@ -238,6 +228,7 @@ void Main_Scene::initialize()
 
     const auto component_tree = new Fixed_Window(this, "Component Tree");
     component_tree->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y));
+    component_tree->setSize(Vector2i(component_tree_width, component_tree_height));
 
     // Setze ein Layout für das Fenster
     component_tree->setLayout(new BoxLayout(
@@ -249,6 +240,7 @@ void Main_Scene::initialize()
     component_attributes->setSize(Eigen::Vector2i(component_attributes_width, component_attributes_height));
 
     attributesWidget = new ComponentAttributes_Widget(component_attributes);
+    attributesWidget->showAttributesOfComponent();
 
     tree_view = new TreeView_Widget(component_tree, attributesWidget);
     tree_view->setPosition(Eigen::Vector2i(component_tree_position_x, component_tree_position_y + 30));
@@ -260,89 +252,37 @@ void Main_Scene::initialize()
     preview_canvas->setSize({preview_width - 20, preview_height - 80});
 
     const auto raytrace_preview_button = new Button(preview_window, "Raytrace Preview");
+    raytrace_preview_button->setFixedSize({preview_width / 2 - 10, 30}); // Breite etwas reduzieren für Platz
     preview_window->addChild(raytrace_preview_button);
-    raytrace_preview_button->setCallback([this]
-    {
-        try
-        {
+    raytrace_preview_button->setCallback([this] {
+        try {
             pthread_t SDL_thread;
             pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
-        }
-        catch(...)
-        {
+        } catch (...) {
             // TODO: Error Handling.
         }
     });
-    raytrace_preview_button->setSize({(preview_width / 2) - 20, 30});
-    raytrace_preview_button->setPosition({preview_position_x + raytrace_preview_button->width() + 25, preview_height - 40});
+    raytrace_preview_button->setPosition({10, preview_height - 40});
 
-    const auto load_json_button = new Button(preview_window, "Import Scene");
-    preview_window->addChild(load_json_button);
-    load_json_button->setCallback([this]
-    {
-        try
-        {
-            Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+    auto *slider = new Slider(preview_window);
+    slider->setValue(0.5f);
+    slider->setFixedSize({preview_width / 2 - 50, 30});
+    preview_window->addChild(slider);
 
-            //Path muss angepasst werden wenn sich wd die Struktur ändert
-            //todo über explorer setzen :)
-            string path_to_json = "C:/Users/lukas/OneDrive - thu.de/5. Semester/Software Projekt/RaytRazor/4. Software/4.1 Quellen/RaytRazor/Parsing/Dummy_Json_New.json";
+    slider->setPosition(
+        {preview_width / 2 + 50,
+         preview_height - 40});
 
-            //string path_to_json1 = openFileDialog();
-            if (path_to_json.empty()) return;
-            if (!isJsonFileAndFixPath(path_to_json)) return;
-            if (!exists(path_to_json)) {
-                std::cerr << "File does not exist: " << path_to_json << std::endl;
-                return;
-            }
-
-
-            path_to_json = absolute(path_to_json).string();
-
-            printf("");
-
-
-            //FileSelector file_Selector();
-            //string path_to_json = file_Selector().get_input_path();
-
-            components.clear();
-            resources.clear();
-
-            Json_Parser::parseJSON(path_to_json, components, resources);
-
-            printf("");
-
-            tree_view->clear();
-            tree_view->addNode("3D-Szene");
-
-            if (components.empty()) {
-                printf("No components to display.\n");
-                return;
-            }
-
-            // Zeige die Attribute des ersten Elements an
-            bool isFirstComponent = true;
-
-            for (const auto& [key, component] : components) {
-                if (isFirstComponent) {
-                    attributesWidget->showAttributesOfComponent(component);
-                    isFirstComponent = false;
-                }
-
-                // Füge den Knoten zum Baum hinzu
-                tree_view->addNode(component->get_name(), "3D-Szene");
-            }
-
-            performLayout();
-
-        }
-        catch(...)
-        {
-            // TODO: Error Handling.
-        }
+    slider->setCallback([](const float value) {
+        scaling = value;
     });
-    load_json_button->setSize({(preview_width / 2) - 20, 30});
-    load_json_button->setPosition({ preview_position_x + 15, preview_height - 40});
+
+
+    auto scaling_label = new Label(preview_window, "Scaler:");
+    scaling_label->setPosition({preview_width / 2 + 10, preview_height - 35});
+    scaling_label->setFixedSize({50,20});
+    scaling_label->setFontSize(20);
+
 
     performLayout();
 }
@@ -358,6 +298,45 @@ void Main_Scene::update()
 {
     performLayout();
 }
+
+bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+        if (key == GLFW_KEY_L && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Save (Ctrl+S)");
+            boost::uuids::uuid uuid = boost::uuids::random_generator()();
+            auto light_comp = std::make_shared<Light_Component>(
+                uuid,
+                "Light_Added",
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                glm::vec3{0, 0, 0},
+                1.0f,
+                glm::vec3{1, 1, 1}
+            );
+            addComponent(uuid, light_comp);
+            return true;
+        }
+        if (key == GLFW_KEY_O && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Open (Ctrl+O)");
+            openScene();
+            return true;
+        }
+        if (key == GLFW_KEY_Q && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            return true;
+        }
+        if (key == GLFW_KEY_R && modifiers == GLFW_MOD_CONTROL) {
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            setVisible(false);
+            pthread_t SDL_thread;
+            pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
+            return true;
+        }
+    }
+    return Screen::keyboardEvent(key, scancode, action, modifiers);
+}
+
 
 std::string Main_Scene::openFileDialog() {
     char filePath[MAX_PATH] = {0};
@@ -406,17 +385,64 @@ bool Main_Scene::isJsonFileAndFixPath(std::string& path) {
 }
 
 void Main_Scene::updateTreeView() const {
-    bool isFirstComponent = true;
+    tree_view->clear();
+    //tree_view->addNode("3D-Szene");
+    instance->tree_view->addParent("3D-Szene");
 
     for (const auto& [key, component] : components) {
-        if (isFirstComponent) {
-            attributesWidget->showAttributesOfComponent(component);
-            isFirstComponent = false;
-        }
-
-        // Füge den Knoten zum Baum hinzu
-        tree_view->addNode(component->get_name(), "3D-Szene");
+        tree_view->addNode(component, "3D-Szene");
     }
 }
 
+void Main_Scene::setChangesOnComponent(const std::shared_ptr<Base_Component>& component)
+{
+    for (auto& pair : getComponents()) {
+        if (pair.second->get_uuid() == component->get_uuid()) {
+            components[component->get_uuid()] = component;
+            instance->attributesWidget->updateFromComponent(components[component->get_uuid()]);
+            break;
+        }
+    }
 
+    forceUpdate();
+}
+
+void Main_Scene::openScene()
+{
+    Logger::log(MessageType::INFO, "Main_Scene::initialize() - Import Scene Button clicked.");
+
+    string path_to_json = openFileDialog();
+    if (path_to_json.empty()) return;
+    if (!isJsonFileAndFixPath(path_to_json)) return;
+    if (!exists(path_to_json)) {
+        std::cerr << "File does not exist: " << path_to_json << std::endl;
+        return;
+    }
+    instance->scene_path = path_to_json;
+    path_to_json = absolute(path_to_json).string();
+    components.clear();
+    resources.clear();
+
+    Json_Parser::parseJSON(path_to_json, components, resources);
+
+    instance->tree_view->clear();
+    instance->tree_view->addParent("3D-Szene");
+
+    if (components.empty()) {
+        printf("No components to display.\n");
+        return;
+    }
+
+    instance->attributesWidget->showAttributesOfComponent();
+
+    for (const auto& [key, component] : components) {
+        instance->tree_view->addNode(component, "3D-Szene");
+    }
+
+    instance->performLayout();
+}
+
+float Main_Scene::getScalingFactor()
+{
+    return scaling;
+}
