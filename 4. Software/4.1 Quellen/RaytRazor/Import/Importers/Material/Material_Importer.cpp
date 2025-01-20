@@ -17,7 +17,7 @@ std::optional<Material_Resource> Material_Importer::import_Material(const boost:
         return std::nullopt;
     }
 
-    //const vector<int> indices = fetch_indices(uuid, path_to_file);
+    //const vector<int> indices = create_Indices(uuid, path_to_file);
     const vector<Material> materials = fetch_materials(path_to_file);
 
     Material_Resource return_Resource(uuid, path_to_file, materials);

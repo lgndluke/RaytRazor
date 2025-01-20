@@ -24,19 +24,19 @@ public:
      * @brief Methode, um die Indices-Matrix einer Object_Resource zu füllen.
      * @param source                Die betreffende Object_Resource.
      */
-    static void convert_to_matrix_indices(Object_Resource& source);
+    static void convert_to_matrix_indices(const shared_ptr<Object_Resource>& source);
 
     /**
      * @brief Methode, um die Vertices-Matrix einer Object_Resource zu füllen.
      * @param source                Die betreffende Object_Resource.
      */
-    static void convert_to_matrix_vertices(Object_Resource& source);
+    static void convert_to_matrix_vertices(shared_ptr<Object_Resource> source);
 
     /**
      * @brief Methode, um die Colors-Matrix einer Object_Resource zu füllen.
      * @param source                Die betreffende Object_Resource.
      */
-    static void convert_to_matrix_colors(Material_Resource& source);
+    static void convert_to_matrix_colors(shared_ptr<Material_Resource> source);
 
     static Eigen::Matrix4f convert_from_GLM_to_EigenMatrix(glm::mat4 source);
 
