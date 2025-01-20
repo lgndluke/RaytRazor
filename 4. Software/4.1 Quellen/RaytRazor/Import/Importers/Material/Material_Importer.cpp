@@ -64,6 +64,11 @@ std::vector<Material> Material_Importer::fetch_materials(const string& path_to_f
             ss >> matXYZ.x >> matXYZ.y >> matXYZ.z;
             materials.at(mtlNR).diffuse = matXYZ;
         }
+        else if (prefix == "Ke")
+        {
+            ss >> matXYZ.x >> matXYZ.y >> matXYZ.z;
+            materials.at(mtlNR).emissive = matXYZ;
+        }
         else if (prefix == "Ks")
         {
             ss >> matXYZ.x >> matXYZ.y >> matXYZ.z;
