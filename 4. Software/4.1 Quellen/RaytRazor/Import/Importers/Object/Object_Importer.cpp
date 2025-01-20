@@ -142,7 +142,8 @@ std::pair<std::vector<Indice>,std::vector<Vertex>> Object_Importer::fetch_Object
                         vertex.normal = vertex_normal[vn_idx - 1];
                     }
 
-                    vertex.color = glm::vec3(1.0f, 1.0f, 1.0f);
+                    //vertex.color = glm::vec3(1.0f, 1.0f, 1.0f);
+                    vertex.materialName = current_material;
                     vertices.push_back(vertex);
 
                     // Füge die neue Kombination in die Map ein
