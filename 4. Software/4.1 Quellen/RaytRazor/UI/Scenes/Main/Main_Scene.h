@@ -54,41 +54,41 @@ class Fixed_Window final : public Window
 class Preview_Canvas final : public GLCanvas
 {
 
-    public:
+public:
 
-        /**
-         * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
-         * @param parent                Der Eltern-Widget des Canvas.
-         */
-        explicit Preview_Canvas(Widget* parent);
+    /**
+     * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
+     * @param parent                Der Eltern-Widget des Canvas.
+     */
+    explicit Preview_Canvas(Widget* parent);
 
-        /**
-         * @brief Methode, um den GLCanvas der Main Szene zu zeichnen.
-         */
-        void drawGL() override;
+    /**
+     * @brief Methode, um den GLCanvas der Main Szene zu zeichnen.
+     */
+    void drawGL() override;
 
-        /**
-        * @brief zum berechnen der richtung in die das objekt (normalerweise kamera) zeigt
-        * @param rotation                Rotations vektor des objektes.
-        */
-        static glm::mat4 calculateViewDir(glm::vec3 rotation);
+    /**
+    * @brief zum berechnen der richtung in die das objekt (normalerweise kamera) zeigt
+    * @param rotation                Rotations vektor des objektes.
+    */
+    static glm::mat4 calculateViewDir(glm::vec3 rotation);
 
-        /**
-        * @brief zum berechnung des punktes auf die die kamera zeigt und den UP vector
-        * @param rotation                Rotations vektor des objektes.
-        * @param rotation                Position des objektes.
-        */
-        static std::pair<glm::vec3,glm::vec3> calculateCameraVectors(glm::vec3 position, glm::vec3 rotation);
+    /**
+    * @brief zum berechnung des punktes auf die die kamera zeigt und den UP vector
+    * @param rotation                Rotations vektor des objektes.
+    * @param rotation                Position des objektes.
+    */
+    static std::pair<glm::vec3,glm::vec3> calculateCameraVectors(glm::vec3 position, glm::vec3 rotation);
 
-        /**
-        * @brief
-        * @param input                Render_Component dessen Model matrix man braucht.
-        */
-        static glm::mat4 extract_Model_Matrix(const shared_ptr<Render_Component>& input);
+    /**
+    * @brief
+    * @param input                Render_Component dessen Model matrix man braucht.
+    */
+    static glm::mat4 extract_Model_Matrix(const shared_ptr<Render_Component>& input);
 
-    private:
-        GLShader mShader;
-        Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
+private:
+    GLShader mShader;
+    Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
 };
 
 /**
