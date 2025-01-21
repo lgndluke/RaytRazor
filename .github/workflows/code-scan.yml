@@ -6,7 +6,7 @@ on:
       - main
       - development
     paths:
-      - '../../3. Software/3.1 Source-Code/**'
+      - '3. Software/3.1 Source-Code/**'
 
 jobs:
   analyze:
