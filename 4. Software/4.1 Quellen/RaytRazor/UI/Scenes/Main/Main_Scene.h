@@ -56,6 +56,8 @@ class Preview_Canvas final : public GLCanvas
 
 public:
 
+
+    bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
     /**
      * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
      * @param parent                Der Eltern-Widget des Canvas.
@@ -89,6 +91,7 @@ public:
 private:
     GLShader mShader;
     Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
+    shared_ptr<Camera_Component> camera_glob;
 };
 
 /**
@@ -150,7 +153,6 @@ class Main_Scene final : public Screen
         bool is_resizeable;
         string scene_path;
         static float scaling;
-
         //Widgets
         TreeView_Widget* tree_view;
         ComponentAttributes_Widget* attributesWidget;

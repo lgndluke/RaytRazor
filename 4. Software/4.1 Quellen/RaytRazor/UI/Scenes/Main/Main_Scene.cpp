@@ -15,6 +15,35 @@ bool Fixed_Window::mouseDragEvent(const Vector2i& p, const Vector2i &rel,
     return false;
 }
 
+bool Preview_Canvas::keyboardEvent(int key, int scancode, int action, int modifiers)
+{
+    if (key == GLFW_KEY_W) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y, camera_glob->get_position().z - 10});
+        return true;
+    }
+    if (key == GLFW_KEY_S) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y, camera_glob->get_position().z + 10});
+        return true;
+    }
+    if (key == GLFW_KEY_A) {
+        camera_glob->set_position({camera_glob->get_position().x - 10, camera_glob->get_position().y, camera_glob->get_position().z});
+        return true;
+    }
+    if (key == GLFW_KEY_D) {
+        camera_glob->set_position({camera_glob->get_position().x + 10, camera_glob->get_position().y, camera_glob->get_position().z});
+        return true;
+    }
+    if (key == GLFW_KEY_E) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y + 10, camera_glob->get_position().z});
+        return true;
+    }
+    if (key == GLFW_KEY_Q) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y - 10, camera_glob->get_position().z});
+        return true;
+    }
+    return GLCanvas::keyboardEvent(key, scancode, action, modifiers);
+}
+
 Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
 {}
 
@@ -50,6 +79,7 @@ void Preview_Canvas::drawGL()
         shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
         if(camera)
         {
+            camera_glob = dynamic_pointer_cast<Camera_Component>(pair.second);
             std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
             viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
             projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
