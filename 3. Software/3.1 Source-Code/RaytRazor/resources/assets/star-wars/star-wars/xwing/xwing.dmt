@@ -1,0 +1,247 @@
+V3.0
+# material name
+material_name "Black"
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.000000 0.000000 0.000000 1.000000
+# specular color
+specular_color 0.000000 0.000000 0.000000 1.000000
+# diffuse
+diffuse 0.774800
+# ambient
+ambient 0.231800
+# shine
+shine 0.178800
+# shine intensity
+intensity 0.245000
+# reflection
+reflection 0.100000
+# transparency
+transparency 0.993400
+# fresnel index of refraction
+index_of_refraction 1.591440
+# fresnel reflections
+fresnel_reflections 1
+# backface appearance
+backface material
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000
+# material name
+material_name "DarkBlue"
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.098909 0.280873 0.702388 1.000000
+# specular color
+specular_color 1.000000 1.000000 1.000000 1.000000
+# diffuse
+diffuse 0.774800
+# ambient
+ambient 0.231800
+# shine
+shine 0.178800
+# shine intensity
+intensity 0.245000
+# reflection
+reflection 0.100000
+# transparency
+transparency 0.993400
+# fresnel index of refraction
+index_of_refraction 1.591440
+# fresnel reflections
+fresnel_reflections 1
+# backface appearance
+backface material
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000
+# material name
+material_name "DarkGrey"
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.678996 0.720043 0.740475 1.000000
+# specular color
+specular_color 1.000000 1.000000 1.000000 1.000000
+# diffuse
+diffuse 1.000000
+# ambient
+ambient 0.100000
+# shine
+shine 0.320000
+# shine intensity
+intensity 0.350000
+# reflection
+reflection 0.200000
+# transparency
+transparency 1.000000
+# fresnel index of refraction
+index_of_refraction 0.000000
+# fresnel reflections
+fresnel_reflections 0
+# backface appearance
+backface black
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000
+# material name
+material_name "Grey"
+shader_type color_shader "plain"
+color_param 0.900000 0.922000 0.924000 "colour"
+shader_type reflectance_shader "metal"
+float_param 1.000000 "ambient factor"
+float_param 1.000000 "roughness"
+float_param 0.000000 "specular factor"
+shader_type transparency_shader "plain coverage"
+float_param 1.000000 "coverage"
+use_color_shader 1
+use_refl_shader 1
+use_trans_shader 0
+use_disp_shader 0
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.900000 0.922000 0.924000 1.000000
+# specular color
+specular_color 0.900000 0.922000 0.924000 1.000000
+# diffuse
+diffuse 0.588200
+# ambient
+ambient 1.000000
+# shine
+shine 0.000000
+# shine intensity
+intensity 0.000000
+# reflection
+reflection 0.000000
+# transparency
+transparency 1.000000
+# fresnel index of refraction
+index_of_refraction 0.000000
+# fresnel reflections
+fresnel_reflections 1
+# backface appearance
+backface material
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000
+# material name
+material_name "Orange"
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.846998 0.478264 0.000000 1.000000
+# specular color
+specular_color 1.000000 1.000000 1.000000 1.000000
+# diffuse
+diffuse 1.000000
+# ambient
+ambient 0.100000
+# shine
+shine 0.320000
+# shine intensity
+intensity 0.350000
+# reflection
+reflection 0.200000
+# transparency
+transparency 1.000000
+# fresnel index of refraction
+index_of_refraction 0.000000
+# fresnel reflections
+fresnel_reflections 0
+# backface appearance
+backface black
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000
+# material name
+material_name "Red"
+shader_type color_shader "plain"
+color_param 0.815106 0.317586 0.351919 "colour"
+shader_type reflectance_shader "metal"
+float_param 0.915000 "ambient factor"
+float_param 0.680000 "roughness"
+float_param 0.350000 "specular factor"
+shader_type transparency_shader "plain coverage"
+float_param 1.000000 "coverage"
+use_color_shader 1
+use_refl_shader 1
+use_trans_shader 0
+use_disp_shader 0
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.815106 0.317586 0.351919 1.000000
+# specular color
+specular_color 0.815106 0.317586 0.351919 1.000000
+# diffuse
+diffuse 0.934600
+# ambient
+ambient 0.915000
+# shine
+shine 0.320000
+# shine intensity
+intensity 0.350000
+# reflection
+reflection 0.000000
+# transparency
+transparency 1.000000
+# fresnel index of refraction
+index_of_refraction 0.000000
+# fresnel reflections
+fresnel_reflections 0
+# backface appearance
+backface black
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000

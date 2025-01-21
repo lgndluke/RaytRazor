@@ -1,0 +1,485 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__362 (56) to come 
+#
+newmtl timetawh
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl timeta2c
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl timeta1c
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwood1c
+Ka  0.2 0.2 0.1
+Kd  0.2 0.2 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIWOOD.png
+#
+newmtl titcrist
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  1.0 1.0 1.0
+d  0.5
+Ns  0.5
+illum 2
+#
+newmtl timetalgr
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tigraygr
+Ka  0.5 0.4 0.4
+Kd  0.5 0.4 0.4
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tigold
+Ka  0.4 0.3 0.1
+Kd  0.4 0.3 0.1
+Ks  1.0 1.0 0.8
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tisuelow
+Ka  0.3 0.3 0.2
+Kd  0.3 0.3 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIWOODS.png
+bump TIBUMP3.png
+#
+newmtl ticanto
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl titechow
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump TILINE.png
+#
+newmtl titecant
+Ka  0.1 0.1 0.0
+Kd  0.1 0.1 0.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIWOODS.png
+#
+newmtl titechdo
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump TILINE.png
+#
+newmtl tisuelup
+Ka  0.3 0.3 0.2
+Kd  0.3 0.3 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIWOODS.png
+bump TIBUMP3.png
+#
+newmtl tigrey
+Ka  0.5 0.4 0.4
+Kd  0.5 0.4 0.4
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwhite1
+Ka  0.9 0.9 0.8
+Kd  0.9 0.9 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tibasech
+Ka  0.5 0.4 0.4
+Kd  0.5 0.4 0.4
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tisilver
+Ka  0.6 0.6 0.7
+Kd  0.6 0.6 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl ticrissi
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  1.0 1.0 1.0
+d  0.5
+Ns  0.5
+illum 2
+#
+newmtl timetalR
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tilight2
+Ka  0.0 0.7 0.2
+Kd  0.0 0.7 0.2
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  0.5
+illum 2
+#
+newmtl timetalR1
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tilight1
+Ka  0.9 0.1 0.1
+Kd  0.9 0.1 0.1
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  0.5
+illum 2
+#
+newmtl tilona
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl timetabr
+Ka  0.5 0.4 0.3
+Kd  0.5 0.4 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl timetalbl
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwooddo
+Ka  0.5 0.2 0.1
+Kd  0.5 0.2 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwoodt
+Ka  0.3 0.3 0.2
+Kd  0.3 0.3 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIWOOD.png
+#
+newmtl tigoldt
+Ka  0.4 0.3 0.1
+Kd  0.4 0.3 0.1
+Ks  1.0 1.0 0.8
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tipared
+Ka  1.0 1.0 0.9
+Kd  1.0 1.0 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl timarco
+Ka  0.2 0.2 0.1
+Kd  0.2 0.2 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd OAKQRTRT.png
+#
+newmtl tiside1
+Ka  0.8 0.7 0.6
+Kd  0.8 0.7 0.6
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TISIDE1.png
+bump TIBUMP.png
+#
+newmtl tiside2
+Ka  0.8 0.7 0.6
+Kd  0.8 0.7 0.6
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump TIBUMP.png
+#
+newmtl tiwoodba
+Ka  0.4 0.4 0.2
+Kd  0.4 0.4 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump TILINEBA.png
+#
+newmtl tiwire
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tibrown
+Ka  0.4 0.3 0.3
+Kd  0.4 0.3 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tigreyto
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwhitet
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwootor
+Ka  0.5 0.4 0.3
+Kd  0.5 0.4 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIWOOD.png
+#
+newmtl tiparwoo
+Ka  1.0 0.9 0.9
+Kd  1.0 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl timarco1
+Ka  0.5 0.4 0.3
+Kd  0.5 0.4 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd OLDWOOD.png
+#
+newmtl timetalw
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tibumpre
+Ka  0.8 0.8 0.8
+Kd  0.8 0.8 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIBUMP2.png
+map_d TIBUMP2.png
+bump TIBUMP2.png
+#
+newmtl tiboatri
+Ka  0.8 0.8 0.7
+Kd  0.8 0.8 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIBOATBU.png
+bump TIBOATBU.png
+#
+newmtl tiboatle
+Ka  0.8 0.8 0.7
+Kd  0.8 0.8 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIBOATBU.png
+bump TIBOATBU.png
+#
+newmtl timetalc
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tiwood2
+Ka  0.2 0.2 0.1
+Kd  0.2 0.2 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd OAKQRTRT.png
+#
+newmtl tireji
+Ka  1.0 0.8 0.6
+Kd  1.0 0.8 0.6
+Ks  1.0 1.0 0.7
+d  1.0
+Ns  0.5
+illum 2
+map_d TIOPACHA.png
+#
+newmtl ticompas
+Ka  1.0 1.0 0.9
+Kd  1.0 1.0 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TICOMPAS.png
+#
+newmtl ticupula
+Ka  0.1 0.1 0.0
+Kd  0.1 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_d TICUPU.png
+#
+newmtl tiflag1
+Ka  0.8 0.8 0.8
+Kd  0.8 0.8 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIFLAG3.png
+#
+newmtl tiflag3
+Ka  0.8 0.8 0.8
+Kd  0.8 0.8 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIFLAG1.png
+#
+newmtl tiflag2
+Ka  0.8 0.8 0.8
+Kd  0.8 0.8 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd TIFLAG2.png
+#
+newmtl tifuyel
+Ka  1.0 0.7 0.1
+Kd  1.0 0.7 0.1
+Ks  1.0 1.0 0.7
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tifublac
+Ka  0.3 0.3 0.4
+Kd  0.3 0.3 0.4
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl tipuert
+Ka  1.0 1.0 0.9
+Kd  1.0 1.0 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__362 done 
+#
+# EOF

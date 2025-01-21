@@ -1,0 +1,188 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__46 (21) to come 
+#
+newmtl CGTGband
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd BANDERA.PNG
+#
+newmtl CGTGcobr
+Ka  0.1 0.2 0.2
+Kd  0.1 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl CGTGgold
+Ka  0.7 0.6 0.3
+Kd  0.7 0.6 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl grisbump
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GRIS.PNG
+bump GRISBUM1.PNG
+#
+newmtl gris
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GRIS.PNG
+#
+newmtl libomad4
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd LIBOMAD4.PNG
+#
+newmtl CGTGchim
+Ka  0.8 0.7 0.4
+Kd  0.8 0.7 0.4
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd CHIMENEA.PNG
+#
+newmtl CGTGcris
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  1.0 1.0 1.0
+d  0.5
+Ns  0.5
+illum 2
+#
+newmtl right-ca
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd RIGHT-CA.PNG
+#
+newmtl marron
+Ka  0.6 0.6 0.5
+Kd  0.6 0.6 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl floor-ca
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd LIBOMAD4.PNG
+#
+newmtl gris1
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GRIS.PNG
+#
+newmtl left-ca
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd LEFT-CA.PNG
+#
+newmtl CGTGcuer
+Ka  0.1 0.2 0.3
+Kd  0.1 0.2 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl CGTGesca
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd LIBOMAD4.PNG
+#
+newmtl lifering
+Ka  0.8 0.7 0.4
+Kd  0.8 0.7 0.4
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl lifeblue
+Ka  0.6 0.7 0.7
+Kd  0.6 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl CGTGmoto
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl SHR-NEUM
+Ka  0.2 0.1 0.1
+Kd  0.2 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl CGTGbum1
+Ka  0.3 0.2 0.1
+Kd  0.3 0.2 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GRIS.PNG
+bump BUMP.PNG
+#
+newmtl CGTGmarr
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__46 done 
+#
+# EOF
