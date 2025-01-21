@@ -42,7 +42,7 @@ void MenuBar_Widget::initialize() {
                         "Render_Added",
                         glm::vec3{0, 0, 0},
                         glm::vec3{0, 0, 0},
-                        glm::vec3{0, 0, 0},
+                        glm::vec3{1, 1, 1},
                         obj_uuid,
                         mat_uuid
                     );
@@ -54,11 +54,11 @@ void MenuBar_Widget::initialize() {
                         auto light_comp = std::make_shared<Light_Component>(
                             uuid,
                             "Light_Added",
+                            glm::vec3{0, 10, 0},
                             glm::vec3{0, 0, 0},
-                            glm::vec3{0, 0, 0},
-                            glm::vec3{0, 0, 0},
+                            glm::vec3{1, 1, 1},
                             1.0f,
-                            glm::vec3{1, 1, 1}
+                            glm::vec3{255, 255, 255}
                         );
 
                         Main_Scene::addComponent(uuid, light_comp);
@@ -68,13 +68,13 @@ void MenuBar_Widget::initialize() {
                         auto camera_comp = std::make_shared<Camera_Component>(
                             uuid,
                             "Camera_Added",
-                            glm::vec3{0, 0, 0},
-                            glm::vec3{0, 0, 0},
-                            glm::vec3{0, 0, 0},
-                            1.0f,
-                            1.0f,
-                            1.0f,
-                            1.0
+                            glm::vec3{0, 65, 100},
+                            glm::vec3{-35, 0, 0},
+                            glm::vec3{1, 1, 1},
+                            60,
+                            1.77f,
+                            0.1f,
+                            1000
                         );
 
                         Main_Scene::addComponent(uuid, camera_comp);
