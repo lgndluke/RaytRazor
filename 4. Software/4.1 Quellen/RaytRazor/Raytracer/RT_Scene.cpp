@@ -5,8 +5,14 @@
 
 RT_Scene::RT_Scene() {
 	auto components = Main_Scene::getComponents();
-	if (components.empty()) {sphereScene();}
-	else {previewScene();}
+	if (components.empty()) {
+		sphereScene();
+		components.clear();
+	}
+	else {
+		previewScene();
+		components.clear();
+	}
 }
 
 void RT_Scene::savebmp (const char *filename, const int w, const int h, const int dpi, const RGBType *data) {
@@ -228,6 +234,7 @@ bool RT_Scene::render(Image &output) {
 	Vector camright = Y.cross(camdir).normalize();
 	Vector camdown = camright.cross(camdir);
 	camera_rt = Camera (cam_pos, camdir, camright, camdown);
+
 
 
 	int thisone, aa_index;
@@ -463,39 +470,118 @@ void RT_Scene::previewScene() {
 	auto resources = Main_Scene::getResources();
 	auto components = Main_Scene::getComponents();
 
-	cam_pos = Vector(3, 1.5, -4);
+	//std::vector<Vector> light_positions;
+	//std::vector<RT_Color> light_colors;
+
+	//cam_pos = Vector(components);
+	for (auto& pair  : components)
+	{
+		shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
+		shared_ptr<Light_Component> light = dynamic_pointer_cast<Light_Component>(pair.second);
+		shared_ptr<Render_Component> render = dynamic_pointer_cast<Render_Component>(pair.second);
+		if(camera)
+		{
+			//std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+			//viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+			cam_pos = Vector(camera->get_position().x, camera->get_position().y, camera->get_position().z);
+		}
+		else if(light)
+		{
+			Vector lightpos = Vector(light->get_position().x, light->get_position().y, light->get_position().z);
+			RT_Color lightcolr (light->get_color().x/255, light->get_color().y/255, light->get_color().z/255, light->get_intensity());
+			light_sources.push_back(new Light(lightpos, lightcolr));
+		}
+		else if (render)
+		{
+			auto objIt = resources.find(render->get_object_UUID());
+			shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
+			const std::vector<Vertex> vertices = objRes->get_vertices();
+
+
+			for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
+				auto* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
+															Vector(vertices[(i+1)].position.x,vertices[(i+1)].position.y,vertices[(i+1)].position.z),
+															Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z),
+															RT_Color(vertices.at(i).color.x, vertices.at(i).color.y, vertices.at(i).color.z, vertices.at(i).smoothness));
+				objects_scene.push_back(scene_triangle);
+
+			}
+		}
+	}
+
+	//cam_pos = Vector(3, 1.5, -4);
 	look_at = Vector (0, 0, 0);
 
-	const Vector O (0,0,0);
-	const Vector Y (0,1,0);
+	//const Vector O (0,0,0);
+	//const Vector Y (0,1,0);
 
 
-	const RT_Color white_light (1.0, 1.0, 1.0, 0);
-	const RT_Color pretty_green (0.5, 1.0, 0.5, 0.3);
-	const RT_Color maroon (0.5, 0.25, 0.25, 0.3);
-	const RT_Color orange (1.0, 0.25, 0.25, 0.3);
+	//const RT_Color white_light (1.0, 1.0, 1.0, 0);
+	//const RT_Color pretty_green (0.5, 1.0, 0.5, 0.3);
+	//const RT_Color maroon (0.5, 0.25, 0.25, 0.3);
+	//const RT_Color orange (1.0, 0.25, 0.25, 0.3);
 	const RT_Color tile_floor (0.5, 0.5, 0.5, 0.5);
-	const RT_Color gray (0.5, 0.5, 0.5, 0.3);
+	//const RT_Color gray (0.5, 0.5, 0.5, 0.3);
 
-	const Vector light_position (-7,10,-10);
-	auto* scene_light = new Light(light_position, white_light);
-	light_sources.push_back(scene_light);
+	//const Vector light_position (-7,10,-10);
+	//auto* scene_light = new Light(light_position, white_light);
+	//light_sources.push_back(scene_light);
 
-	const Vector light_position2 (7,-10,10);
-	auto* scene_light2 = new Light(light_position2, white_light);
-	light_sources.push_back(scene_light2);
+	//const Vector light_position2 (7,-10,10);
+	//auto* scene_light2 = new Light(light_position2, white_light);
+	//light_sources.push_back(scene_light2);
 
 	// scene objects
-	auto* scene_sphere = new Sphere(O, 1, pretty_green);
-	auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, orange);
-	auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
-	auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
+	//auto* scene_sphere = new Sphere(O, 1, pretty_green);
+	//auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, orange);
+	//auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
+	//auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
 	//Triangle scene_triangle2 (Vect (-2,0,0), Vect(0,0,-3), Vect(4,0,0), gray);
-	auto* scene_plane = new Plane(Y, -1, tile_floor);
-	objects_scene.push_back(scene_sphere);
-	objects_scene.push_back(scene_sphere2);
-	objects_scene.push_back(scene_sphere3);
+	auto* scene_plane = new Plane(Vector(0, 1, 0), 0, tile_floor);
+	//objects_scene.push_back(scene_sphere);
+	//objects_scene.push_back(scene_sphere2);
+	//objects_scene.push_back(scene_sphere3);
 	objects_scene.push_back(scene_plane);
-	objects_scene.push_back(scene_triangle);
+	//objects_scene.push_back(scene_triangle);
 }
+
+/*
+std::pair<glm::vec3, glm::vec3> RT_Scene::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
+{
+	const glm::mat4 directions = calculateViewDir(rotation);
+
+	constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
+	constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
+
+	const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
+	glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
+
+	return { position + forward, up };
+}
+
+glm::mat4 RT_Scene::calculateViewDir(const glm::vec3 rotation)
+{
+	const float pitch = glm::radians(rotation.x);
+	const float yaw   = glm::radians(rotation.y);
+	const float roll  = glm::radians(rotation.z);
+
+	const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+	const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
+	const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
+
+	const glm::mat4 result = rotation_x * rotation_y * rotation_z;
+
+	return result;
+}
+
+glm::mat4 RT_Scene::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
+	auto result = glm::mat4(1.0f);
+	result = glm::translate(result, input->get_position());
+	result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
+	result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
+	result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
+	result = glm::scale(result, input->get_scale());
+	return result;
+}
+*/
 
