@@ -1,8 +1,10 @@
-
 #ifndef VECTOR_H
 #define VECTOR_H
 
 #include <cmath>
+#include <glm/matrix.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 class Vector {
     public:
@@ -21,6 +23,7 @@ class Vector {
         [[nodiscard]] Vector add(const Vector &v) const;
         [[nodiscard]] Vector subtract(const Vector &v) const;
         [[nodiscard]] Vector multiply(double scalar) const;
+        [[nodiscard]] Vector multiply(const glm::mat4& matrix) const;
         [[nodiscard]] bool isInitialized() const;
 
     private:
