@@ -464,16 +464,12 @@ void RT_Scene::sphereScene() {
 
 void RT_Scene::previewScene() {
 	Logger::log(MessageType::INFO, "Rendering the previewed scene...!");
-	const Vector new_sphere_location (1.75, -0.25, 0);
-	const Vector new_sphere_location2 (-1.75, 0.25, 0);
 
 	auto resources = Main_Scene::getResources();
 	auto components = Main_Scene::getComponents();
 
-	//std::vector<Vector> light_positions;
-	//std::vector<RT_Color> light_colors;
+	glm::mat4 mvp_matrix, projection_matrix, view_matrix, model_matrix;
 
-	//cam_pos = Vector(components);
 	for (auto& pair  : components)
 	{
 		shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
@@ -481,8 +477,9 @@ void RT_Scene::previewScene() {
 		shared_ptr<Render_Component> render = dynamic_pointer_cast<Render_Component>(pair.second);
 		if(camera)
 		{
-			//std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
-			//viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
+			std::pair<glm::vec3, glm::vec3> camera_pair = Preview_Canvas::calculateCameraVectors(camera->get_position(), camera->get_rotation());
+			view_matrix       = glm::lookAt(camera->get_position(), camera_pair.first, camera_pair.second);
+			projection_matrix = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
 			cam_pos = Vector(camera->get_position().x, camera->get_position().y, camera->get_position().z);
 		}
 		else if(light)
@@ -497,12 +494,34 @@ void RT_Scene::previewScene() {
 			shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
 			const std::vector<Vertex> vertices = objRes->get_vertices();
 
+			model_matrix = Preview_Canvas::extract_Model_Matrix(render);
+			//mvp_matrix = view_matrix * projection_matrix * model_matrix;
 
-			for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
-				auto* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
-															Vector(vertices[(i+1)].position.x,vertices[(i+1)].position.y,vertices[(i+1)].position.z),
-															Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z),
-															RT_Color(vertices.at(i).color.x, vertices.at(i).color.y, vertices.at(i).color.z, vertices.at(i).smoothness));
+			for(int i = 0; i <= vertices.size()-3 ; i = i+3)
+			{
+				auto* scene_triangle = new Triangle(
+				Vector(
+						vertices[i].position.x,
+						vertices[i].position.y,
+						vertices[i].position.z
+					).multiply(model_matrix),
+					Vector(
+							vertices[(i+1)].position.x,
+							vertices[(i+1)].position.y,
+							vertices[(i+1)].position.z
+					).multiply(model_matrix),
+				Vector(
+						vertices[(i+2)].position.x,
+						vertices[(i+2)].position.y,
+						vertices[(i+2)].position.z
+					).multiply(model_matrix),
+					RT_Color(
+						vertices.at(i).color.x,
+						vertices.at(i).color.y,
+						vertices.at(i).color.z,
+						vertices.at(i).smoothness
+					)
+				);
 				objects_scene.push_back(scene_triangle);
 
 			}
@@ -544,44 +563,3 @@ void RT_Scene::previewScene() {
 	objects_scene.push_back(scene_plane);
 	//objects_scene.push_back(scene_triangle);
 }
-
-/*
-std::pair<glm::vec3, glm::vec3> RT_Scene::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
-{
-	const glm::mat4 directions = calculateViewDir(rotation);
-
-	constexpr glm::vec3 base_forward(0.0f, 0.0f, -1.0f);
-	constexpr glm::vec3 base_up     (0.0f, 1.0f, 0.0f);
-
-	const glm::vec3 forward = glm::normalize(glm::vec3(directions * glm::vec4(base_forward, 0.0f)));
-	glm::vec3 up            = glm::normalize(glm::vec3(directions * glm::vec4(base_up, 0.0f)));
-
-	return { position + forward, up };
-}
-
-glm::mat4 RT_Scene::calculateViewDir(const glm::vec3 rotation)
-{
-	const float pitch = glm::radians(rotation.x);
-	const float yaw   = glm::radians(rotation.y);
-	const float roll  = glm::radians(rotation.z);
-
-	const glm::mat4 rotation_x = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
-	const glm::mat4 rotation_y = glm::rotate(glm::mat4(1.0f), yaw,   glm::vec3(0.0f, 1.0f, 0.0f));
-	const glm::mat4 rotation_z = glm::rotate(glm::mat4(1.0f), roll,  glm::vec3(0.0f, 0.0f, 1.0f));
-
-	const glm::mat4 result = rotation_x * rotation_y * rotation_z;
-
-	return result;
-}
-
-glm::mat4 RT_Scene::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
-	auto result = glm::mat4(1.0f);
-	result = glm::translate(result, input->get_position());
-	result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
-	result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
-	result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
-	result = glm::scale(result, input->get_scale());
-	return result;
-}
-*/
-
