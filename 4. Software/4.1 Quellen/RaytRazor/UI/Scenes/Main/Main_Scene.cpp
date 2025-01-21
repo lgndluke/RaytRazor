@@ -386,10 +386,6 @@ void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_
 }
 
 
-
-
-
-
 void Main_Scene::addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource)
 {
     resources.insert({uuid, object_resource});
