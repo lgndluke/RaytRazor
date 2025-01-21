@@ -1,0 +1,293 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+newmtl F50NEGRO
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F50CRIST
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  1.0 1.0 1.0
+d  0.4
+Ns  0.5
+illum 2
+#
+newmtl F50ROJO
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__179 (2) to come 
+#
+newmtl F50TOPAL
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F50TOPAL1
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__179 done 
+#
+newmtl F50CROMO
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__168 (4) to come 
+#
+newmtl F50CAPO
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F50LEFT
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F50CAPO1
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F50RIGHT
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__168 done 
+#
+newmtl F50AIRE
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_d F50FARO.png
+#
+newmtl F50REJIL
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_d F50REJIL.png
+#
+newmtl F50FARED
+Ka  0.8 0.1 0.1
+Kd  0.8 0.1 0.1
+Ks  1.0 1.0 1.0
+d  0.7
+Ns  0.5
+illum 2
+#
+newmtl F50FARWD
+Ka  0.5 0.5 0.5
+Kd  0.5 0.5 0.5
+Ks  1.0 1.0 1.0
+d  0.7
+Ns  0.5
+illum 2
+#
+newmtl F50MATR
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F50MATR.png
+bump F50MATR.png
+#
+newmtl F5OLOGO
+Ka  0.5 0.5 0.3
+Kd  0.5 0.5 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50LOGO.png
+#
+newmtl F50SUELO
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50SUELO.png
+#
+newmtl F50FARYE
+Ka  1.0 0.5 0.0
+Kd  1.0 0.5 0.0
+Ks  1.0 1.0 1.0
+d  0.6
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__157 (2) to come 
+#
+newmtl F50GOOD
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50GOOD.png
+#
+newmtl F50RUEDA
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50RUEDA.png
+#
+# Multi/Sub Material__157 done 
+#
+# Multi/Sub Material__146 (2) to come 
+#
+newmtl F50GOOD
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50GOOD.png
+#
+newmtl F50RUEDA
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50RUEDA.png
+#
+# Multi/Sub Material__146 done 
+#
+newmtl F50DISCO
+Ka  0.5 0.5 0.3
+Kd  0.5 0.5 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_d F50DISCO.png
+#
+# Multi/Sub Material__135 (2) to come 
+#
+newmtl F50GOOD
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50GOOD.png
+#
+newmtl F50RUEDA
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50RUEDA.png
+#
+# Multi/Sub Material__135 done 
+#
+# Multi/Sub Material__124 (2) to come 
+#
+newmtl F50GOOD
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50GOOD.png
+#
+newmtl F50RUEDA
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50RUEDA.png
+#
+# Multi/Sub Material__124 done 
+#
+newmtl F50ASIEN
+Ka  0.7 0.1 0.1
+Kd  0.7 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50ALFO.png
+#
+newmtl F50NEGRO1
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F50ALFO
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50ALFO.png
+#
+newmtl F50MOTOR
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F50MOTOR.png
+#
+# EOF
