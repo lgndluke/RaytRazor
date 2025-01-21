@@ -6,7 +6,7 @@ on:
       - main
       - development
     paths:
-      - '../../3. Software/3.1 Source-Code/**'
+      - '3. Software/3.1 Source-Code/**'
 
 jobs:
   build-pre-release:
@@ -49,7 +49,7 @@ jobs:
         id: generate_version
         shell: pwsh
         run: |
-          $VERSION_FILE = "4. Software/4.1 Quellen/RaytRazor/VERSION.DAT"
+          $VERSION_FILE = "3. Software/3.1 Quellen/RaytRazor/VERSION.DAT"
           $BUILD_NUMBER = $env:GITHUB_RUN_NUMBER
           if (Test-Path $VERSION_FILE) {
             $VERSION = Get-Content $VERSION_FILE
@@ -75,7 +75,7 @@ jobs:
           Set-Location build
           
           Write-Host "Building Project"
-          cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
+          cmake "../3. Software/3.1 Quellen/RaytRazor" -G "MinGW Makefiles"
           mingw32-make
           
           Write-Host "Listing built folders/files"
@@ -92,10 +92,10 @@ jobs:
           
           Write-Host "Copying RaytRazor executable and other important files into the release directory"
           Copy-Item -Path "RaytRazor/build/RaytRazor.exe" -Destination "release/"
-          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
-          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/assets/" -Destination "release/" -Recurse
-          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
-          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/assets/" -Destination "release/" -Recurse
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
+          Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
           
           Write-Host "Compressing release/* into an archive."
           Compress-Archive -Path "release/*" -DestinationPath "release/RaytRazor-${{ env.version }}.zip"
@@ -153,7 +153,7 @@ jobs:
           id: generate_version
           shell: pwsh
           run: |
-            $VERSION_FILE = "4. Software/4.1 Quellen/RaytRazor/VERSION.DAT"
+            $VERSION_FILE = "3. Software/3.1 Quellen/RaytRazor/VERSION.DAT"
             $BUILD_NUMBER = $env:GITHUB_RUN_NUMBER
             if (Test-Path $VERSION_FILE) {
               $VERSION = Get-Content $VERSION_FILE
@@ -179,7 +179,7 @@ jobs:
             Set-Location build
 
             Write-Host "Building Project"
-            cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
+            cmake "../3. Software/3.1 Quellen/RaytRazor" -G "MinGW Makefiles"
             mingw32-make
 
             Write-Host "Listing built folders/files"
@@ -196,10 +196,10 @@ jobs:
 
             Write-Host "Copying RaytRazor executable and other important files into the release directory"
             Copy-Item -Path "RaytRazor/build/RaytRazor.exe" -Destination "release/"
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/assets/" -Destination "release/" -Recurse
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
-            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/4. Software/4.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
+            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/SDL2.dll" -Destination "release/"
+            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/assets/" -Destination "release/" -Recurse
+            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/logs/" -Destination "release/" -Recurse
+            Copy-Item -Path "D:/a/RaytRazor/RaytRazor/3. Software/3.1 Quellen/RaytRazor/resources/scenes/" -Destination "release/" -Recurse
             
             Write-Host "Compressing release/* into an archive."
             Compress-Archive -Path "release/*" -DestinationPath "release/RaytRazor-${{ env.version }}.zip"        
