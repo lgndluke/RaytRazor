@@ -343,20 +343,29 @@ std::string Main_Scene::openFileDialog() {
 
 void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
 
-    bool cameraExists = false;
-    for (const auto& pair : components) {
-        if (std::dynamic_pointer_cast<Camera_Component>(pair.second)) {
-            cameraExists = true;
-            break;
-        }
+    // Prüfen, ob das hinzuzufügende Objekt eine Kamera ist
+    if (auto cameraComp = std::dynamic_pointer_cast<Camera_Component>(component)) {
+        // Falls das Objekt eine Kamera ist, überspringen wir das Hinzufügen
+        Logger::log(MessageType::INFO, "Kamera-Komponente existiert bereits. Keine neue Kamera wird hinzugefügt.");
+        components.insert({uuid, component});
+        forceUpdate();
+        return;
     }
 
+    // Überprüfen, ob bereits eine Kamera in der Szene existiert
+    bool cameraExists = std::any_of(components.begin(), components.end(), [](const auto& pair) {
+        return std::dynamic_pointer_cast<Camera_Component>(pair.second);
+    });
 
+    // Falls noch keine Kamera existiert, wird eine Kamera zur Szene hinzugefügt
     if (!cameraExists) {
+        // Erzeuge eine neue UUID für die Kamera
         boost::uuids::uuid cameraUUID = boost::uuids::random_generator()();
-        auto camera_comp = std::make_shared<Camera_Component>(
+
+        // Erstelle die Kamera-Komponente
+        auto cameraComp = std::make_shared<Camera_Component>(
             cameraUUID,
-            "Camera_Added",
+            "Camera",
             glm::vec3{0, 65, 100},
             glm::vec3{-35, 0, 0},
             glm::vec3{1, 1, 1},
@@ -365,14 +374,19 @@ void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_
             0.1f,
             1000
         );
-        components.insert({cameraUUID, camera_comp});
-        Logger::log(MessageType::INFO, "Camera hinzugefügt da szene keine Camera hatte.");
+
+        // Kamera zur Szene hinzufügen
+        components.insert({cameraUUID, cameraComp});
+        Logger::log(MessageType::INFO, "Eine neue Kamera wurde automatisch zur Szene hinzugefügt.");
     }
 
-    
+    // Füge das gegebene Objekt (falls keine Kamera) zur Szene hinzu
     components.insert({uuid, component});
     forceUpdate();
 }
+
+
+
 
 
 
