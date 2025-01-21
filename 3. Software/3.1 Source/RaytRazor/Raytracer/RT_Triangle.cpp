@@ -48,7 +48,7 @@ RT_Color Triangle::getColor() { return color; }
 
 Vector Triangle::getNormalAt(Vector point) {
     normal = getTriangleNormal();
-    return normal.multiply(-1);
+    return normal;
 }
 
 double Triangle::hit(const Ray ray) {
