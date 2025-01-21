@@ -29,17 +29,17 @@ void MenuBar_Widget::initialize() {
             {"Object", "Light", "Camera"},
             {
                 []() {
-                    //todo .mtl
                     boost::uuids::uuid uuid = boost::uuids::random_generator()();
-                    std::string path_to_file = openFileDialog();
-                    std::string path_to_file_mtl = openFileDialog();
-                    std::optional<Object_Resource> OR = Object_Importer::import_Object(uuid,path_to_file);
-                    std::optional<Material_Resource> MR = Material_Importer::import_Material(uuid,path_to_file_mtl);
-
-                    if (!OR.has_value() || !MR.has_value()) return;
-
                     boost::uuids::uuid mat_uuid = boost::uuids::random_generator()();
                     boost::uuids::uuid obj_uuid = boost::uuids::random_generator()();
+
+                    std::string path_to_file = openFileDialog();
+                    std::string path_to_file_mtl = openFileDialog();
+
+                    std::optional<Object_Resource> OR = Object_Importer::import_Object(obj_uuid,path_to_file);
+                    std::optional<Material_Resource> MR = Material_Importer::import_Material(mat_uuid,path_to_file_mtl);
+
+                    if (!OR.has_value() || !MR.has_value()) return;
 
                     auto render_comp = std::make_shared<Render_Component>(
                         uuid,
