@@ -1,0 +1,59 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__373 (6) to come 
+#
+newmtl VikMad-1
+Ka  0.6 0.4 0.3
+Kd  0.6 0.4 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd VIKMAD-1.png
+#
+newmtl VikMad-11
+Ka  0.6 0.4 0.3
+Kd  0.6 0.4 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd VIKMAD-1.png
+#
+newmtl VikCabos
+Ka  0.4 0.3 0.1
+Kd  0.4 0.3 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd VIKCABOS.png
+#
+newmtl VikTela1
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  0.9
+Ns  0.5
+illum 2
+#
+newmtl VikTela2
+Ka  0.9 0.7 0.7
+Kd  0.9 0.7 0.7
+Ks  1.0 1.0 1.0
+d  0.9
+Ns  0.5
+illum 2
+#
+newmtl VikMetal
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd VIKMETAL.png
+#
+# Multi/Sub Material__373 done 
+#
+# EOF

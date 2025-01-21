@@ -1,0 +1,119 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__216 (13) to come 
+#
+newmtl DC3BODY
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd DC3PGLE.png
+#
+newmtl DC3METL
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl GLASS
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  1.0 1.0 1.0
+d  0.5
+Ns  0.5
+illum 2
+#
+newmtl DC3
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd DC3PEGT.png
+#
+newmtl DC3METAL
+Ka  0.5 0.5 0.5
+Kd  0.5 0.5 0.5
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl DC3ELIP
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump ELIP.png
+#
+newmtl DC3timb
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump TIMBUMP.png
+#
+newmtl LUZ_VERDE
+Ka  0.1 0.6 0.0
+Kd  0.1 0.6 0.0
+Ks  1.0 1.0 1.0
+d  0.7
+Ns  0.5
+illum 2
+#
+newmtl DC3MNEG
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl dc3Cmoto
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+map_Kd CUBMO.png
+bump CUBMBU.png
+#
+newmtl Material__68
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump RUEDA.png
+#
+newmtl DC3timb2
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+bump TIM2BUM.png
+#
+newmtl DC3METAL1
+Ka  0.5 0.5 0.5
+Kd  0.5 0.5 0.5
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+# Multi/Sub Material__216 done 
+#
+# EOF

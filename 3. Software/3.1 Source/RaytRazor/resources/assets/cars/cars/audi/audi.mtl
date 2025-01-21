@@ -1,0 +1,367 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+newmtl AVUSFUSE
+Ka  0.8 0.8 0.8
+Kd  0.8 0.8 0.8
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSPLAT
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  7.4
+illum 2
+map_Kd AVUSPLAT.png
+bump AVUSPLAT.png
+#
+newmtl AVUSFUBK
+Ka  0.8 0.8 0.8
+Kd  0.8 0.8 0.8
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  10.0
+illum 2
+bump AVUSLOGO.png
+#
+newmtl AVUSTLBK
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSSTEE
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  8.1
+illum 2
+#
+newmtl AVUSDASH
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.8 0.8 0.8
+d  1.0
+Ns  2.8
+illum 2
+#
+newmtl AVUSTABE
+Ka  0.5 0.5 0.5
+Kd  0.5 0.5 0.5
+Ks  0.0 0.0 0.0
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl AVUSMIRR
+Ka  0.8 0.7 0.7
+Kd  0.8 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSBEAM
+Ka  0.9 0.9 0.8
+Kd  0.9 0.9 0.8
+Ks  1.0 1.0 1.0
+d  0.0
+Ns  10.0
+illum 2
+map_d AVUSBEAM.png
+bump AVUSBEAM.png
+#
+newmtl AVUSMETE
+Ka  0.3 0.4 0.4
+Kd  0.3 0.4 0.4
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  3.5
+illum 2
+map_Kd AVUSMETE.png
+#
+# Multi/Sub Material__256 (2) to come 
+#
+newmtl Material__3554
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  7.5
+illum 2
+bump -s 50.0 50.0 1.0 AVUSDASB.png
+#
+newmtl Material__3555
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  7.5
+illum 2
+#
+# Multi/Sub Material__256 done 
+#
+newmtl AVUSBLAC
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  8.2
+illum 2
+#
+newmtl AVUSFLOO
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.0 0.0 0.0
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl AVUSENGI
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  5.9
+illum 2
+#
+newmtl AVUSLOGO
+Ka  0.8 0.7 0.7
+Kd  0.8 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSGLAS
+Ka  0.2 0.2 0.0
+Kd  0.2 0.2 0.0
+Ks  1.0 1.0 1.0
+d  0.5
+Ns  10.0
+illum 2
+#
+newmtl AVUSBLGL
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  8.2
+illum 2
+#
+newmtl AVUSAIR
+Ka  0.6 0.7 0.7
+Kd  0.6 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSCOCK
+Ka  0.5 0.1 0.1
+Kd  0.5 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl AVUSBEVB
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  0.0 0.0 0.0
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl AVUSBEBE
+Ka  0.5 0.5 0.5
+Kd  0.5 0.5 0.5
+Ks  0.0 0.0 0.0
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl AVUSBEAC
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSTALI
+Ka  0.9 0.0 0.0
+Kd  0.9 0.0 0.0
+Ks  1.0 1.0 1.0
+d  0.9
+Ns  10.0
+illum 2
+bump -s 20.0 20.0 1.0 AVUSRECT.png
+#
+newmtl AVUSEXHA
+Ka  0.7 0.8 0.8
+Kd  0.7 0.8 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl AVUSGRILL
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.9
+illum 2
+#
+newmtl AVUSWHEE
+Ka  0.8 0.7 0.7
+Kd  0.8 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+# Multi/Sub Material__245 (2) to come 
+#
+newmtl Material__3537
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHB2.png
+#
+newmtl Material__3553
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHEB.png
+#
+# Multi/Sub Material__245 done 
+#
+# Multi/Sub Material__234 (2) to come 
+#
+newmtl Material__3537
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHB2.png
+#
+newmtl Material__3553
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHEB.png
+#
+# Multi/Sub Material__234 done 
+#
+# Multi/Sub Material__223 (2) to come 
+#
+newmtl Material__3537
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHB2.png
+#
+newmtl Material__3553
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHEB.png
+#
+# Multi/Sub Material__223 done 
+#
+# Multi/Sub Material__212 (2) to come 
+#
+newmtl Material__3537
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHB2.png
+#
+newmtl Material__3553
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.4 0.4 0.4
+d  1.0
+Ns  6.0
+illum 2
+bump AVUSWHEB.png
+#
+# Multi/Sub Material__212 done 
+#
+newmtl Material__3556
+Ka  0.7 0.1 0.2
+Kd  0.7 0.1 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  5.4
+illum 2
+#
+# Multi/Sub Material__201 (2) to come 
+#
+newmtl Material__3556
+Ka  0.7 0.1 0.2
+Kd  0.7 0.1 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  5.4
+illum 2
+#
+newmtl Material__3557
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.8 0.8 0.8
+d  1.0
+Ns  6.3
+illum 2
+#
+# Multi/Sub Material__201 done 
+#
+# Multi/Sub Material__190 (2) to come 
+#
+newmtl Material__3556
+Ka  0.7 0.1 0.2
+Kd  0.7 0.1 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  5.4
+illum 2
+#
+newmtl Material__3557
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.8 0.8 0.8
+d  1.0
+Ns  6.3
+illum 2
+#
+# Multi/Sub Material__190 done 
+#
+# EOF

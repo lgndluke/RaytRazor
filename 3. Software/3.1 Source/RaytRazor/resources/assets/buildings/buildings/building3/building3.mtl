@@ -1,0 +1,232 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+newmtl WALL
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+bump TEJA.png
+#
+newmtl Material__1
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl door2
+Ka  0.5 0.3 0.2
+Kd  0.5 0.3 0.2
+Ks  0.6 0.4 0.4
+d  1.0
+Ns  3.0
+illum 2
+#
+newmtl WALL2
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+# Multi/Sub Material__134 (2) to come 
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+# Multi/Sub Material__134 done 
+#
+# Multi/Sub Material__123 (2) to come 
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+# Multi/Sub Material__123 done 
+#
+# Multi/Sub Material__112 (2) to come 
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+# Multi/Sub Material__112 done 
+#
+# Multi/Sub Material__101 (2) to come 
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+# Multi/Sub Material__101 done 
+#
+# Multi/Sub Material__90 (2) to come 
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+# Multi/Sub Material__90 done 
+#
+# Multi/Sub Material__79 (2) to come 
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+# Multi/Sub Material__79 done 
+#
+# Multi/Sub Material__68 (2) to come 
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+# Multi/Sub Material__68 done 
+#
+# Multi/Sub Material__57 (2) to come 
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+# Multi/Sub Material__57 done 
+#
+# Multi/Sub Material__46 (2) to come 
+#
+newmtl Material__3245
+Ka  0.4 0.6 0.6
+Kd  0.4 0.6 0.6
+Ks  0.4 0.6 0.6
+d  1.0
+Ns  2.9
+illum 2
+#
+newmtl Material__3244
+Ka  0.7 0.7 0.6
+Kd  0.7 0.7 0.6
+Ks  0.8 0.8 0.7
+d  1.0
+Ns  2.3
+illum 2
+#
+# Multi/Sub Material__46 done 
+#
+# EOF

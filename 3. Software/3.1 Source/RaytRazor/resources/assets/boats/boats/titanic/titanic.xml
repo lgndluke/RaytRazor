@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE xmlDocument>
+<environment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="environment.xsd" >
+ <background>
+  <color>
+   <red>0</red>
+   <green>0</green>
+   <blue>0</blue>
+  </color>
+ </background>
+ <camera>
+  <up>
+   <x>0</x>
+   <y>1</y>
+   <z>0</z>
+  </up>
+  <position>
+   <x>2915.98</x>
+   <y>5097.94</y>
+   <z>-12685.4</z>
+  </position>
+  <target>
+   <x>-8147.62</x>
+   <y>-2708.71</y>
+   <z>5295.45</z>
+  </target>
+  <viewReferencePoint>
+   <u>0</u>
+   <v>0</v>
+   <w>50</w>
+  </viewReferencePoint>
+  <imagePlane>
+   <sizeU>64</sizeU>
+   <sizeV>48</sizeV>
+   <resU>1600</resU>
+   <resV>1200</resV>
+  </imagePlane>
+ </camera>
+ <lightSources>
+  <ambientLight>
+   <color>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
+   </color>
+  </ambientLight>
+ </lightSources>
+</environment>
