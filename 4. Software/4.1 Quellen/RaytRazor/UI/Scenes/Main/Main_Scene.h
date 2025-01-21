@@ -120,6 +120,7 @@ class Main_Scene final : public Screen
 
         bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
 
+
         static map<boost::uuids::uuid, shared_ptr<Base_Component>> getComponents()
         {
             return components;
@@ -136,6 +137,8 @@ class Main_Scene final : public Screen
         static void openScene();
 
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
+
+        static void addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource);
 
     static void forceUpdate();
 

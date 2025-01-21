@@ -66,26 +66,26 @@ void Preview_Canvas::drawGL()
             // Validate Object Resource
             auto objIt = resources.find(render->get_object_UUID());
             if (objIt == resources.end()) {
-                std::cerr << "Object UUID not found in resources!" << std::endl;
+                Logger::log(MessageType::SEVERE,"Object UUID not found in resources!");
                 continue;
             }
 
             shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
             if (!objRes) {
-                std::cerr << "Failed to cast to Object_Resource!" << std::endl;
+                Logger::log(MessageType::SEVERE,"Failed to cast to Object_Resource!");
                 continue;
             }
 
             // Validate Material Resource
             auto matIt = resources.find(render->get_material_UUID());
             if (matIt == resources.end()) {
-                std::cerr << "Material UUID not found in resources!" << std::endl;
+                 Logger::log(MessageType::SEVERE,"Material UUID not found in resources!");
                 continue;
             }
 
             shared_ptr<Material_Resource> matRes = dynamic_pointer_cast<Material_Resource>(matIt->second);
             if (!matRes) {
-                std::cerr << "Failed to cast to Material_Resource!" << std::endl;
+                 Logger::log(MessageType::SEVERE,"Failed to cast to Material_Resource!");
                 continue;
             }
             //calculate Model Matrix in GLM
@@ -342,7 +342,13 @@ std::string Main_Scene::openFileDialog() {
 }
 
 void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
-    components[uuid] = component;
+    components.insert({uuid,component});
+    forceUpdate();
+}
+
+void Main_Scene::addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource)
+{
+    resources.insert({uuid, object_resource});
     forceUpdate();
 }
 
