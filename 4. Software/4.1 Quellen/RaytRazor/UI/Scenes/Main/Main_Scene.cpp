@@ -5,6 +5,7 @@ std::map<boost::uuids::uuid, std::shared_ptr<Base_Resource>> Main_Scene::resourc
 Main_Scene* Main_Scene::instance = nullptr;
 float Main_Scene::scaling = 0.5f;
 
+
 Fixed_Window::Fixed_Window(Widget* parent, const std::string& title)
                            : Window(parent, title)
 {}
@@ -45,22 +46,22 @@ void Preview_Canvas::drawGL()
     auto components = Main_Scene::getComponents();
     auto resources = Main_Scene::getResources();
     //create projection and view matrix
-    for (auto& pair  : components)
-    {
+    for (auto& pair  : components) {
         shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
-        if(camera)
-        {
-            std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
+
+        if (camera) {
+            std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),
+                                                                                camera->get_rotation());
             viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
-            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
+            projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(),
+                                          camera->get_near_clip(), camera->get_far_clip());
         }
     }
-
-    //iterate through components and bind the new mvpEigen matrix/object -> get model matrix, calculate matrix, bind new mvpEigen, print screen
-    //model matrix
-    for (auto& pair : components)
+    for (auto& pair  : components)
     {
         shared_ptr<Render_Component> render = dynamic_pointer_cast<Render_Component>(pair.second);
+        shared_ptr<Light_Component> light = dynamic_pointer_cast<Light_Component>(pair.second);
+
         if(render)
         {
             // Validate Object Resource
@@ -111,7 +112,24 @@ void Preview_Canvas::drawGL()
             mShader.drawIndexed(GL_TRIANGLES, 0, objRes->get_matrix_indices().size());
             glDisable(GL_DEPTH_TEST);
         }
+        else if (light)
+        {
+            //todo farbe auf glatt weiß setzten und sphere auslagern -> thread oder nur 1 mal initialisieren (1 mal ist lieber)
+            glm::mat4 modelGLMmat = extract_Model_Matrix(light);
+            mvpGLM = projGLMmat * viewGLMmat * modelGLMmat;
+            mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
+            mShader.setUniform("modelViewProj", mvpEigen);
+            nanogui::MatrixXu indices = make_sphere_indices();
+            Eigen::MatrixXf vertices = make_sphere_vertices();
+            mShader.uploadIndices(indices);
+            mShader.uploadAttrib("position", vertices);
+            glEnable(GL_DEPTH_TEST);
+            mShader.drawIndexed(GL_TRIANGLES, 0, indices.rows() * indices.cols());
+            glDisable(GL_DEPTH_TEST);
+        }
     }
+
+
 }
 
 std::pair<glm::vec3, glm::vec3> Preview_Canvas::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation)
@@ -142,13 +160,80 @@ glm::mat4 Preview_Canvas::calculateViewDir(const glm::vec3 rotation)
     return result;
 }
 
-glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Render_Component>& input) {
+glm::mat4 Preview_Canvas::extract_Model_Matrix(const shared_ptr<Base_Component>& input) {
     auto result = glm::mat4(1.0f);
     result = glm::translate(result, input->get_position());
     result = glm::rotate(result, glm::radians(input->get_rotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
     result = glm::rotate(result, glm::radians(input->get_rotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
     result = glm::rotate(result, glm::radians(input->get_rotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
     result = glm::scale(result, input->get_scale());
+    return result;
+}
+
+Eigen::MatrixXf Preview_Canvas::make_sphere_vertices() {
+    float radius = 10.0;
+    int stacks = 10, slices = 10;
+
+    // Calculate the total number of vertices
+    int numVertices = (stacks + 1) * (slices + 1);
+
+    // Initialize the Eigen matrix
+    Eigen::MatrixXf result(3, numVertices); // Store vertices in 3 rows: (x, y, z)
+
+    // Generate vertices
+    int vertexIndex = 0;
+    for (int i = 0; i <= stacks; ++i) {
+        float phi = M_PI * i / stacks; // Angle from the "north pole"
+        for (int j = 0; j <= slices; ++j) {
+            float theta = 2.0f * M_PI * j / slices; // Angle around the equator
+
+            // Calculate vertex position
+            float x = radius * sin(phi) * cos(theta);
+            float y = radius * cos(phi);
+            float z = radius * sin(phi) * sin(theta);
+
+            // Store the vertex in the Eigen matrix (column-major order)
+            result(0, vertexIndex) = x; // x-coordinate
+            result(1, vertexIndex) = y; // y-coordinate
+            result(2, vertexIndex) = z; // z-coordinate
+
+            vertexIndex++;
+        }
+    }
+
+    return result;
+}
+
+nanogui::MatrixXu Preview_Canvas::make_sphere_indices() {
+    int stacks = 10, slices = 10;
+
+    // Calculate the total number of triangles
+    int numTriangles = stacks * slices * 2;
+
+    // Resize the result matrix to hold all triangle indices
+    nanogui::MatrixXu result(3, numTriangles); // 3 rows (triangle vertices) x numTriangles
+
+    // Generate indices for triangles
+    int triangleIndex = 0;
+    for (int i = 0; i < stacks; ++i) {
+        for (int j = 0; j < slices; ++j) {
+            int first = i * (slices + 1) + j;
+            int second = first + slices + 1;
+
+            // First triangle of the quad
+            result(0, triangleIndex) = first;
+            result(1, triangleIndex) = second;
+            result(2, triangleIndex) = first + 1;
+            triangleIndex++;
+
+            // Second triangle of the quad
+            result(0, triangleIndex) = second;
+            result(1, triangleIndex) = second + 1;
+            result(2, triangleIndex) = first + 1;
+            triangleIndex++;
+        }
+    }
+
     return result;
 }
 

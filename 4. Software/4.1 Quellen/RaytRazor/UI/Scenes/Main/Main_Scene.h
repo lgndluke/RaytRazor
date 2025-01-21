@@ -84,7 +84,11 @@ public:
     * @brief
     * @param input                Render_Component dessen Model matrix man braucht.
     */
-    static glm::mat4 extract_Model_Matrix(const shared_ptr<Render_Component>& input);
+    static glm::mat4 extract_Model_Matrix(const shared_ptr<Base_Component>& input);
+
+    static Eigen::MatrixXf make_sphere_vertices();
+
+    static nanogui::MatrixXu make_sphere_indices();
 
 private:
     GLShader mShader;
