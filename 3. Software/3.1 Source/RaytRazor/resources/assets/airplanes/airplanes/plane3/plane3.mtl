@@ -1,0 +1,177 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__237 (20) to come 
+#
+newmtl F4U1FUSD
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1FURT.png
+#
+newmtl F4U1BLUE
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1BLDE
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1BLET.png
+#
+newmtl F4U1ENG
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1CON
+Ka  0.4 0.4 0.5
+Kd  0.4 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1CHR
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1CAFR
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1GLS
+Ka  0.0 0.3 0.2
+Kd  0.0 0.3 0.2
+Ks  1.0 1.0 1.0
+d  0.2
+Ns  0.5
+illum 2
+#
+newmtl F4U1INT
+Ka  0.4 0.5 0.2
+Kd  0.4 0.5 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1WHNT
+Ka  1.0 0.9 0.8
+Kd  1.0 0.9 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1WHNT.png
+#
+newmtl F4U1WHTE
+Ka  1.0 0.9 0.8
+Kd  1.0 0.9 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1WHTE1
+Ka  1.0 0.9 0.8
+Kd  1.0 0.9 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1WGLD
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1WTLT.png
+#
+newmtl F4U1WHTE2
+Ka  1.0 0.9 0.8
+Kd  1.0 0.9 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1BLK1
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl F4U1WGRD
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1WTLT.png
+#
+newmtl F4U1BLU
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd Undefined
+bump F4U1TLB.png
+#
+newmtl F4U1WHT
+Ka  1.0 0.9 0.8
+Kd  1.0 0.9 0.8
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+bump F4U1TLB.png
+#
+newmtl F4U1TLRT
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1TLRT.png
+#
+newmtl F4U1TLLT
+Ka  0.3 0.4 0.5
+Kd  0.3 0.4 0.5
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd F4U1TLLT.png
+#
+# Multi/Sub Material__237 done 
+#
+# EOF

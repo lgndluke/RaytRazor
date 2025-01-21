@@ -1,0 +1,82 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__290 (9) to come 
+#
+newmtl YELLOW
+Ka  1.0 0.7 0.0
+Kd  1.0 0.7 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl WINGS
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GBOP3_1.png
+#
+newmtl BODY2
+Ka  1.0 0.7 0.0
+Kd  1.0 0.7 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GBOP3.png
+#
+newmtl BODY1
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+map_Kd GBOP2.png
+#
+newmtl BLACK_METAL
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl STEEL
+Ka  0.2 0.1 0.0
+Kd  0.2 0.1 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl Material__6
+Ka  0.1 0.2 0.0
+Kd  0.1 0.2 0.0
+Ks  0.4 0.4 0.4
+d  0.4
+Ns  0.5
+illum 2
+#
+newmtl YELLOWS
+Ka  1.0 0.7 0.0
+Kd  1.0 0.7 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.5
+illum 2
+#
+newmtl Default
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  7.1
+illum 2
+#
+# Multi/Sub Material__290 done 
+#
+# EOF
