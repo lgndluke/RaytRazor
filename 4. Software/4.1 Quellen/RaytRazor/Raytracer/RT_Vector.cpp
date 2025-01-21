@@ -34,7 +34,7 @@ Vector Vector::multiply(const double scalar) const { return {x * scalar, y * sca
 Vector Vector::multiply(const glm::mat4& matrix) const
 {
     const glm::vec4 new_positions = matrix * glm::vec4(glm::vec3(x, y, z), 1.0f);
-    return Vector(new_positions.x, new_positions.y, new_positions.z);
+    return Vector(new_positions.x, new_positions.y, -new_positions.z);
 }
 
 bool Vector::isInitialized() const {

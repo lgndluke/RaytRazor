@@ -480,12 +480,15 @@ void RT_Scene::previewScene() {
 			std::pair<glm::vec3, glm::vec3> camera_pair = Preview_Canvas::calculateCameraVectors(camera->get_position(), camera->get_rotation());
 			view_matrix       = glm::lookAt(camera->get_position(), camera_pair.first, camera_pair.second);
 			projection_matrix = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
-			cam_pos = Vector(camera->get_position().x, camera->get_position().y, camera->get_position().z);
+			cam_pos = Vector(camera->get_position().x, camera->get_position().y, -camera->get_position().z);
 		}
 		else if(light)
 		{
 			Vector lightpos = Vector(light->get_position().x, light->get_position().y, light->get_position().z);
-			RT_Color lightcolr (light->get_color().x/255, light->get_color().y/255, light->get_color().z/255, light->get_intensity());
+			RT_Color lightcolr (light->get_color().x/255*light->get_intensity(),
+				light->get_color().y/255*light->get_intensity(),
+				light->get_color().z/255*light->get_intensity(),
+				0);
 			light_sources.push_back(new Light(lightpos, lightcolr));
 		}
 		else if (render)
@@ -493,10 +496,44 @@ void RT_Scene::previewScene() {
 			auto objIt = resources.find(render->get_object_UUID());
 			shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
 			const std::vector<Vertex> vertices = objRes->get_vertices();
+			const std::vector<Indice> indices = objRes->get_indices();
 
 			model_matrix = Preview_Canvas::extract_Model_Matrix(render);
+
+			for (auto &i : indices) {
+					std::vector<int> vertex_idx = i.vertexIndices_v;
+					int v1 = vertex_idx[0];
+					int v2 = vertex_idx[1];
+					int v3 = vertex_idx[2];
+
+					auto* scene_triangle = new Triangle(
+				Vector(
+						vertices[v1].position.x,
+						vertices[v1].position.y,
+						vertices[v1].position.z
+					).multiply(model_matrix),
+					Vector(
+							vertices[v2].position.x,
+							vertices[v2].position.y,
+							vertices[v2].position.z
+					).multiply(model_matrix),
+				Vector(
+						vertices[v3].position.x,
+						vertices[v3].position.y,
+						vertices[v3].position.z
+					).multiply(model_matrix),
+					RT_Color(
+						vertices.at(v1).color.x,
+						vertices.at(v1).color.y,
+						vertices.at(v1).color.z,
+						0.3
+					)
+				);
+					objects_scene.push_back(scene_triangle);
+			}
 			//mvp_matrix = view_matrix * projection_matrix * model_matrix;
 
+			/*
 			for(int i = 0; i <= vertices.size()-3 ; i = i+3)
 			{
 				auto* scene_triangle = new Triangle(
@@ -525,41 +562,14 @@ void RT_Scene::previewScene() {
 				objects_scene.push_back(scene_triangle);
 
 			}
+			*/
 		}
 	}
 
 	//cam_pos = Vector(3, 1.5, -4);
 	look_at = Vector (0, 0, 0);
 
-	//const Vector O (0,0,0);
-	//const Vector Y (0,1,0);
-
-
-	//const RT_Color white_light (1.0, 1.0, 1.0, 0);
-	//const RT_Color pretty_green (0.5, 1.0, 0.5, 0.3);
-	//const RT_Color maroon (0.5, 0.25, 0.25, 0.3);
-	//const RT_Color orange (1.0, 0.25, 0.25, 0.3);
-	const RT_Color tile_floor (0.5, 0.5, 0.5, 0.5);
-	//const RT_Color gray (0.5, 0.5, 0.5, 0.3);
-
-	//const Vector light_position (-7,10,-10);
-	//auto* scene_light = new Light(light_position, white_light);
-	//light_sources.push_back(scene_light);
-
-	//const Vector light_position2 (7,-10,10);
-	//auto* scene_light2 = new Light(light_position2, white_light);
-	//light_sources.push_back(scene_light2);
-
-	// scene objects
-	//auto* scene_sphere = new Sphere(O, 1, pretty_green);
-	//auto* scene_sphere2 = new Sphere(new_sphere_location, 0.5, orange);
-	//auto* scene_sphere3 = new Sphere(new_sphere_location2, 1, gray);
-	//auto* scene_triangle = new Triangle(Vector (5,0,0), Vector(0,3,0), Vector(0,0,3), orange);
-	//Triangle scene_triangle2 (Vect (-2,0,0), Vect(0,0,-3), Vect(4,0,0), gray);
-	auto* scene_plane = new Plane(Vector(0, 1, 0), 0, tile_floor);
-	//objects_scene.push_back(scene_sphere);
-	//objects_scene.push_back(scene_sphere2);
-	//objects_scene.push_back(scene_sphere3);
+	const RT_Color plane_color (0.5, 0.5, 0.5, 0.5);
+	auto* scene_plane = new Plane(Vector(0, 1, 0), 0, plane_color);
 	objects_scene.push_back(scene_plane);
-	//objects_scene.push_back(scene_triangle);
 }
