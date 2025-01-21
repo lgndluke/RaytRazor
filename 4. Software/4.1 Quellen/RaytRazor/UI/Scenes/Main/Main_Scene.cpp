@@ -19,28 +19,45 @@ bool Preview_Canvas::keyboardEvent(int key, int scancode, int action, int modifi
 {
     if (key == GLFW_KEY_W) {
         camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y, camera_glob->get_position().z - 10});
+        Main_Scene::setChangesOnComponent(camera_glob);
         return true;
     }
     if (key == GLFW_KEY_S) {
         camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y, camera_glob->get_position().z + 10});
+        Main_Scene::setChangesOnComponent(camera_glob);
         return true;
     }
     if (key == GLFW_KEY_A) {
         camera_glob->set_position({camera_glob->get_position().x - 10, camera_glob->get_position().y, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
         return true;
     }
     if (key == GLFW_KEY_D) {
         camera_glob->set_position({camera_glob->get_position().x + 10, camera_glob->get_position().y, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
         return true;
     }
     if (key == GLFW_KEY_E) {
         camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y + 10, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
         return true;
     }
     if (key == GLFW_KEY_Q) {
         camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y - 10, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
         return true;
     }
+    if (key == GLFW_KEY_R) {
+        camera_glob->set_rotation({camera_glob->get_rotation().x, camera_glob->get_rotation().y - 10, camera_glob->get_rotation().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_F) {
+        camera_glob->set_rotation({camera_glob->get_rotation().x, camera_glob->get_rotation().y + 10, camera_glob->get_rotation().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+
     return GLCanvas::keyboardEvent(key, scancode, action, modifiers);
 }
 

@@ -91,7 +91,7 @@ public:
 private:
     GLShader mShader;
     Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
-    shared_ptr<Camera_Component> camera_glob;
+    shared_ptr<Base_Component> camera_glob;
 };
 
 /**
