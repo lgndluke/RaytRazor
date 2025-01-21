@@ -56,6 +56,8 @@ class Preview_Canvas final : public GLCanvas
 
 public:
 
+
+    bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
     /**
      * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
      * @param parent                Der Eltern-Widget des Canvas.
@@ -89,6 +91,7 @@ public:
 private:
     GLShader mShader;
     Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
+    shared_ptr<Base_Component> camera_glob;
 };
 
 /**
@@ -120,6 +123,7 @@ class Main_Scene final : public Screen
 
         bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
 
+
         static map<boost::uuids::uuid, shared_ptr<Base_Component>> getComponents()
         {
             return components;
@@ -137,6 +141,8 @@ class Main_Scene final : public Screen
 
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
 
+        static void addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource);
+
     static void forceUpdate();
 
     private:
@@ -147,7 +153,6 @@ class Main_Scene final : public Screen
         bool is_resizeable;
         string scene_path;
         static float scaling;
-
         //Widgets
         TreeView_Widget* tree_view;
         ComponentAttributes_Widget* attributesWidget;

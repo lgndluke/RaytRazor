@@ -15,6 +15,52 @@ bool Fixed_Window::mouseDragEvent(const Vector2i& p, const Vector2i &rel,
     return false;
 }
 
+bool Preview_Canvas::keyboardEvent(int key, int scancode, int action, int modifiers)
+{
+    if (key == GLFW_KEY_W) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y, camera_glob->get_position().z - 10});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_S) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y, camera_glob->get_position().z + 10});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_A) {
+        camera_glob->set_position({camera_glob->get_position().x - 10, camera_glob->get_position().y, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_D) {
+        camera_glob->set_position({camera_glob->get_position().x + 10, camera_glob->get_position().y, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_E) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y + 10, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_Q) {
+        camera_glob->set_position({camera_glob->get_position().x, camera_glob->get_position().y - 10, camera_glob->get_position().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_R) {
+        camera_glob->set_rotation({camera_glob->get_rotation().x, camera_glob->get_rotation().y - 10, camera_glob->get_rotation().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+    if (key == GLFW_KEY_F) {
+        camera_glob->set_rotation({camera_glob->get_rotation().x, camera_glob->get_rotation().y + 10, camera_glob->get_rotation().z});
+        Main_Scene::setChangesOnComponent(camera_glob);
+        return true;
+    }
+
+    return GLCanvas::keyboardEvent(key, scancode, action, modifiers);
+}
+
 Preview_Canvas::Preview_Canvas(Widget* parent) : GLCanvas(parent)
 {}
 
@@ -50,6 +96,7 @@ void Preview_Canvas::drawGL()
         shared_ptr<Camera_Component> camera = dynamic_pointer_cast<Camera_Component>(pair.second);
         if(camera)
         {
+            camera_glob = dynamic_pointer_cast<Camera_Component>(pair.second);
             std::pair<glm::vec3, glm::vec3> cameraPair = calculateCameraVectors(camera->get_position(),camera->get_rotation());
             viewGLMmat = glm::lookAt(camera->get_position(), cameraPair.first, cameraPair.second);
             projGLMmat = glm::perspective(glm::radians(camera->get_fov()), camera->get_aspect_ratio(), camera->get_near_clip(), camera->get_far_clip());
@@ -66,26 +113,26 @@ void Preview_Canvas::drawGL()
             // Validate Object Resource
             auto objIt = resources.find(render->get_object_UUID());
             if (objIt == resources.end()) {
-                std::cerr << "Object UUID not found in resources!" << std::endl;
+                Logger::log(MessageType::SEVERE,"Object UUID not found in resources!");
                 continue;
             }
 
             shared_ptr<Object_Resource> objRes = dynamic_pointer_cast<Object_Resource>(objIt->second);
             if (!objRes) {
-                std::cerr << "Failed to cast to Object_Resource!" << std::endl;
+                Logger::log(MessageType::SEVERE,"Failed to cast to Object_Resource!");
                 continue;
             }
 
             // Validate Material Resource
             auto matIt = resources.find(render->get_material_UUID());
             if (matIt == resources.end()) {
-                std::cerr << "Material UUID not found in resources!" << std::endl;
+                 Logger::log(MessageType::SEVERE,"Material UUID not found in resources!");
                 continue;
             }
 
             shared_ptr<Material_Resource> matRes = dynamic_pointer_cast<Material_Resource>(matIt->second);
             if (!matRes) {
-                std::cerr << "Failed to cast to Material_Resource!" << std::endl;
+                 Logger::log(MessageType::SEVERE,"Failed to cast to Material_Resource!");
                 continue;
             }
             //calculate Model Matrix in GLM
@@ -342,7 +389,53 @@ std::string Main_Scene::openFileDialog() {
 }
 
 void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
-    components[uuid] = component;
+
+    // Prüfen, ob das hinzuzufügende Objekt eine Kamera ist
+    if (auto cameraComp = std::dynamic_pointer_cast<Camera_Component>(component)) {
+        // Falls das Objekt eine Kamera ist, überspringen wir das Hinzufügen
+        Logger::log(MessageType::INFO, "Kamera-Komponente existiert bereits. Keine neue Kamera wird hinzugefügt.");
+        components.insert({uuid, component});
+        forceUpdate();
+        return;
+    }
+
+    // Überprüfen, ob bereits eine Kamera in der Szene existiert
+    bool cameraExists = std::any_of(components.begin(), components.end(), [](const auto& pair) {
+        return std::dynamic_pointer_cast<Camera_Component>(pair.second);
+    });
+
+    // Falls noch keine Kamera existiert, wird eine Kamera zur Szene hinzugefügt
+    if (!cameraExists) {
+        // Erzeuge eine neue UUID für die Kamera
+        boost::uuids::uuid cameraUUID = boost::uuids::random_generator()();
+
+        // Erstelle die Kamera-Komponente
+        auto cameraComp = std::make_shared<Camera_Component>(
+            cameraUUID,
+            "Camera",
+            glm::vec3{0, 65, 100},
+            glm::vec3{-35, 0, 0},
+            glm::vec3{1, 1, 1},
+            60,
+            1.77f,
+            0.1f,
+            1000
+        );
+
+        // Kamera zur Szene hinzufügen
+        components.insert({cameraUUID, cameraComp});
+        Logger::log(MessageType::INFO, "Eine neue Kamera wurde automatisch zur Szene hinzugefügt.");
+    }
+
+    // Füge das gegebene Objekt (falls keine Kamera) zur Szene hinzu
+    components.insert({uuid, component});
+    forceUpdate();
+}
+
+
+void Main_Scene::addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource)
+{
+    resources.insert({uuid, object_resource});
     forceUpdate();
 }
 
