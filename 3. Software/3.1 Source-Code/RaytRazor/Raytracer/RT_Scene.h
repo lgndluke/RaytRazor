@@ -15,6 +15,7 @@
 #include "../Utility/Logger/Logger.h"
 #include "RT_Triangle.h"
 #include "RT_Object_Importer.h"
+#include "../Components/Entities/Render_Component.h"
 
 
 struct RGBType {
@@ -31,6 +32,9 @@ class RT_Scene {
         static void sphereScene();
         static void previewScene();
 
+        //std::pair<glm::vec3, glm::vec3> RT_Scene::calculateCameraVectors(const glm::vec3 position, const glm::vec3 rotation);
+        //glm::mat4 RT_Scene::calculateViewDir(const glm::vec3 rotation);
+        //glm::mat4 RT_Scene::extract_Model_Matrix(const shared_ptr<Render_Component>& input);
         static RT_Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<RT_Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
         static void savebmp (const char *filename, int w, int h, int dpi, const RGBType *data);
 };
