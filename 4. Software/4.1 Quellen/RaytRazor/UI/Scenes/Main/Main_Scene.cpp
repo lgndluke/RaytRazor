@@ -325,7 +325,7 @@ void Main_Scene::update()
 bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers) {
     if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         if (key == GLFW_KEY_L && modifiers == GLFW_MOD_CONTROL) {
-            Logger::log(MessageType::INFO, "Shortcut: Save (Ctrl+S)");
+            Logger::log(MessageType::INFO, "Shortcut: Light (Ctrl+L)");
             boost::uuids::uuid uuid = boost::uuids::random_generator()();
             auto light_comp = std::make_shared<Light_Component>(
                 uuid,
@@ -350,7 +350,7 @@ bool Main_Scene::keyboardEvent(int key, int scancode, int action, int modifiers)
             return true;
         }
         if (key == GLFW_KEY_R && modifiers == GLFW_MOD_CONTROL) {
-            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+Q)");
+            Logger::log(MessageType::INFO, "Shortcut: Quit (Ctrl+R)");
             setVisible(false);
             pthread_t SDL_thread;
             pthread_create(&SDL_thread, NULL, raytrace_preview(), NULL);
