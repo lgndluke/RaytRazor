@@ -531,42 +531,9 @@ void RT_Scene::previewScene() {
 				);
 					objects_scene.push_back(scene_triangle);
 			}
-			//mvp_matrix = view_matrix * projection_matrix * model_matrix;
-
-			/*
-			for(int i = 0; i <= vertices.size()-3 ; i = i+3)
-			{
-				auto* scene_triangle = new Triangle(
-				Vector(
-						vertices[i].position.x,
-						vertices[i].position.y,
-						vertices[i].position.z
-					).multiply(model_matrix),
-					Vector(
-							vertices[(i+1)].position.x,
-							vertices[(i+1)].position.y,
-							vertices[(i+1)].position.z
-					).multiply(model_matrix),
-				Vector(
-						vertices[(i+2)].position.x,
-						vertices[(i+2)].position.y,
-						vertices[(i+2)].position.z
-					).multiply(model_matrix),
-					RT_Color(
-						vertices.at(i).color.x,
-						vertices.at(i).color.y,
-						vertices.at(i).color.z,
-						vertices.at(i).smoothness
-					)
-				);
-				objects_scene.push_back(scene_triangle);
-
-			}
-			*/
 		}
 	}
 
-	//cam_pos = Vector(3, 1.5, -4);
 	look_at = Vector (0, 0, 0);
 
 	const RT_Color plane_color (0.5, 0.5, 0.5, 0.5);
