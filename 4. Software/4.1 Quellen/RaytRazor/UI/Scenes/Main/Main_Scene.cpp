@@ -342,9 +342,39 @@ std::string Main_Scene::openFileDialog() {
 }
 
 void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component) {
-    components.insert({uuid,component});
+
+    bool cameraExists = false;
+    for (const auto& pair : components) {
+        if (std::dynamic_pointer_cast<Camera_Component>(pair.second)) {
+            cameraExists = true;
+            break;
+        }
+    }
+
+
+    if (!cameraExists) {
+        boost::uuids::uuid cameraUUID = boost::uuids::random_generator()();
+        auto camera_comp = std::make_shared<Camera_Component>(
+            cameraUUID,
+            "Camera_Added",
+            glm::vec3{0, 65, 100},
+            glm::vec3{-35, 0, 0},
+            glm::vec3{1, 1, 1},
+            60,
+            1.77f,
+            0.1f,
+            1000
+        );
+        components.insert({cameraUUID, camera_comp});
+        Logger::log(MessageType::INFO, "Camera hinzugefügt da szene keine Camera hatte.");
+    }
+
+    
+    components.insert({uuid, component});
     forceUpdate();
 }
+
+
 
 void Main_Scene::addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource)
 {
