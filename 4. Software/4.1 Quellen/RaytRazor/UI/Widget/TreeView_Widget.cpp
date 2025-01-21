@@ -42,50 +42,62 @@ void TreeView_Widget::addParent(const std::string& parentName) {
 }
 
 void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, const std::string& parentName) {
-    if (mTrackedObjects.find(nodeName->get_uuid()) != mTrackedObjects.end()) {
-        return;
-    }
+    try
+    {
+        if (mTrackedObjects.find(nodeName->get_uuid()) != mTrackedObjects.end()) {
+            return;
+        }
 
-    if (parentName.empty()) {
-        // Erstellen eines Root-Knotens
-        auto rootContainer = new Widget(mContainer);
-        rootContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
+        if (parentName.empty()) {
+            // Erstellen eines Root-Knotens
+            auto rootContainer = new Widget(mContainer);
+            rootContainer->setLayout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 0, 5));
 
-        auto label = new Custom_Label(rootContainer, nodeName->get_name(), "sans-bold");
-        label->setFontSize(Basis_Root_Font);
-        mNodeMap[nodeName->get_name()] = rootContainer; // Speichern des Knotens in der Map
-    } else if (mNodeMap.find(parentName) != mNodeMap.end()) {
-        // Erstellen eines Child-Knotens unter dem angegebenen Parent
-        auto parentWidget = mNodeMap[parentName];
+            auto label = new Custom_Label(rootContainer, nodeName->get_name(), "sans-bold");
+            label->setFontSize(Basis_Root_Font);
+            mNodeMap[nodeName->get_name()] = rootContainer; // Speichern des Knotens in der Map
+        } else if (mNodeMap.find(parentName) != mNodeMap.end())
+        {
+            // Erstellen eines Child-Knotens unter dem angegebenen Parent
+            auto parentWidget = mNodeMap[parentName];
 
-        auto childContainer = new Widget(parentWidget);
-        childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 0));
+            auto childContainer = new Widget(parentWidget);
+            childContainer->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 0));
 
-        auto label = new Custom_Label(childContainer, "|-------> " + nodeName->get_name(), "sans");
-        label->setFontSize(Basis_Child_Font);
+            auto label = new Custom_Label(childContainer, "|-------> " + nodeName->get_name(), "sans");
+            label->setFontSize(Basis_Child_Font);
 
-        label->setCallback([this, label, nodeName]() {
-            printf("Node name: %s\n", nodeName->get_name().c_str());
-            if (mCurrentSelectedLabel) {
-                mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
-            }
-            label->setColor(Color(255, 0, 0, 255));
+            label->setCallback([this, label, nodeName]() {
+                try {
+                    printf("Node name: %s\n", nodeName->get_name().c_str());
+                    if (mCurrentSelectedLabel) {
+                        mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
+                    }
+                    label->setColor(Color(255, 0, 0, 255));
 
-            mCurrentSelectedLabel = label;
+                    mCurrentSelectedLabel = label;
 
-            for (const auto& componets : Main_Scene::getComponents()) {
-                if (nodeName->get_uuid() == componets.second->get_uuid()) {
-                    mAttributes->updateFromComponent(componets.second);
+                    for (const auto& componets : Main_Scene::getComponents()) {
+                        if (nodeName->get_uuid() == componets.second->get_uuid()) {
+                            mAttributes->updateFromComponent(componets.second);
+                        }
+                    }
+                } catch (const std::exception& e)
+                {
+                    Logger::log(MessageType::SEVERE, e.what());
                 }
-            }
-        });
+            });
 
-        // Speichern des neuen Child-Knotens in der Map
-        mNodeMap[nodeName->get_name()] = childContainer;
-        mContainer->setSize(Vector2i(mScrollPanel->width(), mContainer->children().size() * label->height()));
-        mContainer->performLayout(screen()->nvgContext());
-        mScrollPanel->performLayout(screen()->nvgContext());
-        printf("");
+            // Speichern des neuen Child-Knotens in der Map
+            mNodeMap[nodeName->get_name()] = childContainer;
+            mContainer->setSize(Vector2i(mScrollPanel->width(), mContainer->children().size() * label->height()));
+            mContainer->performLayout(screen()->nvgContext());
+            mScrollPanel->performLayout(screen()->nvgContext());
+            printf("");
+        }
+    } catch (const std::runtime_error& e)
+    {
+        Logger::log(MessageType::SEVERE, e.what());
     }
 }
 
