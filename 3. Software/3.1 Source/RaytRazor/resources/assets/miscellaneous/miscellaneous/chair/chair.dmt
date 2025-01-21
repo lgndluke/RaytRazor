@@ -1,0 +1,105 @@
+V3.0
+# material name
+material_name "Default"
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.830000 0.706900 0.670000 1.000000
+# specular color
+specular_color 1.000000 1.000000 1.000000 1.000000
+# diffuse
+diffuse 1.000000
+# ambient
+ambient 0.100000
+# shine
+shine 0.320000
+# shine intensity
+intensity 0.200000
+# reflection
+reflection 0.200000
+# transparency
+transparency 1.000000
+# fresnel index of refraction
+index_of_refraction 0.000000
+# fresnel reflections
+fresnel_reflections 0
+# backface appearance
+backface black
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000
+# material name
+material_name "Wood"
+shader_type color_shader "wrapped oak floor"
+float_param 0.537900 "gnarl"
+float_param 0.096400 "grain"
+color_param 0.000000 0.000000 0.000000 "grain colour"
+float_param 0.200000 "grain scale"
+color_param 0.100000 0.050000 0.020000 "groove colour"
+float_param 0.000000 "groove width"
+float_param 0.000000 "offset"
+float_param 0.030000 "pattern scale"
+float_param 2.000000 "plank length"
+float_param 0.500000 "plank variation"
+float_param 2.000000 "plank width"
+enum_param 1 "replication type"
+color_param 0.300000 0.180000 0.060000 "ring colour"
+float_param 0.020700 "ring fuzz grain"
+float_param 0.150000 "ring fuzz in"
+float_param 0.400000 "ring fuzz out"
+float_param 0.165500 "ring width"
+float_param 1.000000 "scale"
+natural_param 1 "strips"
+color_param 0.570000 0.290000 0.120000 "wood colour"
+shader_type reflectance_shader "matte"
+float_param 1.000000 "ambient factor"
+float_param 1.000000 "diffuse factor"
+shader_type transparency_shader "plain coverage"
+float_param 1.000000 "coverage"
+use_color_shader 1
+use_refl_shader 1
+use_trans_shader 0
+use_disp_shader 0
+# ambient color
+ambient_color 0.000000 0.000000 0.000000 1.000000
+# diffuse color
+diffuse_color 0.570000 0.290000 0.120000 1.000000
+# specular color
+specular_color 0.570000 0.290000 0.120000 1.000000
+# diffuse
+diffuse 1.000000
+# ambient
+ambient 1.000000
+# shine
+shine 0.000000
+# shine intensity
+intensity 0.000000
+# reflection
+reflection 0.000000
+# transparency
+transparency 1.000000
+# fresnel index of refraction
+index_of_refraction 0.000000
+# fresnel reflections
+fresnel_reflections 0
+# backface appearance
+backface black
+# glow
+glow 0
+# glow intensity
+glow_intensity 1.000000
+# glow color
+glow_color 0.000000 1.000000 0.000000 1.000000
+# bump map height
+bump_height 0.010000
+# decal intensity
+decal_intensity 0.000000
+decal_reflectivity 0.000000

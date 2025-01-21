@@ -1,0 +1,394 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+newmtl 2MCVTPAI
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTPAI.png
+map_d 2MCVMPAI.png
+#
+newmtl 2MCVCAMU
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+bump -s 4.0 4.0 1.0 2MCVMCAM.png
+#
+newmtl 2MCVCRIS
+Ka  0.4 0.5 0.4
+Kd  0.4 0.5 0.4
+Ks  1.0 1.0 1.0
+d  0.5
+Ns  10.0
+illum 2
+#
+newmtl 2MCVRED
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.4
+illum 2
+map_Kd 2MCVTRED.png
+map_d 2MCVORED.png
+bump 2MCVORED.png
+#
+newmtl 2MCVTDIB
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.6
+illum 2
+map_Kd 2MCVTDIB.png
+#
+newmtl 2MCVANTE
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  4.0
+illum 2
+#
+newmtl 2MCVT31P
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVT31P.png
+map_d 2MCVM31P.png
+#
+newmtl 2MCVMNEG
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  3.2
+illum 2
+#
+newmtl 2MCVREJA
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_d -s 0.5 0.5 1.0 2MCVOREJ.png
+bump -s 0.4 0.4 1.0 2MCVMCAM.png
+#
+newmtl 2MCVREMA
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+bump -s 4.0 4.0 1.0 2MCVMCAM.png
+#
+newmtl 2MCVBPU1
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVMPU1.png
+map_d 2MCVOPU1.png
+bump 2MCVBPU1.png
+#
+newmtl 2MCVBPU3
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVMPU3.png
+map_d 2MCVOPU3.png
+bump 2MCVBPU3.png
+#
+newmtl 2MCVTUND
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTUND.png
+bump 2MCVBUND.png
+#
+newmtl 2MCVBRE2
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd -s 0.4 0.4 1.0 2MCVTCAM.png
+bump 2MCVBRE2.png
+#
+newmtl 2MCVBRE3
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+bump 2MCVBRE3.png
+#
+newmtl 2MCVBRE4
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+bump 2MCVBRE4.png
+#
+newmtl 2MCVCROJ
+Ka  0.9 0.1 0.1
+Kd  0.9 0.1 0.1
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  10.0
+illum 2
+#
+newmtl 2MCVMATR
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTMAT.png
+bump 2MCVTMAT.png
+#
+newmtl 2MCVBRE1
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+bump 2MCVBRE1.png
+#
+newmtl 2MCVPLAT
+Ka  0.7 0.7 0.7
+Kd  0.7 0.7 0.7
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  6.6
+illum 2
+#
+newmtl 2MCVREJA1
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd -s 0.4 0.4 1.0 2MCVTCAM.png
+map_d -s 0.8 0.8 1.0 2MCVOREJ.png
+bump -s 0.4 0.4 1.0 2MCVMCAM.png
+#
+newmtl 2MCVTELA
+Ka  0.3 0.3 0.2
+Kd  0.3 0.3 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.4
+illum 2
+#
+newmtl 2MCTESL
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTESL.png
+bump 2MCVBESL.png
+#
+newmtl 2MCTCAA
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTCAA.png
+bump 2MCVBCAA.png
+#
+newmtl 2MCTCAF
+Ka  0.9 0.9 0.9
+Kd  0.9 0.9 0.9
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTCAF.png
+bump 2MCVBCAF.png
+#
+newmtl 2MCVTBOL
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTBOL.png
+bump 2MCVBBOL.png
+#
+newmtl 2MCVTBLD
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTBLD.png
+bump 2MCVBBLD.png
+#
+newmtl 2MCVTBLI
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTBLI.png
+bump 2MCVBBLI.png
+#
+newmtl 2MCVTLAT
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTLAT.png
+bump 2MCVBLAT.png
+#
+newmtl 2MCVTBID
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTBID.png
+bump 2MCVTBID.png
+#
+newmtl 2MCVHERR
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTHER.png
+bump 2MCVBHER.png
+#
+newmtl 2MCVMNEG1
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  3.2
+illum 2
+#
+newmtl 2MCVMATR1
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTMAT.png
+bump 2MCVTMAT.png
+#
+newmtl 2MCVESPE
+Ka  0.3 0.3 0.3
+Kd  0.3 0.3 0.3
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl 2MCVBRU2
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  1.5
+illum 2
+map_Kd 2MCVTRU2.png
+bump 2MCVBRU2.png
+#
+newmtl 2MCVBRU1
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  1.5
+illum 2
+map_Kd 2MCVTRU1.png
+bump 2MCVBRU1.png
+#
+newmtl 2MCVBCAD
+Ka  0.2 0.2 0.2
+Kd  0.2 0.2 0.2
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  8.2
+illum 2
+bump -o -0.0 0.0 0.0 2MCVBCAD.png
+#
+newmtl 2MCVTLUN
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTLUN.png
+map_d 2MCVMLUN.png
+#
+newmtl 2MCVTCAN
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTCAN.png
+map_d 2MCVMCAN.png
+#
+newmtl 2MCVTTRD
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTTRD.png
+map_d 2MCVMTRD.png
+#
+newmtl 2MCVTTRI
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  0.0
+illum 2
+map_Kd 2MCVTUNP.png
+map_d 2MCVMUNP.png
+#
+# EOF

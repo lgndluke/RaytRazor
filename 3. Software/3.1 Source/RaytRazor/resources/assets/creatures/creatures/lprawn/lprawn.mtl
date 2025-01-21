@@ -1,0 +1,70 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+newmtl head1
+Ka  0.6 0.4 0.4
+Kd  0.6 0.4 0.4
+Ks  1.0 0.9 0.9
+d  1.0
+Ns  5.5
+illum 2
+map_Kd LPRMHEAT.PNG
+map_d LPRMHEAT.PNG
+#
+newmtl patas1
+Ka  0.6 0.4 0.4
+Kd  0.6 0.4 0.4
+Ks  1.0 0.9 0.9
+d  1.0
+Ns  5.5
+illum 2
+map_Kd LPRMLEGT.PNG
+#
+newmtl Eye
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  9.8
+illum 2
+#
+newmtl PLE
+Ka  0.6 0.4 0.4
+Kd  0.6 0.4 0.4
+Ks  1.0 0.9 0.9
+d  1.0
+Ns  5.5
+illum 2
+map_Kd LPRMPLEO.PNG
+map_d LPRMPEOO.PNG
+#
+newmtl abd
+Ka  0.6 0.4 0.4
+Kd  0.6 0.4 0.4
+Ks  1.0 0.9 0.9
+d  1.0
+Ns  5.5
+illum 2
+map_Kd LPRMABDT.PNG
+map_d LPRMABDT.PNG
+#
+newmtl tail
+Ka  0.6 0.4 0.4
+Kd  0.6 0.4 0.4
+Ks  1.0 0.9 0.9
+d  1.0
+Ns  5.5
+illum 2
+map_Kd LPRMTAIT.PNG
+map_d LPRMTAIO.PNG
+#
+newmtl xy
+Ka 0.5 0.5 0.5
+Kd 0.5 0.5 0.5
+Ks 0.5 0.5 0.5
+d 1
+Ns 55
+illum 2
+map_Kd SAND.PNG
+
+#
+# EOF
