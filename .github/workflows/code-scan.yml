@@ -63,7 +63,7 @@ jobs:
           Set-Location build
           
           Write-Host "Building Project"
-          cmake "../4. Software/4.1 Quellen/RaytRazor" -G "MinGW Makefiles"
+          cmake "../3. Software/3.1 Quellen/RaytRazor" -G "MinGW Makefiles"
           mingw32-make
           
           Write-Host "Listing built folders/files"
