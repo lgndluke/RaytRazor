@@ -73,6 +73,15 @@ void MenuBar_Widget::initialize() {
                         Main_Scene::addComponent(uuid, light_comp);
                     },
                 []() {
+
+                        for(const auto& pair : Main_Scene::getComponents())
+                        {
+                            if(auto camera = dynamic_pointer_cast<Camera_Component>(pair.second))
+                            {
+                                return;
+                            }
+                        }
+
                         boost::uuids::uuid uuid = boost::uuids::random_generator()();
                         auto camera_comp = std::make_shared<Camera_Component>(
                             uuid,
