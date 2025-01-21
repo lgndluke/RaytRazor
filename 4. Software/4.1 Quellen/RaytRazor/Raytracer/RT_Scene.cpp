@@ -175,7 +175,7 @@ RT_Color RT_Scene::getColorAt(Vector intersection_position, Vector intersecting_
 				if (secondary_intersection > accuracy) {
 					if (secondary_intersection <= distance_to_light_magnitude) {
 						shadowed = true;
-						break;
+						//break;
 					}
 				}
 			}
@@ -287,7 +287,7 @@ bool RT_Scene::render(Image &output) {
 						temp_blue[aa_index] = 0;
 					}
 					else{
-						if (double accuracy = 1e-8; intersections.at(index_of_winning_object) > accuracy) {
+						if (double accuracy = 1e-6; intersections.at(index_of_winning_object) > accuracy) {
 							double ambientlight = 0.2;
 
 							Vector intersection_position = cam_ray_origin.add(cam_ray_direction.multiply(intersections.at(index_of_winning_object)));
@@ -347,54 +347,6 @@ bool RT_Scene::render(Image &output) {
 	return true;
 }
 
-void RT_Scene::cubeScene() {
-	Logger::log(MessageType::INFO, "Rendering the .obj scene...!");
-	const Vector Y (0,1,0);
-	const RT_Color white_light (1.0, 1.0, 1.0, 0);
-	const RT_Color gray (0.5, 0.5, 0.5, 0.5);
-	const RT_Color maroon (1.0, 0.0, 0.0, 0.3);
-	const RT_Color pink (1.0, 0.0, 1.0, 0.3);
-
-	cam_pos = Vector (3, 1.5, -4);
-	look_at = Vector (0, 0, 0);
-	std::string abs_path = "";
-	std::string filename = "resizedTeapot.obj";
-	try {
-		path relative_path = "../../../../5. Modelle/5.1 Beispielmodelle/Test/" + filename;
-		path absolute_path = absolute(relative_path);
-		path canonical_path = canonical(absolute_path);
-		if (!exists(canonical_path)) {
-			throw std::runtime_error("Path does not exist: " + canonical_path.string());
-		}
-		abs_path = canonical_path.string();
-		std::replace(abs_path.begin(), abs_path.end(), '\\', '/');
-	}catch (const filesystem_error& e) {
-		throw std::runtime_error("Filesystem error: " + std::string(e.what()));
-	} catch (const std::exception& e) {
-		throw std::runtime_error("Error: " + std::string(e.what()));
-	}
-	const std::vector<RT_Vertex> vertices = RT_Object_Importer::fetch_vertices(abs_path);
-
-    for(int i = 0; i <= vertices.size()-3 ; i = i+3) {
-    	auto* scene_triangle = new Triangle(Vector (vertices[i].position.x,vertices[i].position.y,vertices[i].position.z),
-    												Vector(vertices[(i+1)].position.x,vertices[(i+1)].position.y,vertices[(i+1)].position.z),
-    												Vector(vertices[(i+2)].position.x,vertices[(i+2)].position.y,vertices[(i+2)].position.z),
-    												pink);
-    	objects_scene.push_back(scene_triangle);
-
-    }
-
-    Logger::log(MessageType::DEBUG, "Objects: " + std::to_string(objects_scene.size()));
-
-
-	auto* scene_plane = new Plane(Y, 0, gray);
-	objects_scene.push_back(scene_plane);
-
-	//Vector light_position (3, 300, 0); // für teapot
-	Vector light_position (10, 1, 10);
-	auto* scene_light = new Light(light_position, white_light);
-	light_sources.push_back(scene_light);
-}
 
 void RT_Scene::sphereScene() {
 	Logger::log(MessageType::INFO, "Rendering the sphere scene...!");
