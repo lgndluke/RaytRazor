@@ -166,8 +166,10 @@ void Preview_Canvas::drawGL()
             mShader.setUniform("modelViewProj", mvpEigen);
             nanogui::MatrixXu indices = make_sphere_indices();
             Eigen::MatrixXf vertices = make_sphere_vertices();
+            Eigen::MatrixXf color = makeLightColor(light->get_color(),vertices.cols());
             mShader.uploadIndices(indices);
             mShader.uploadAttrib("position", vertices);
+            mShader.uploadAttrib("color", color);
             glEnable(GL_DEPTH_TEST);
             mShader.drawIndexed(GL_TRIANGLES, 0, indices.rows() * indices.cols());
             glDisable(GL_DEPTH_TEST);
@@ -277,6 +279,16 @@ nanogui::MatrixXu Preview_Canvas::make_sphere_indices() {
         }
     }
 
+    return result;
+}
+
+Eigen::MatrixXf Preview_Canvas::makeLightColor(glm::vec3 color, int amount) {
+    Eigen::MatrixXf result = Eigen::MatrixXf(3,amount);
+    for (int col = 0; col < amount; ++col) {
+        result(0, col) = color.x;
+        result(1, col) = color.y;
+        result(2, col) = color.z;
+    }
     return result;
 }
 
