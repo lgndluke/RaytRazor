@@ -10,6 +10,14 @@
 
 </div>
 
+## 🖼️ Beispiel Bilder:
+
+<div align="center" style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/7866cbe5-4d05-42e1-ab96-32e19fb7836d" alt="Audis" style="width: 33%;">
+  <img src="https://github.com/user-attachments/assets/aac029a2-1b72-41f5-9aac-92ddd1212d4e" alt="Teapot-and-Chess" style="width: 33%;">
+  <img src="https://github.com/user-attachments/assets/169f562b-1adb-4123-9aca-ad4b883b355e" alt="Spheres" style="width: 33%;">
+</div>
+
 ## ⚡️ Quick start:
 
 Neuesten Release herunterladen, Archiv entpacken und direkt unter Windows durchstarten. <br>
