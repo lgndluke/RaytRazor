@@ -66,7 +66,7 @@ class Json_Parser
         *
         * @note Diese Funktion verwendet externe Bibliotheken wie nlohmann::json für die JSON-Verarbeitung
         *       und boost::uuids für die Verwaltung von UUIDs.
-        * @author Christan Kasper, Dennis Welsch
+        * @author Christan Kasper
         */
         static bool exportToJSON(const std::string& exportPath,
                                  const std::map<boost::uuids::uuid, shared_ptr<Base_Component>>& components,

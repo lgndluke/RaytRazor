@@ -29,20 +29,19 @@ public:
      * @param nodeName Der Name des Knotens.
      * @param parentName Der Name des Elternknotens, falls dieser vorhanden ist.
      * @param isLastChild Ist das Letzte Kind des Knoten wenn die Aussage war ist.
+     * @author Christian Kasper
      */
     void addNode(const std::shared_ptr<Base_Component>& nodeName, const std::string& parentName = "");
-    void cleanUpUnusedNodes();
 
     /**
      * @brief Leert die gesamte Baumstruktur.
+     * @author Christian Kasper
      */
     void clear();
 
-    void update();
-
 private:
-    Widget* mContainer; ///< Container für die Baumstruktur
-    map<std::string, Widget*> mNodeMap; ///< Map für Knoten und deren Widgets
+    Widget* mContainer;
+    map<std::string, Widget*> mNodeMap;
     ComponentAttributes_Widget *mAttributes;
     Custom_Label* mCurrentSelectedLabel = nullptr;
     std::map<boost::uuids::uuid, std::string> mTrackedObjects;
