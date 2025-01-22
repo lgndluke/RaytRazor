@@ -57,3 +57,9 @@ RayForge Logo: [ChatGPT Logo Generator](https://chatgpt.com/g/g-9i7ARxKhj-logo)<
 #### **Fundamentals of Computer Graphics:**
 
 - Citation: Marschner, S., & Shirley, P. (2021). Fundamentals of Computer Graphics (5th ed.). A K Peters/CRC Press. https://doi.org/10.1201/9781003050339
+
+#### **Raytracing using SDL2**
+
+- [Youtube](https://www.youtube.com/watch?v=JN5yUrJPThI&list=PL3WoIG-PLjSt54LvzY2SuBQDl-cXa11Tm)
+- [Website / Documentation](https://www.scratchapixel.com/index.html)
+- [Website / Documentation](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
