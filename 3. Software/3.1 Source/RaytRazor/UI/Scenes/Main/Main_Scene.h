@@ -99,6 +99,8 @@ public:
 
     static nanogui::MatrixXu make_sphere_indices();
 
+    Eigen::MatrixXf makeLightColor(glm::vec3 color, int amount);
+
 private:
     GLShader mShader;
     Eigen::Vector3f mRotation{0.25f, 0.5f, 0.33f};
@@ -169,6 +171,13 @@ class Main_Scene final : public Screen
         * @author Christian Kasper
         */
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
+
+        /**
+        * @brief Fügt neue Componenenten zu Szene hinzu
+        * @param uuid, Identifier
+        * @author Christian Kasper
+        */
+        static void removeComponent(const boost::uuids::uuid& uuid);
 
          /**
         * @brief Fügt neue Componenenten zu Szene hinzu

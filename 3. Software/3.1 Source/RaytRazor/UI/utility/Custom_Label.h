@@ -21,6 +21,9 @@ using namespace std;
 
 class Custom_Label : public nanogui::Widget {
 public:
+
+    std::function<void()> mSecondaryCallback;
+
     Custom_Label(Widget *parent, const std::string &caption,
           const std::string &font = "sans", int fontSize = -1);
 

@@ -43,7 +43,7 @@ private:
     Widget* mContainer;
     map<std::string, Widget*> mNodeMap;
     ComponentAttributes_Widget *mAttributes;
-    Custom_Label* mCurrentSelectedLabel = nullptr;
+    pair<boost::uuids::uuid, Custom_Label*>* mCurrentSelectedLabel = nullptr;
     std::map<boost::uuids::uuid, std::string> mTrackedObjects;
     VScrollPanel* mScrollPanel;
 };
