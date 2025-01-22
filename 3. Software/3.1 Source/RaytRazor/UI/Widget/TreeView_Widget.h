@@ -44,7 +44,7 @@ private:
     Widget* mContainer; ///< Container für die Baumstruktur
     map<std::string, Widget*> mNodeMap; ///< Map für Knoten und deren Widgets
     ComponentAttributes_Widget *mAttributes;
-    Custom_Label* mCurrentSelectedLabel = nullptr;
+    pair<boost::uuids::uuid, Custom_Label*>* mCurrentSelectedLabel = nullptr;
     std::map<boost::uuids::uuid, std::string> mTrackedObjects;
     VScrollPanel* mScrollPanel;
 };
