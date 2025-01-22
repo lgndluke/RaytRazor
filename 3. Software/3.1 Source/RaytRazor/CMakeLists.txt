@@ -3,13 +3,8 @@ project(RaytRazor)
 
 set(CMAKE_CXX_STANDARD 17)
 
-if (WIN32)
-    # Windows specific compiler flags.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static -Ofast -fopenmp")
-else ()
-    # Linux/MacOS specific compiler flags. -> Functionality has not yet been tested.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Ofast")
-endif ()
+# Windows specific compiler flags.
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static -Ofast -fopenmp")
 
 set(SDL2_PATH "Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32")
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Utility/External_Libraries/SDL2-2.30.9/x86_64-w64-mingw32/lib/cmake/SDL2)
@@ -83,14 +78,10 @@ set(SOURCE_FILES
         Raytracer/RT_Light.cpp
         Raytracer/RT_Object.h
         Raytracer/RT_Object.cpp
-        Raytracer/RT_Plane.h
-        Raytracer/RT_Plane.cpp
         Raytracer/RT_Ray.h
         Raytracer/RT_Ray.cpp
         Raytracer/RT_Scene.h
         Raytracer/RT_Scene.cpp
-        Raytracer/RT_Sphere.h
-        Raytracer/RT_Sphere.cpp
         Raytracer/RT_Vector.h
         UI/Widget/TreeView_Widget.cpp
         UI/Widget/TreeView_Widget.h
@@ -113,8 +104,6 @@ set(SOURCE_FILES
         Raytracer/RT_LightSource.h
         Raytracer/RT_Color.cpp
         Raytracer/RT_LightSource.cpp
-        Raytracer/RT_Object_Importer.h
-        Raytracer/RT_Object_Importer.cpp
 )
 
 add_executable(RaytRazor ${SOURCE_FILES})
