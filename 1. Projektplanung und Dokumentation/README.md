@@ -6,9 +6,9 @@ Dieses Verzeichnis enthält alle Planungs- und Dokumentationsunterlagen dieses P
 
 ### Hier sind die wichtigsten Dokumentationsunterlagen zu finden:
 
-1. Die Haupt-Projekt-Dokumentation ist hier zu finden: [Lastenheft]()
+1. Die Haupt-Projekt-Dokumentation ist hier zu finden: [Lastenheft](/1.%20Projektplanung%20und%20Dokumentation/04_RaytRazor_Lastenheft.pdf)
 
-2. Verwendete externe Bibliotheken und Quellen hier aufgeführt: [Quellen.md](/05_Quellen)
+2. Verwendete externe Bibliotheken und Quellen hier aufgeführt: [Quellen.md](/1.%20Projektplanung%20und%20Dokumentation/05_Quellen.md)
 
 3. Die Installations-Anleitung ist hier zu finden: [GitHub Wiki](https://github.com/lgndluke/RaytRazor/wiki/)
 
