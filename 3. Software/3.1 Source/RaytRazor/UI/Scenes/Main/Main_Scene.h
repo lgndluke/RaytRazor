@@ -170,6 +170,11 @@ class Main_Scene final : public Screen
         */
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
 
+        /**
+        * @brief Fügt neue Componenenten zu Szene hinzu
+        * @param uuid, Identifier
+        * @author Christian Kasper
+        */
         static void removeComponent(const boost::uuids::uuid& uuid);
 
          /**
