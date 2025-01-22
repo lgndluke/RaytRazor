@@ -27,6 +27,7 @@ public:
 
     /**
      * @brief Initialisiert die Menüleiste mit vordefinierten Menüs und Aktionen.
+     * @author Christian Kasper
      */
     void initialize();
 
@@ -36,14 +37,32 @@ private:
      * @param title Der Name des Hauptmenüs (z. B. File, Add, Help).
      * @param options Die Optionen, die im Dropdown angezeigt werden.
      * @param callbacks Die Callbacks, die für jede Option ausgeführt werden sollen.
+     * @author Christian Kasper
      */
     void addMenu(const string& title, const vector<string>& options, const vector<function<void()>>& callbacks);
+    /**
+     * @brief Macht ein Layout Update in NanoGui, und überschreibt den Effekt auf die PopUp
+     * @param ctx, Layout Kontext
+     * @author Christian Kasper
+     */
     void performLayout(NVGcontext* ctx);
 
+    /**
+    * @brief Öffnet eine FileDialog von Windows
+    * @author Christian Kasper
+    */
     static string openFileDialog();
 
+    /**
+    * @brief Öffnet eine DirectoryDialog von Windows
+    * @author Christian Kasper
+    */
     static std::string openDirectoryDialog();
 
+    /**
+    * @brief Prüft bei einem Pfad ob es sich um einen Ordner handelt
+    * @author Christian Kasper
+    */
     static bool isDirectory(const string& path);
 };
 
