@@ -525,6 +525,20 @@ void Main_Scene::addComponent(const boost::uuids::uuid& uuid, const std::shared_
     forceUpdate();
 }
 
+void Main_Scene::removeComponent(const boost::uuids::uuid& uuid)
+{
+    auto render_obj = resources.find(uuid);
+
+    auto render =  dynamic_pointer_cast<Render_Component>(render_obj->second);
+
+    if(render)
+    {
+        resources.erase(render->get_material_UUID());
+        resources.erase(render->get_object_UUID());
+    }
+    components.erase(uuid);
+}
+
 
 void Main_Scene::addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource)
 {

@@ -56,7 +56,14 @@ class Preview_Canvas final : public GLCanvas
 
 public:
 
-
+   /**
+    * @brief Überschreibt die KeyboardEvents an der Preview
+    * @param key gedrückte Taste
+    * @param scancode
+    * @param action
+    * @param modifiers sowas wie Control und STRG
+    * @author Christian Kasper
+    */
     bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
     /**
      * @brief Konstruktor zum Erstellen eines Preview_Canvas Objekts.
@@ -127,6 +134,14 @@ class Main_Scene final : public Screen
          */
         void update();
 
+        /**
+        * @brief Überschreibt die KeyboardEvents an der Main_Scene
+        * @param key gedrückte Taste
+        * @param scancode
+        * @param action
+        * @param modifiers sowas wie Control und STRG
+        * @author Christian Kasper
+        */
         bool keyboardEvent(int key, int scancode, int action, int modifiers) override;
 
 
@@ -143,10 +158,33 @@ class Main_Scene final : public Screen
 
         static void setChangesOnComponent(const std::shared_ptr<Base_Component>& component);
 
+        /**
+        * @brief Öffnet eine ausgewählte Szene im JsonParser und generiert dadurch ressourcen und components
+        * @author Christian Kasper
+        */
         static void openScene();
 
+        /**
+        * @brief Fügt neue Componenenten zu Szene hinzu
+        * @param uuid, Identifier
+        * @param component, das zu hinzufügende Componente
+        * @author Christian Kasper
+        */
         static void addComponent(const boost::uuids::uuid& uuid, const std::shared_ptr<Base_Component>& component);
 
+        /**
+        * @brief Fügt neue Componenenten zu Szene hinzu
+        * @param uuid, Identifier
+        * @author Christian Kasper
+        */
+        static void removeComponent(const boost::uuids::uuid& uuid);
+
+         /**
+        * @brief Fügt neue Componenenten zu Szene hinzu
+        * @param uuid, Identifier
+        * @param object_resource, die zu hinzufügende Resource
+        * @author Christian Kasper
+        */
         static void addResource(boost::uuids::uuid uuid, const std::shared_ptr<Base_Resource>& object_resource);
 
     static void forceUpdate();
@@ -163,6 +201,10 @@ class Main_Scene final : public Screen
         TreeView_Widget* tree_view;
         ComponentAttributes_Widget* attributesWidget;
 
+        /**
+        * @brief Singleton von der Szene MainSzene
+        * @author Christian Kasper
+        */
         static Main_Scene* instance;
 
         vector<int> ids;
@@ -180,10 +222,22 @@ class Main_Scene final : public Screen
          */
         void* (*raytrace_preview())(void*);
 
+        /**
+        * @brief Öffnet eine FileDialog von Windows
+        * @author Christian Kasper
+        */
         static std::string openFileDialog();
 
+        /**
+        * @brief Überprüft ob die Endung .json ist und vertauscht '\\' mit '/'
+        * @author Christian Kasper
+        */
         static bool isJsonFileAndFixPath(std::string& path);
 
+        /**
+        * @brief Ruft eine Update Methode im TreeView auf um neue Nodes anzuzeigen
+        * @author Christian Kasper
+        */
         void updateTreeView() const;
 };
 

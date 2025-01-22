@@ -13,11 +13,17 @@
 #include <GLFW/glfw3.h>
 #include "nanogui/serializer/core.h"
 
-
+/**
+ * @brief Erweiterung eines Labels um auf Callbacks zu antworten
+ * @author Christian Kasper
+ */
 using namespace std;
 
 class Custom_Label : public nanogui::Widget {
 public:
+
+    std::function<void()> mSecondaryCallback;
+
     Custom_Label(Widget *parent, const std::string &caption,
           const std::string &font = "sans", int fontSize = -1);
 
