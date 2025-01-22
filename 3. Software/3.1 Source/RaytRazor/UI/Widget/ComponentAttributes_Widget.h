@@ -19,12 +19,32 @@ struct Vec3WidgetGroup {
     TextBox* zBox;
     int FONT_SIZE = 17;
 
+    /**
+    * @brief Konstruktor
+    * @author Christian Kasper
+    */
     Vec3WidgetGroup(Widget* parent, const std::string& labelText);
 
+    /**
+    * @brief Aktualisiert mit den richtgien neuen Werten
+    * @param value, neuer Wert
+    * @param editable, Bearbeitung ja oder nein (true/false)
+    * @author Christian Kasper
+    */
     void update(const glm::vec3& value, bool editable) const;
 
+    /**
+    * @brief updated mit Dummy Werte "-"
+    * @param value, dummy string value
+    * @param editable, Bearbeitung ja oder nein (true/false)
+    * @author Christian Kasper
+    */
     void update(string value, bool editable) const;
 
+    /**
+    * @brief Definiert die KlickEvents, schreibt die neuen Werte in die ComponentListe rein
+    * @author Christian Kasper
+    */
     void setCallback(std::function<void(glm::vec3)> callback) const;
 };
 
