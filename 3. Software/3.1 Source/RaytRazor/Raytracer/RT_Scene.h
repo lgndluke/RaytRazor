@@ -5,16 +5,13 @@
 #include <SDL.h>
 #include "RT_Image.h"
 #include "RT_Camera.h"
-#include "RT_Sphere.h"
 #include "RT_Light.h"
-#include "RT_Plane.h"
 #include "RT_LightSource.h"
 #include <vector>
 #include <cmath>
 #include <filesystem>
 #include "../Utility/Logger/Logger.h"
 #include "RT_Triangle.h"
-#include "RT_Object_Importer.h"
 #include "../Components/Entities/Render_Component.h"
 
 
@@ -28,7 +25,6 @@ class RT_Scene {
     public:
         RT_Scene();
         static bool render(Image& output);
-        static void sphereScene();
         static void previewScene();
 
         static RT_Color getColorAt(Vector intersection_position, Vector intersecting_ray_direction, vector<RT_Object*> scene_objects, int index_of_winning_object, vector<RT_LightSource*> light_sources, double accuracy, double ambientlight);
