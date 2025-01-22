@@ -94,6 +94,11 @@ void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, c
                 }
             });
 
+            label->mSecondaryCallback = [this, label, nodeName]() {
+                Main_Scene::removeComponent(nodeName->get_uuid());
+                label->setVisible(false);
+            };
+
             // Speichern des neuen Child-Knotens in der Map
             mNodeMap[nodeName->get_name()] = childContainer;
             mContainer->setSize(Vector2i(mScrollPanel->width(), mContainer->children().size() * label->height()));
