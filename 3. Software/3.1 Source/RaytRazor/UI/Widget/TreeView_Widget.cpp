@@ -67,15 +67,21 @@ void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, c
             auto label = new Custom_Label(childContainer, "|-------> " + nodeName->get_name(), "sans");
             label->setFontSize(Basis_Child_Font);
 
+            label->setColor(Color(255, 255, 255, 255));
+
+            if (mCurrentSelectedLabel && mCurrentSelectedLabel->first == nodeName->get_uuid()){
+                label->setColor(Color(255, 0, 0, 255));
+            }
+
             label->setCallback([this, label, nodeName]() {
                 try {
                     printf("Node name: %s\n", nodeName->get_name().c_str());
                     if (mCurrentSelectedLabel) {
-                        mCurrentSelectedLabel->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
+                        mCurrentSelectedLabel->second->setColor(Color(255, 255, 255, 255)); // Standardfarbe (z. B. Weiß)
                     }
                     label->setColor(Color(255, 0, 0, 255));
 
-                    mCurrentSelectedLabel = label;
+                    mCurrentSelectedLabel = new std::pair<boost::uuids::uuid, Custom_Label*>(nodeName->get_uuid(), label);
 
                     for (const auto& componets : Main_Scene::getComponents()) {
                         if (nodeName->get_uuid() == componets.second->get_uuid()) {
@@ -87,6 +93,11 @@ void TreeView_Widget::addNode(const std::shared_ptr<Base_Component>& nodeName, c
                     Logger::log(MessageType::SEVERE, e.what());
                 }
             });
+
+            label->mSecondaryCallback = [this, label, nodeName]() {
+                Main_Scene::removeComponent(nodeName->get_uuid());
+                label->setVisible(false);
+            };
 
             // Speichern des neuen Child-Knotens in der Map
             mNodeMap[nodeName->get_name()] = childContainer;

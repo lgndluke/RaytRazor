@@ -267,9 +267,9 @@ bool Json_Parser::exportToJSON(const std::string& exportPath,
             componentDetails["LightComponent"] = {
                 {"intensity", lightComponent->get_intensity()},
                 {"color", {
-                    {"r", static_cast<int>(lightComponent->get_color().x * 255)},
-                    {"g", static_cast<int>(lightComponent->get_color().y * 255)},
-                    {"b", static_cast<int>(lightComponent->get_color().z * 255)}
+                    {"r", lightComponent->get_color().x},
+                    {"g", lightComponent->get_color().y},
+                    {"b", lightComponent->get_color().z}
                 }}
             };
             entityData["components"] = componentDetails;

@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     try
     {
         init();
-        nanogui::ref app = new Main_Scene(1400, 700, "RaytRazor", true);
+        nanogui::ref app = new Main_Scene(1400, 700, "RaytRazor", false);
         app->drawAll();
         app->setVisible(true);
         mainloop();

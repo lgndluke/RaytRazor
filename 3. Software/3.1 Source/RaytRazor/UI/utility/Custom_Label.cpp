@@ -38,9 +38,15 @@ void Custom_Label::draw(NVGcontext *ctx) {
 }
 
 bool Custom_Label::mouseButtonEvent(const nanogui::Vector2i &p, int button, bool down, int modifiers) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && down && contains(p)) {
-        if (mCallback) {
-            mCallback(); // Callback auslösen
+    if (down && contains(p)) { // Nur wenn der Button gedrückt wurde und der Punkt innerhalb des Widgets liegt
+        if (button == GLFW_MOUSE_BUTTON_LEFT) { // Linke Maustaste
+            if (mCallback) {
+                mCallback(); // Linke Maustasten-Callback
+            }
+        } else if (button == GLFW_MOUSE_BUTTON_RIGHT) { // Rechte Maustaste
+            if (mSecondaryCallback) {
+                mSecondaryCallback(); // Rechte Maustasten-Callback
+            }
         }
         return true; // Event verarbeitet
     }
