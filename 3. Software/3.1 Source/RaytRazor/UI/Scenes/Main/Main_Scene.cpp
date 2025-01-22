@@ -159,14 +159,16 @@ void Preview_Canvas::drawGL()
         }
         else if (light)
         {
-            //todo farbe auf glatt weiß setzten und sphere auslagern -> thread oder nur 1 mal initialisieren (1 mal ist lieber)
+            //erstellt lightsphere mvp and binded diese
             glm::mat4 modelGLMmat = extract_Model_Matrix(light);
             mvpGLM = projGLMmat * viewGLMmat * modelGLMmat;
             mvpEigen = Converter::convert_from_GLM_to_EigenMatrix(mvpGLM);
             mShader.setUniform("modelViewProj", mvpEigen);
+            //erstellt variablen für shader
             nanogui::MatrixXu indices = make_sphere_indices();
             Eigen::MatrixXf vertices = make_sphere_vertices();
             Eigen::MatrixXf color = makeLightColor(light->get_color(),vertices.cols());
+            //binded und zeichnet die lightsphere
             mShader.uploadIndices(indices);
             mShader.uploadAttrib("position", vertices);
             mShader.uploadAttrib("color", color);
