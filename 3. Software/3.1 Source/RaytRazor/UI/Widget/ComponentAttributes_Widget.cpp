@@ -2,6 +2,82 @@
 #include "ComponentAttributes_Widget.h"
 
 
+Vec3WidgetGroup::Vec3WidgetGroup(Widget* parent, const std::string& labelText) {
+    label = new Label(parent, labelText, "sans-bold", FONT_SIZE);
+    layout = new Widget(parent);
+    auto* hLayout = new BoxLayout(Orientation::Horizontal, Alignment::Fill, 0, 0);
+    layout->setLayout(hLayout);
+
+    xBox = new TextBox(layout, "-");
+    yBox = new TextBox(layout, "-");
+    zBox = new TextBox(layout, "-");
+
+    xBox->setFixedSize(Vector2i(107, 30));
+    yBox->setFixedSize(Vector2i(107, 30));
+    zBox->setFixedSize(Vector2i(107, 30));
+
+    xBox->setEditable(true);
+    yBox->setEditable(true);
+    zBox->setEditable(true);
+}
+
+void Vec3WidgetGroup::setCallback(std::function<void(glm::vec3)> callback) const
+{
+    xBox->setCallback([this, callback](const std::string& value) -> bool {
+        try {
+            glm::vec3 vec(std::stof(xBox->value()), std::stof(yBox->value()), std::stof(zBox->value()));
+            callback(vec);
+            return true;
+        } catch (...) {
+            return false;
+        }
+    });
+    yBox->setCallback([this, callback](const std::string& value) -> bool {
+        try {
+            glm::vec3 vec(std::stof(xBox->value()), std::stof(yBox->value()), std::stof(zBox->value()));
+            callback(vec);
+            return true;
+        } catch (...) {
+            return false;
+        }
+    });
+    zBox->setCallback([this, callback](const std::string& value) -> bool {
+        try {
+            glm::vec3 vec(std::stof(xBox->value()), std::stof(yBox->value()), std::stof(zBox->value()));
+            callback(vec);
+            return true;
+        } catch (...) {
+            return false;
+        }
+    });
+}
+
+void Vec3WidgetGroup::update(const glm::vec3& value, bool editable) const
+{
+    xBox->setValue(std::to_string(value.x));
+    yBox->setValue(std::to_string(value.y));
+    zBox->setValue(std::to_string(value.z));
+
+    xBox->setEditable(editable);
+    yBox->setEditable(editable);
+    zBox->setEditable(editable);
+}
+
+void Vec3WidgetGroup::update(const string value, bool editable) const
+{
+    if(value == "-")
+    {
+        xBox->setValue(value);
+        yBox->setValue(value);
+        zBox->setValue(value);
+
+        xBox->setEditable(editable);
+        yBox->setEditable(editable);
+        zBox->setEditable(editable);
+    }
+}
+
+
 ComponentAttributes_Widget::ComponentAttributes_Widget(Widget *parent)
     : Widget(parent) {
     setLayout(new GridLayout(Orientation::Horizontal, 2, Alignment::Fill, 30));
@@ -37,24 +113,20 @@ void ComponentAttributes_Widget::populate_widget() {
     dynamicWidgets.push_back(nameValue);
 
     // Position
-    auto *posLabel = new Label(this, "Position:", "sans-bold", FONT_SIZE);
-    dynamicWidgets.push_back(posLabel);
-    auto *posValue = new TextBox(this, "-");
-    dynamicWidgets.push_back(posValue);
+    positionGroup = new Vec3WidgetGroup(this, "Position:");
+    dynamicWidgets.push_back(positionGroup->label);
+    dynamicWidgets.push_back(positionGroup->layout);
 
     // Rotation
-    auto *rotLabel = new Label(this, "Rotation:", "sans-bold", FONT_SIZE);
-    dynamicWidgets.push_back(rotLabel);
-    auto *rotValue = new TextBox(this, "-");
-    rotValue->setEditable(true);
-    dynamicWidgets.push_back(rotValue);
+    rotationGroup = new Vec3WidgetGroup(this, "Rotation:");
+    dynamicWidgets.push_back(rotationGroup->label);
+    dynamicWidgets.push_back(rotationGroup->layout);
 
     // Scale
-    auto *scaleLabel = new Label(this, "Scale:", "sans-bold", FONT_SIZE);
-    dynamicWidgets.push_back(scaleLabel);
-    auto *scaleValue = new TextBox(this, "-");
-    scaleValue->setEditable(true);
-    dynamicWidgets.push_back(scaleValue);
+    scaleGroup = new Vec3WidgetGroup(this, "Scale:");
+    dynamicWidgets.push_back(scaleGroup->label);
+    dynamicWidgets.push_back(scaleGroup->layout);
+
 
     // Kamera-spezifische Felder
     auto *fovLabel = new Label(this, "FOV:", "sans-bold", FONT_SIZE);
@@ -88,11 +160,10 @@ void ComponentAttributes_Widget::populate_widget() {
     intensityValue->setEditable(true);
     dynamicWidgets.push_back(intensityValue);
 
-    auto *colorLabel = new Label(this, "Color:", "sans-bold", FONT_SIZE);
-    dynamicWidgets.push_back(colorLabel);
-    auto *colorValue = new TextBox(this, "-");
-    colorValue->setEditable(true);
-    dynamicWidgets.push_back(colorValue);
+    // Color
+    colorGroup = new Vec3WidgetGroup(this, "Color:");
+    dynamicWidgets.push_back(colorGroup->label);
+    dynamicWidgets.push_back(colorGroup->layout);
 
     // Render-spezifische Felder
     auto *objectLabel = new Label(this, "Object UUID:", "sans-bold", FONT_SIZE);
@@ -158,43 +229,25 @@ void ComponentAttributes_Widget::updateFromComponent(const std::shared_ptr<Base_
                 return true;
             });
 
-            // Position
-            auto tBox_Position = dynamic_cast<TextBox*>(dynamicWidgets[5]);
-            updateTextBox(tBox_Position, vec3ToString(component->get_position()), true);
-            tBox_Position->setCallback([component, this](const std::string& value) -> bool {
-                glm::vec3 pos;
-                if (parseVec3(value, pos)) {
-                    component->set_position(pos);
-                    Main_Scene::setChangesOnComponent(component);
-                    return true;
-                }
-                return false; // Eingabe ungültig
+            glm::vec3 position = component->get_position();
+            positionGroup->update(position, true);
+            positionGroup->setCallback([component](const glm::vec3& value) {
+                component->set_position(value);
+                Main_Scene::setChangesOnComponent(component);
             });
 
-            // Rotation
-            auto tBox_Rotation = dynamic_cast<TextBox*>(dynamicWidgets[7]);
-            updateTextBox(tBox_Rotation, vec3ToString(component->get_rotation()), true);
-            tBox_Rotation->setCallback([component, this](const std::string& value) -> bool {
-                glm::vec3 rot;
-                if (parseVec3(value, rot)) {
-                    component->set_rotation(rot);
-                    Main_Scene::setChangesOnComponent(component);
-                    return true;
-                }
-                return false;
+            glm::vec3 rotation = component->get_rotation();
+            rotationGroup->update(rotation, true);
+            rotationGroup->setCallback([component](const glm::vec3& value) {
+                component->set_rotation(value);
+                Main_Scene::setChangesOnComponent(component);
             });
 
-            // Scale
-            auto tBox_Scale = dynamic_cast<TextBox*>(dynamicWidgets[9]);
-            updateTextBox(tBox_Scale, vec3ToString(component->get_scale()), true);
-            tBox_Scale->setCallback([component, this](const std::string& value) -> bool {
-                glm::vec3 scale;
-                if (parseVec3(value, scale)) {
-                    component->set_scale(scale);
-                    Main_Scene::setChangesOnComponent(component);
-                    return true;
-                }
-                return false;
+            glm::vec3 scale = component->get_scale();
+            scaleGroup->update(scale, true);
+            scaleGroup->setCallback([component](const glm::vec3& value) {
+                component->set_scale(value);
+                Main_Scene::setChangesOnComponent(component);
             });
 
             // Kamera-spezifische Felder
@@ -269,22 +322,17 @@ void ComponentAttributes_Widget::updateFromComponent(const std::shared_ptr<Base_
                     }
                 });
 
-                auto tBox_Color = dynamic_cast<TextBox*>(dynamicWidgets[21]);
-                updateTextBox(tBox_Color, vec3ToString(light->get_color()), true);
-                tBox_Color->setCallback([light, this](const std::string& value) -> bool {
-                    glm::vec3 color;
-                    if (parseVec3(value, color)) {
-                        light->set_color(color);
-                        Main_Scene::setChangesOnComponent(light);
-                        return true;
-                    }
-                    return false;
+                glm::vec3 color = light->get_color();
+                colorGroup->update(color, true);
+                colorGroup->setCallback([light](const glm::vec3& value) {
+                    light->set_color(value);
+                    Main_Scene::setChangesOnComponent(light);
                 });
             }
             else
             {
                 updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[19]), "-", false);
-                updateTextBox(dynamic_cast<TextBox*>(dynamicWidgets[21]), "-", false);
+                colorGroup->update("-", false);
             }
 
             // Render-spezifische Felder
